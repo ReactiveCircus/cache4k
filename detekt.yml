@@ -1,0 +1,7 @@
+complexity:
+  LongMethod:
+    excludes: ["**/*Test/**"]
+  TooManyFunctions:
+    excludes: ["**/*Test/**"]
+  LargeClass:
+    excludes: ["**/*Test/**"]
