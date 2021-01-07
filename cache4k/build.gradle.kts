@@ -1,8 +1,11 @@
-val statelyVersion = "1.1.1-a1"
+val statelyVersion = "1.1.1"
+val statelyIsoVersion = "1.1.1-a1"
+val coroutinesVersion = "1.4.2"
 
 plugins {
-    kotlin("multiplatform") version "1.4.10"
+    kotlin("multiplatform")
     id("org.jetbrains.dokka")
+    id("maven-publish")
 }
 
 group = property("GROUP") as String
@@ -13,7 +16,12 @@ kotlin {
     jvm {
         compilations.all {
             kotlinOptions {
-                kotlinOptions.jvmTarget = "1.8"
+                kotlinOptions.jvmTarget = "11"
+                useIR = true
+                freeCompilerArgs = freeCompilerArgs + listOf(
+                    "-Xuse-ir",
+                    "-Xjvm-default=all"
+                )
             }
         }
     }
@@ -26,38 +34,71 @@ kotlin {
         browser()
         nodejs()
     }
-
-    val hostOs = System.getProperty("os.name")
-    val isMingwX64 = hostOs.startsWith("Windows")
-    val nativeTarget = when {
-        hostOs == "Mac OS X" -> macosX64("native")
-        hostOs == "Linux" -> linuxX64("native")
-        isMingwX64 -> mingwX64("native")
-        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
-    }
+    iosX64()
+    iosArm64()
+    macosX64()
+    watchosArm32()
+    watchosArm64()
+    tvosX64()
+    tvosArm64()
 
     sourceSets {
+        all {
+            languageSettings.apply {
+                progressiveMode = true
+                enableLanguageFeature("NewInference")
+                useExperimentalAnnotation("kotlin.Experimental")
+                useExperimentalAnnotation("kotlin.time.ExperimentalTime")
+            }
+        }
         val commonMain by getting {
             dependencies {
-                implementation("co.touchlab:stately-iso-collections:$statelyVersion")
+                implementation("co.touchlab:stately-concurrency:$statelyVersion")
+                implementation("co.touchlab:stately-isolate:$statelyIsoVersion")
+                implementation("co.touchlab:stately-iso-collections:$statelyIsoVersion")
             }
         }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
             }
         }
-        val jvmMain by getting
         val jvmTest by getting {
             dependencies {
                 implementation(kotlin("test"))
                 implementation(kotlin("test-junit"))
             }
         }
-        val jsMain by getting
-        val jsTest by getting
-        val nativeMain by getting
-        val nativeTest by getting
+        val jsTest by getting {
+            dependencies {
+                implementation(kotlin("test-js"))
+            }
+        }
+        val nativeTest by creating {
+            dependsOn(commonTest)
+        }
+        val iosX64Test by getting {
+            dependsOn(nativeTest)
+        }
+        val iosArm64Test by getting {
+            dependsOn(nativeTest)
+        }
+        val macosX64Test by getting {
+            dependsOn(nativeTest)
+        }
+        val watchosArm32Test by getting {
+            dependsOn(nativeTest)
+        }
+        val watchosArm64Test by getting {
+            dependsOn(nativeTest)
+        }
+        val tvosX64Test by getting {
+            dependsOn(nativeTest)
+        }
+        val tvosArm64Test by getting {
+            dependsOn(nativeTest)
+        }
     }
 }

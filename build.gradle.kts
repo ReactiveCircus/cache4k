@@ -1,13 +1,16 @@
-val detektVersion = "1.13.1"
+val detektVersion = "1.15.0"
 
 plugins {
-    id("org.jetbrains.dokka") version "1.4.0"
-    id("io.gitlab.arturbosch.detekt") version "1.13.1"
+    kotlin("multiplatform") version "1.4.30-M1" apply false
+    id("org.jetbrains.dokka") version "1.4.10"
+    id("io.gitlab.arturbosch.detekt") version "1.15.0"
 }
 
 allprojects {
     repositories {
         mavenCentral()
+        jcenter()
+        maven("https://dl.bintray.com/kotlin/kotlin-eap")
     }
 }
 
