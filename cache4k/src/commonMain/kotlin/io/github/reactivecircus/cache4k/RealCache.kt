@@ -39,6 +39,21 @@ internal class RealCache<Key : Any, Value : Any>(
     private val cacheEntries = IsoMutableMap<Key, CacheEntry<Key, Value>>()
 
     /**
+     * Whether to perform size based evictions.
+     */
+    private val evictsBySize = maxSize >= 0
+
+    /**
+     * Whether to perform write-time based expiration.
+     */
+    private val expiresAfterWrite = expireAfterWriteDuration.isFinite()
+
+    /**
+     * Whether to perform access-time (both read and write) based expiration.
+     */
+    private val expiresAfterAccess = expireAfterAccessDuration.isFinite()
+
+    /**
      * A queue of unique cache entries ordered by write time.
      * Used for performing write-time based cache expiration.
      */
@@ -59,21 +74,6 @@ internal class RealCache<Key : Any, Value : Any>(
             ReorderingIsoMutableSet()
         }
 
-    /**
-     * Whether to perform size based evictions.
-     */
-    private val evictsBySize = maxSize >= 0
-
-    /**
-     * Whether to perform write-time based expiration.
-     */
-    private val expiresAfterWrite = expireAfterWriteDuration.isFinite()
-
-    /**
-     * Whether to perform access-time (both read and write) based expiration.
-     */
-    private val expiresAfterAccess = expireAfterAccessDuration.isFinite()
-
     override fun get(key: Key): Value? {
         return cacheEntries[key]?.let {
             if (it.isExpired()) {
@@ -88,7 +88,27 @@ internal class RealCache<Key : Any, Value : Any>(
         }
     }
 
-    override fun get(key: Key, loader: suspend () -> Value): Value = TODO()
+    override suspend fun get(key: Key, loader: suspend () -> Value): Value {
+        return cacheEntries[key]?.let {
+            if (it.isExpired()) {
+                // clean up expired entries
+                expireEntries()
+                null
+            } else {
+                // update eviction metadata
+                recordRead(it)
+                it.value.get()
+            }
+        } ?: loader().let { loadedValue ->
+            val existingValue = get(key)
+            if (existingValue != null) {
+                existingValue
+            } else {
+                put(key, loadedValue)
+                loadedValue
+            }
+        }
+    }
 
     override fun put(key: Key, value: Value) {
         expireEntries()
@@ -144,15 +164,17 @@ internal class RealCache<Key : Any, Value : Any>(
         )
 
         queuesToProcess.forEach { queue ->
-            val iterator = queue.iterator()
-            for (entry in iterator) {
-                if (entry.isExpired()) {
-                    cacheEntries.remove(entry.key)
-                    // remove the entry from the current queue
-                    iterator.remove()
-                } else {
-                    // found unexpired entry, no need to look any further
-                    break
+            queue.access {
+                val iterator = queue.iterator()
+                for (entry in iterator) {
+                    if (entry.isExpired()) {
+                        cacheEntries.remove(entry.key)
+                        // remove the entry from the current queue
+                        iterator.remove()
+                    } else {
+                        // found unexpired entry, no need to look any further
+                        break
+                    }
                 }
             }
         }
@@ -177,10 +199,12 @@ internal class RealCache<Key : Any, Value : Any>(
         checkNotNull(accessQueue)
 
         while (cacheEntries.size > maxSize) {
-            accessQueue.firstOrNull()?.run {
-                cacheEntries.remove(key)
-                writeQueue?.remove(this)
-                accessQueue.remove(this)
+            accessQueue.access {
+                it.firstOrNull()?.run {
+                    cacheEntries.remove(key)
+                    writeQueue?.remove(this)
+                    accessQueue.remove(this)
+                }
             }
         }
     }

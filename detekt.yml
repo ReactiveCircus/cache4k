@@ -5,3 +5,11 @@ complexity:
     excludes: ["**/*Test/**"]
   LargeClass:
     excludes: ["**/*Test/**"]
+
+formatting:
+  MaximumLineLength:
+    active: false
+
+style:
+  MaxLineLength:
+    active: false

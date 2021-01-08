@@ -1,7 +1,6 @@
 package io.github.reactivecircus.cache4k
 
 import kotlin.time.Duration
-import kotlin.time.TestTimeSource
 import kotlin.time.TimeSource
 
 /**
@@ -20,14 +19,9 @@ public interface Cache<in Key : Any, Value : Any> {
      * otherwise gets the value by invoking [loader], associates the value with [key] in the cache,
      * and returns the cached value.
      *
-     * Note that [loader] is executed on the caller's thread. When called from multiple threads
-     * concurrently, if an unexpired value for the [key] is present by the time the [loader] returns
-     * the new value, the existing value won't be replaced by the new value.
-     * Instead the existing value will be returned.
-     *
      * Any exceptions thrown by the [loader] will be propagated to the caller of this function.
      */
-    public fun get(key: Key, loader: suspend () -> Value): Value
+    public suspend fun get(key: Key, loader: suspend () -> Value): Value
 
     /**
      * Associates [value] with [key] in this cache. If the cache previously contained a
@@ -85,14 +79,12 @@ public interface Cache<in Key : Any, Value : Any> {
         public fun maximumCacheSize(size: Long): Builder
 
         /**
-         * Specifies [TimeSource] for this cache.
+         * Specifies a [FakeTimeSource] for programmatically advancing the reading of the underlying
+         * [TimeSource] used for expiry checks in tests.
          *
-         * This is useful for programmatically updating the reading of a [TimeSource] in tests
-         * by specifying [TestTimeSource] as the time source.
-         *
-         * A [TimeSource.Monotonic] will be used if not specified.
+         * If not specified, [TimeSource.Monotonic] will be used for expiry checks.
          */
-        public fun timeSource(timeSource: TimeSource): Builder
+        public fun fakeTimeSource(fakeTimeSource: FakeTimeSource): Builder
 
         /**
          * Builds a new instance of [Cache] with the specified configurations.
@@ -118,7 +110,7 @@ internal class CacheBuilderImpl : Cache.Builder {
 
     private var expireAfterAccessDuration = Duration.INFINITE
     private var maxSize = UNSET_LONG
-    private var timeSource: TimeSource? = null
+    private var fakeTimeSource: FakeTimeSource? = null
 
     override fun expireAfterWrite(duration: Duration): CacheBuilderImpl = apply {
         require(duration.isPositive()) {
@@ -141,8 +133,8 @@ internal class CacheBuilderImpl : Cache.Builder {
         this.maxSize = size
     }
 
-    override fun timeSource(timeSource: TimeSource): CacheBuilderImpl = apply {
-        this.timeSource = timeSource
+    override fun fakeTimeSource(fakeTimeSource: FakeTimeSource): CacheBuilderImpl = apply {
+        this.fakeTimeSource = fakeTimeSource
     }
 
     override fun <K : Any, V : Any> build(): Cache<K, V> {
@@ -150,7 +142,7 @@ internal class CacheBuilderImpl : Cache.Builder {
             expireAfterWriteDuration,
             expireAfterAccessDuration,
             maxSize,
-            timeSource ?: TimeSource.Monotonic
+            fakeTimeSource ?: TimeSource.Monotonic,
         )
     }
 

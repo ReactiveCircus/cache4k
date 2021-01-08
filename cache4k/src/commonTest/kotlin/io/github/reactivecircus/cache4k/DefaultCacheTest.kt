@@ -7,7 +7,7 @@ import kotlin.test.assertNull
 class DefaultCacheTest {
 
     @Test
-    fun get_noEntryWithAssociatedKeyExists() {
+    fun noEntryWithAssociatedKeyExists_get_returnsNull() {
         val cache = Cache.Builder.newBuilder()
             .build<Long, String>()
 
@@ -15,7 +15,7 @@ class DefaultCacheTest {
     }
 
     @Test
-    fun get_entryWithAssociatedKeyExists() {
+    fun entryWithAssociatedKeyExists_get_returnsValue() {
         val cache = Cache.Builder.newBuilder()
             .build<Long, String>()
 
@@ -27,7 +27,7 @@ class DefaultCacheTest {
     }
 
     @Test
-    fun get_multipleTimesWithSameKey() {
+    fun getMultipleTimesWithSameKey_returnsSameValue() {
         val cache = Cache.Builder.newBuilder()
             .build<Long, String>()
 
@@ -41,7 +41,7 @@ class DefaultCacheTest {
     }
 
     @Test
-    fun get_valueReplacedForSameKey() {
+    fun valuesReplacedForSameKey_get_returnsLatestValue() {
         val cache = Cache.Builder.newBuilder()
             .build<Long, String>()
 
@@ -132,7 +132,7 @@ class DefaultCacheTest {
     }
 
     @Test
-    fun asMap() {
+    fun asMap_returnsAllEntries() {
         val cache = Cache.Builder.newBuilder()
             .build<Long, String>()
 
@@ -143,7 +143,7 @@ class DefaultCacheTest {
     }
 
     @Test
-    fun asMap_defensiveCopy() {
+    fun asMap_createsDefensiveCopy() {
         val cache = Cache.Builder.newBuilder()
             .build<Long, String>()
 

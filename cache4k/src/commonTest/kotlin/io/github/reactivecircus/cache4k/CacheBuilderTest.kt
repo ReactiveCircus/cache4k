@@ -5,7 +5,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.time.Duration
-import kotlin.time.TestTimeSource
 import kotlin.time.TimeSource
 import kotlin.time.hours
 import kotlin.time.nanoseconds
@@ -104,13 +103,13 @@ class CacheBuilderTest {
     }
 
     @Test
-    fun timeSource() {
-        val testTimeSource = TestTimeSource()
+    fun fakeTimeSource() {
+        val fakeTimeSource = FakeTimeSource()
         val cache = Cache.Builder.newBuilder()
-            .timeSource(testTimeSource)
+            .fakeTimeSource(fakeTimeSource)
             .build<Any, Any>() as RealCache
 
-        assertEquals(testTimeSource, cache.timeSource)
+        assertEquals(fakeTimeSource, cache.timeSource)
     }
 
     @Test

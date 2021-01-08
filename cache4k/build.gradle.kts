@@ -78,6 +78,9 @@ kotlin {
         }
         val nativeTest by creating {
             dependsOn(commonTest)
+            dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+            }
         }
         val iosX64Test by getting {
             dependsOn(nativeTest)
