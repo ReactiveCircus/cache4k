@@ -5,7 +5,7 @@ val coroutinesVersion = "1.4.2"
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.dokka")
-    id("maven-publish")
+    id("com.vanniktech.maven.publish")
 }
 
 group = property("GROUP") as String
