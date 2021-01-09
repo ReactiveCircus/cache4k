@@ -1,5 +1,9 @@
 # cache4k
 
+![CI](https://github.com/ReactiveCircus/cache4k/workflows/CI/badge.svg)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.reactivecircus.cache4k/cache4k/badge.svg)](https://search.maven.org/search?q=g:io.github.reactivecircus.cache4k)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 In-memory Cache for Kotlin Multiplatform.
 
 **Work in progress.**
