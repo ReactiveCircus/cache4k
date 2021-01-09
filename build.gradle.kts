@@ -2,8 +2,9 @@ val detektVersion = "1.15.0"
 
 plugins {
     kotlin("multiplatform") version "1.4.30-M1" apply false
-    id("org.jetbrains.dokka") version "1.4.10"
+    id("org.jetbrains.dokka") version "1.4.10.2"
     id("io.gitlab.arturbosch.detekt") version "1.15.0"
+    id("binary-compatibility-validator") version "0.3.0"
 }
 
 allprojects {
@@ -11,6 +12,14 @@ allprojects {
         mavenCentral()
         jcenter()
         maven("https://dl.bintray.com/kotlin/kotlin-eap")
+    }
+}
+
+tasks.dokkaHtmlMultiModule.configure {
+    val apiDir = rootDir.resolve("docs/api")
+    outputDirectory.set(apiDir)
+    doLast {
+        apiDir.resolve("-modules.html").renameTo(apiDir.resolve("index.html"))
     }
 }
 
