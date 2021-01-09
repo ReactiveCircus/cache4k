@@ -20,7 +20,7 @@ env:
 jobs:
   assemble:
     name: Assemble
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     env:
       JAVA_TOOL_OPTIONS: -Xmx4g
 
@@ -44,7 +44,7 @@ jobs:
 
   checks:
     name: Checks (unit tests, static analysis and binary compatibility API check)
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     env:
       JAVA_TOOL_OPTIONS: -Xmx4g
 
@@ -70,7 +70,7 @@ jobs:
     name: Deploy snapshot
     needs: [assemble, checks]
     if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     env:
       JAVA_TOOL_OPTIONS: -Xmx4g
       ORG_GRADLE_PROJECT_SONATYPE_NEXUS_USERNAME: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
