@@ -39,18 +39,20 @@ cache.get(1) // returns "bird"
 
 ### Cache loader
 
-**Cache** provides an API for getting cached value by key and using the provided `loader: () -> Value` lambda to compute and cache the value automatically if none exists.
+**Cache** provides an API for getting cached value by key and using the provided `loader: suspend () -> Value` lambda to compute and cache the value automatically if none exists.
 
 ```kotlin
-val cache = Cache.Builder.newBuilder().build<Long, User>()
+runBlockingTest {
+    val cache = Cache.Builder.newBuilder().build<Long, User>()
 
-val userId = 1L
-val user = cache.get(userId) {
-    fetchUserById(userId) // potentially expensive call
+    val userId = 1L
+    val user = cache.get(userId) {
+        fetchUserById(userId) // potentially expensive call (might be a suspend function)
+    }
+
+    // value successfully computed by the loader will be cached automatically
+    assertThat(user).isEqualTo(cache.get(userId))
 }
-
-// value successfully computed by the loader will be cached automatically
-assertThat(user).isEqualTo(cache.get(userId))
 ```
 
 Any exceptions thrown by the `loader` will be propagated to the caller of this function.
