@@ -18,3 +18,9 @@ local.properties
 # Docs
 site
 docs/api
+
+## Xcode files
+xcuserdata/
+*.xcscmblueprint
+*.xccheckout
+DerivedData/
