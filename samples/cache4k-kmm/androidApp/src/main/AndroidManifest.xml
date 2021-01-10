@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.javiersc.cache4k.androidApp">
+    package="io.github.reactivecircus.cache4k.sample">
 
     <application
         android:allowBackup="false"

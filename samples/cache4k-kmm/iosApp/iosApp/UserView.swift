@@ -5,7 +5,7 @@ struct UserView: View {
     
     let user: User
     
-    init(user: User = User(id: 99, name: "Unknown")) {
+    init(user: User = User(id: "99", name: "Unknown")) {
         self.user = user
     }
     
