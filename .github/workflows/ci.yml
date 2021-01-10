@@ -93,3 +93,27 @@ jobs:
             ${{ runner.os }}-${{ github.job }}-
       - run: |
           ./gradlew clean uploadArchives --no-daemon --no-parallel --no-configuration-cache
+
+  build-sample-cache4k-kmm:
+    name: Assemble
+    runs-on: macos-latest
+    env:
+      JAVA_TOOL_OPTIONS: -Xmx4g
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: gradle/wrapper-validation-action@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 15
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            ~/.konan
+          key: ${{ runner.os }}-${{ github.job }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ github.job }}-
+      - run: |
+          ./gradlew -p samples/cache4k-kmm build
