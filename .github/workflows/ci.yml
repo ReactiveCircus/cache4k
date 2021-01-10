@@ -95,7 +95,7 @@ jobs:
           ./gradlew clean uploadArchives --no-daemon --no-parallel --no-configuration-cache
 
   build-sample-cache4k-kmm:
-    name: Assemble
+    name: Build cache4k-kmm sample
     runs-on: macos-latest
     env:
       JAVA_TOOL_OPTIONS: -Xmx4g
