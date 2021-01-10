@@ -8,7 +8,47 @@ In-memory Cache for Kotlin Multiplatform.
 
 **Work in progress.**
 
------
+**cache4k** provides a simple in-memory key-value cache for **Kotlin Multiplatform**, with support for time-based (expiration) and size-based evictions.
+
+The following targets are currently supported:
+
+- jvm
+- js
+- iosX64
+- iosArm64
+- macosX64
+- watchosArm32
+- watchosArm64
+- tvosX64
+- tvosArm64
+
+## Download
+
+Dependencies are hosted on [Maven Central](https://search.maven.org/artifact/io.github.reactivecircus.cache4k/cache4k).
+
+### Android
+
+```kotlin
+dependencies {
+    implementation("io.github.reactivecircus.cache4k:cache4k:x.y.z")
+}
+```
+
+### Multiplatform
+
+```kotlin
+kotlin {
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation("io.github.reactivecircus.cache4k:cache4k:x.y.z")
+            }
+        }
+    }
+}
+```
+
+## Usage
 
 ### Writing and reading cache entries
 
@@ -173,6 +213,12 @@ fun cacheEntryEvictedAfterExpiration() {
         .isNull()
 }
 ```
+
+## Credits
+
+The library was ported from a kotlin / JVM cache which I contributed to [dropbox/Store](https://github.com/dropbox/Store) to help unblock Store's multiplatform support (it was reverted before the 1.0 release as multiplatform wasn't a priority). Many thanks to Store's owners and contributors for reviewing and improving the original implementation.
+
+Native concurrency support of the library is powered by [touchlab/Stately](https://github.com/touchlab/Stately). Many thanks to Stately's authors and contributors for the great library.
 
 ## License
 
