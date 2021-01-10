@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		3BF1C02325AA164C00867AB8 /* Cache4kApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF1C02225AA164C00867AB8 /* Cache4kApp.swift */; };
-		7555FF83242A565900829871 /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* UserView.swift */; };
 		7555FF85242A565B00829871 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7555FF84242A565B00829871 /* Assets.xcassets */; };
 		7555FF88242A565B00829871 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7555FF87242A565B00829871 /* Preview Assets.xcassets */; };
 		7555FFB2242A642300829871 /* shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7555FFB1242A642300829871 /* shared.framework */; };
@@ -32,7 +31,6 @@
 /* Begin PBXFileReference section */
 		3BF1C02225AA164C00867AB8 /* Cache4kApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache4kApp.swift; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* Cache4k.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cache4k.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		7555FF82242A565900829871 /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		7555FF84242A565B00829871 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7555FF87242A565B00829871 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -72,7 +70,6 @@
 			isa = PBXGroup;
 			children = (
 				3BF1C02225AA164C00867AB8 /* Cache4kApp.swift */,
-				7555FF82242A565900829871 /* UserView.swift */,
 				7555FF84242A565B00829871 /* Assets.xcassets */,
 				7555FF8C242A565B00829871 /* Info.plist */,
 				7555FF86242A565B00829871 /* Preview Content */,
@@ -188,7 +185,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7555FF83242A565900829871 /* UserView.swift in Sources */,
 				3BF1C02325AA164C00867AB8 /* Cache4kApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -323,7 +319,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.javiersc.cache4k.iosApp;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.reactivecircus.cache4k.sample;
 				PRODUCT_NAME = Cache4k;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -343,7 +339,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.javiersc.cache4k.iosApp;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.reactivecircus.cache4k.sample;
 				PRODUCT_NAME = Cache4k;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
