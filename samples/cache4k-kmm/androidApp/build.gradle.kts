@@ -6,7 +6,6 @@ plugins {
 
 dependencies {
     implementation(project(":shared"))
-    implementation("com.google.android.material:material:1.2.1")
     implementation("androidx.appcompat:appcompat:1.2.0")
     implementation(compose.foundation)
     implementation(compose.material)
@@ -16,9 +15,10 @@ dependencies {
 
 android {
     compileSdkVersion(30)
+    buildToolsVersion("30.0.3")
 
     defaultConfig {
-        applicationId = "com.javiersc.cache4k.androidApp"
+        applicationId = "io.github.reactivecircus.cache4k.androidApp"
         minSdkVersion(23)
         targetSdkVersion(30)
         versionCode = 1

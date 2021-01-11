@@ -11,7 +11,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="Cache4k">
+            android:label="Cache4k Sample">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

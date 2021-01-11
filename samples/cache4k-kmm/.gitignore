@@ -15,11 +15,7 @@ local.properties
 *.iml
 .idea/
 
-# Docs
-site
-docs/api
-
-## Xcode files
+# Xcode files
 xcuserdata/
 *.xcscmblueprint
 *.xccheckout
