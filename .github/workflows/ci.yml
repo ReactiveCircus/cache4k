@@ -88,6 +88,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ github.job }}-
       - run: |
+          # TODO figure out how to enable lint without causing memory issue
           ./gradlew build -x lint -x lintVitalRelease
         working-directory: samples/cache4k-kmm
 
