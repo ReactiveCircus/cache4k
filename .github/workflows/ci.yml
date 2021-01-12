@@ -88,8 +88,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ github.job }}-
       - run: |
-          # TODO figure out how to enable lint without causing memory issue
-          ./gradlew build -x lint -x lintVitalRelease
+          # TODO figure out how to build shared library for iOS without causing memory issue
+          ./gradlew androidApp:build
         working-directory: samples/cache4k-kmm
 
   deploy-snapshot:
