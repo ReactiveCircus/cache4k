@@ -1,4 +1,4 @@
-rootProject.name = "cache4k"
+rootProject.name = "cache4k-kmm"
 include(":androidApp")
 include(":shared")
 

@@ -20,8 +20,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusReference
-import androidx.compose.ui.focus.focusReference
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -56,7 +56,7 @@ fun SaveUser(onClickSave: (User) -> Unit) {
 
     var shouldShowError by remember { mutableStateOf(false) }
 
-    val focusReference = remember { FocusReference() }
+    val focusRequester = remember { FocusRequester() }
 
     fun buildUser() {
         if (listOf(id, name).all(String::isNotBlank)) user = User(id, name)
@@ -72,13 +72,13 @@ fun SaveUser(onClickSave: (User) -> Unit) {
             label = { Text("Id") },
             onValueChange = { id = it.also { buildUser() } },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-            onImeActionPerformed = { _, _ -> focusReference.requestFocus() },
+            onImeActionPerformed = { _, _ -> focusRequester.requestFocus() },
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            modifier = Modifier.focusReference(focusReference),
+            modifier = Modifier.focusRequester(focusRequester),
             label = { Text("Name") },
             value = name,
             onValueChange = { name = it.also { buildUser() } },
