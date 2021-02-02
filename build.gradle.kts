@@ -5,7 +5,7 @@ plugins {
     id("com.vanniktech.maven.publish") version "0.13.0" apply false
     id("org.jetbrains.dokka") version "1.4.10.2"
     id("io.gitlab.arturbosch.detekt") version "1.15.0"
-    id("binary-compatibility-validator") version "0.3.0"
+    id("binary-compatibility-validator") version "0.4.0" apply false
 }
 
 allprojects {

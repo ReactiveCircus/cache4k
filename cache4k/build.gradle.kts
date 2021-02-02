@@ -6,6 +6,7 @@ plugins {
     kotlin("multiplatform")
     id("org.jetbrains.dokka")
     id("com.vanniktech.maven.publish")
+    id("binary-compatibility-validator")
 }
 
 group = property("GROUP") as String
