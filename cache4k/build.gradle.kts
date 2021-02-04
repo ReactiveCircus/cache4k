@@ -17,10 +17,9 @@ kotlin {
     jvm {
         compilations.all {
             kotlinOptions {
-                kotlinOptions.jvmTarget = "1.8"
                 useIR = true
+                kotlinOptions.jvmTarget = "1.8"
                 freeCompilerArgs = freeCompilerArgs + listOf(
-                    "-Xuse-ir",
                     "-Xjvm-default=all"
                 )
             }
