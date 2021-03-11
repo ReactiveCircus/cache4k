@@ -1,10 +1,10 @@
-val detektVersion = "1.15.0"
+val detektVersion = "1.16.0"
 
 plugins {
     kotlin("multiplatform") version "1.4.31" apply false
     id("com.vanniktech.maven.publish") version "0.13.0" apply false
     id("org.jetbrains.dokka") version "1.4.10.2"
-    id("io.gitlab.arturbosch.detekt") version "1.15.0"
+    id("io.gitlab.arturbosch.detekt") version "1.16.0"
     id("binary-compatibility-validator") version "0.4.0" apply false
 }
 
@@ -28,9 +28,9 @@ subprojects {
     apply(plugin = "io.gitlab.arturbosch.detekt")
     detekt {
         input = files("src/")
-        failFast = true
         config = files("${project.rootDir}/detekt.yml")
         buildUponDefaultConfig = true
+        allRules = true
         reports {
             html.destination = file("${project.buildDir}/reports/detekt/${project.name}.html")
         }
