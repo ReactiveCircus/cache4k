@@ -2,7 +2,7 @@ val detektVersion = "1.16.0"
 
 plugins {
     kotlin("multiplatform") version "1.4.32" apply false
-    id("com.vanniktech.maven.publish") version "0.13.0" apply false
+    id("com.vanniktech.maven.publish") version "0.14.2" apply false
     id("org.jetbrains.dokka") version "1.4.10.2"
     id("io.gitlab.arturbosch.detekt") version "1.16.0"
     id("binary-compatibility-validator") version "0.4.0" apply false
