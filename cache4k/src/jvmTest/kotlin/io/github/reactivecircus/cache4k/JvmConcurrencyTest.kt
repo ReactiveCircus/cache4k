@@ -5,6 +5,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import java.util.concurrent.Executors
+import kotlin.time.Duration
 import kotlin.time.seconds
 
 class JvmConcurrencyTest {
@@ -29,7 +30,7 @@ class JvmConcurrencyTest {
     fun expireEntriesConcurrently() = runBlocking {
         val cache = Cache.Builder.newBuilder()
             .fakeTimeSource(fakeTimeSource)
-            .expireAfterWrite(2.seconds)
+            .expireAfterWrite(Duration.seconds(2))
             .build<Long, String>()
 
         repeat(10) {
@@ -40,7 +41,7 @@ class JvmConcurrencyTest {
         repeat(10) {
             launch(Executors.newSingleThreadExecutor().asCoroutineDispatcher()) {
                 cache.get(it.toLong())
-                fakeTimeSource += 1.seconds
+                fakeTimeSource += Duration.seconds(1)
             }
         }
     }

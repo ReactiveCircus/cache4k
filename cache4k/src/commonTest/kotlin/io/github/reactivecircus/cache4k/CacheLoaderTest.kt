@@ -4,13 +4,12 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
-import kotlin.time.minutes
-import kotlin.time.nanoseconds
+import kotlin.time.Duration
 
 class CacheLoaderTest {
 
     private val fakeTimeSource = FakeTimeSource()
-    private val expiryDuration = 1.minutes
+    private val expiryDuration = Duration.minutes(1)
 
     @Test
     fun entryWithAssociatedKeyNotExists_getWithLoader_returnsValueFromLoader() = runTest {
@@ -63,7 +62,7 @@ class CacheLoaderTest {
         cache.put(1, "dog")
 
         // just before expiry
-        fakeTimeSource += expiryDuration - 1.nanoseconds
+        fakeTimeSource += expiryDuration - Duration.nanoseconds(1)
 
         var loaderInvokeCount = 0
         val loader = suspend {

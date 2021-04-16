@@ -1,7 +1,7 @@
 plugins {
-    kotlin("multiplatform") version "1.4.32" apply false
-    id("com.android.application") version "4.0.2" apply false
-    id("org.jetbrains.compose") version "0.3.2" apply false
+    kotlin("multiplatform") version "1.5.0-RC" apply false
+    id("com.android.application") version "4.1.3" apply false
+    id("org.jetbrains.compose") version "0.4.0-build181" apply false
     id("io.gitlab.arturbosch.detekt") version "1.16.0"
 }
 

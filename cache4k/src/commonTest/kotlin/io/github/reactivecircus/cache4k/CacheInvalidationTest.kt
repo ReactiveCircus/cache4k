@@ -3,7 +3,7 @@ package io.github.reactivecircus.cache4k
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
-import kotlin.time.minutes
+import kotlin.time.Duration
 
 class CacheInvalidationTest {
 
@@ -24,7 +24,7 @@ class CacheInvalidationTest {
     @Test
     fun invalidateByKey_allExpiredEntriesEvicted() {
         val fakeTimeSource = FakeTimeSource()
-        val oneMinute = 1.minutes
+        val oneMinute = Duration.minutes(1)
 
         val cache = Cache.Builder.newBuilder()
             .fakeTimeSource(fakeTimeSource)

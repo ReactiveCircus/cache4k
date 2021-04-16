@@ -1,5 +1,5 @@
-val statelyVersion = "1.1.5"
-val statelyIsoVersion = "1.1.5-a1"
+val statelyVersion = "1.1.6"
+val statelyIsoVersion = "1.1.6-a1"
 val coroutinesVersion = "1.4.2"
 
 plugins {
@@ -17,7 +17,6 @@ kotlin {
     jvm {
         compilations.all {
             kotlinOptions {
-                useIR = true
                 kotlinOptions.jvmTarget = "1.8"
                 freeCompilerArgs = freeCompilerArgs + listOf(
                     "-Xjvm-default=all"

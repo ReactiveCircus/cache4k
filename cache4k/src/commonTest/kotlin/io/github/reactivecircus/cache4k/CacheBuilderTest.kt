@@ -7,7 +7,6 @@ import kotlin.test.assertFailsWith
 import kotlin.time.Duration
 import kotlin.time.TimeSource
 import kotlin.time.hours
-import kotlin.time.nanoseconds
 
 class CacheBuilderTest {
 
@@ -15,7 +14,7 @@ class CacheBuilderTest {
     fun expireAfterWrite_zeroDuration() {
         val exception = assertFailsWith<IllegalArgumentException> {
             Cache.Builder.newBuilder()
-                .expireAfterWrite(0.nanoseconds)
+                .expireAfterWrite(Duration.nanoseconds(0))
                 .build<Any, Any>()
         }
 
@@ -25,17 +24,17 @@ class CacheBuilderTest {
     @Test
     fun expireAfterWrite_positiveDuration() {
         val cache = Cache.Builder.newBuilder()
-            .expireAfterWrite(24.hours)
+            .expireAfterWrite(Duration.hours(24))
             .build<Any, Any>() as RealCache
 
-        assertEquals(24.hours, cache.expireAfterWriteDuration)
+        assertEquals(Duration.hours(24), cache.expireAfterWriteDuration)
     }
 
     @Test
     fun expireAfterWrite_negativeDuration() {
         val exception = assertFailsWith<IllegalArgumentException> {
             Cache.Builder.newBuilder()
-                .expireAfterWrite((-1).nanoseconds)
+                .expireAfterWrite(Duration.nanoseconds((-1)))
                 .build<Any, Any>() as RealCache
         }
 
@@ -46,7 +45,7 @@ class CacheBuilderTest {
     fun expireAfterAccess_zeroDuration() {
         val exception = assertFailsWith<IllegalArgumentException> {
             Cache.Builder.newBuilder()
-                .expireAfterAccess(0.nanoseconds)
+                .expireAfterAccess(Duration.nanoseconds(0))
                 .build<Any, Any>() as RealCache
         }
 
@@ -56,17 +55,17 @@ class CacheBuilderTest {
     @Test
     fun expireAfterAccess_positiveDuration() {
         val cache = Cache.Builder.newBuilder()
-            .expireAfterAccess(24.hours)
+            .expireAfterAccess(Duration.hours(24))
             .build<Any, Any>() as RealCache
 
-        assertEquals(24.hours, cache.expireAfterAccessDuration)
+        assertEquals(Duration.hours(24), cache.expireAfterAccessDuration)
     }
 
     @Test
     fun expireAfterAccess_negativeDuration() {
         val exception = assertFailsWith<IllegalArgumentException> {
             Cache.Builder.newBuilder()
-                .expireAfterAccess((-1).nanoseconds)
+                .expireAfterAccess(Duration.nanoseconds(-1))
                 .build<Any, Any>() as RealCache
         }
 
