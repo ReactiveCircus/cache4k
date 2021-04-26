@@ -1,7 +1,7 @@
 val detektVersion = "1.16.0"
 
 plugins {
-    kotlin("multiplatform") version "1.5.0-RC" apply false
+    kotlin("multiplatform") version "1.5.0" apply false
     id("com.vanniktech.maven.publish") version "0.15.0" apply false
     id("org.jetbrains.dokka") version "1.4.10.2"
     id("io.gitlab.arturbosch.detekt") version "1.16.0"
