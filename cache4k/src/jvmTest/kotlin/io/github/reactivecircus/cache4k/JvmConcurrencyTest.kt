@@ -6,8 +6,9 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import java.util.concurrent.Executors
 import kotlin.time.Duration
-import kotlin.time.seconds
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 class JvmConcurrencyTest {
 
     private val fakeTimeSource = FakeTimeSource()
