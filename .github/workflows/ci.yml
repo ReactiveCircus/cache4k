@@ -22,7 +22,7 @@ jobs:
     name: Assemble
     runs-on: macos-latest
     env:
-      JAVA_TOOL_OPTIONS: -Xmx4g
+      JAVA_TOOL_OPTIONS: -Xmx4g -XX:+UseParallelGC
 
     steps:
       - uses: actions/checkout@v2
@@ -47,7 +47,7 @@ jobs:
     name: Checks (unit tests, static analysis and binary compatibility API check)
     runs-on: macos-latest
     env:
-      JAVA_TOOL_OPTIONS: -Xmx4g
+      JAVA_TOOL_OPTIONS: -Xmx4g -XX:+UseParallelGC
 
     steps:
       - uses: actions/checkout@v2
@@ -72,7 +72,7 @@ jobs:
     name: Build cache4k-kmm sample
     runs-on: macos-latest
     env:
-      JAVA_TOOL_OPTIONS: -Xmx4g
+      JAVA_TOOL_OPTIONS: -Xmx4g -XX:+UseParallelGC
 
     steps:
       - uses: actions/checkout@v2
@@ -100,7 +100,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: macos-latest
     env:
-      JAVA_TOOL_OPTIONS: -Xmx4g
+      JAVA_TOOL_OPTIONS: -Xmx4g -XX:+UseParallelGC
       ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
       ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
 
