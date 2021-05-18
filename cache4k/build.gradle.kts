@@ -1,5 +1,5 @@
-val statelyVersion = "1.1.6"
-val statelyIsoVersion = "1.1.6-a1"
+val statelyVersion = "1.1.7"
+val statelyIsoVersion = "1.1.7-a1"
 val coroutinesVersion = "1.5.0"
 
 plugins {
