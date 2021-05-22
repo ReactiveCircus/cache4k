@@ -1,10 +1,10 @@
-val detektVersion = "1.17.0"
+val detektVersion = "1.17.1"
 
 plugins {
     kotlin("multiplatform") version "1.5.0" apply false
     id("com.vanniktech.maven.publish") version "0.15.1" apply false
     id("org.jetbrains.dokka") version "1.4.32"
-    id("io.gitlab.arturbosch.detekt") version "1.17.0"
+    id("io.gitlab.arturbosch.detekt") version "1.17.1"
     id("binary-compatibility-validator") version "0.4.0" apply false
 }
 

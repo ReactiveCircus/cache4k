@@ -4,7 +4,7 @@ plugins {
     kotlin("multiplatform") version "1.4.32" apply false
     id("com.android.application") version "4.2.1" apply false
     id("org.jetbrains.compose") version "0.4.0-build181" apply false
-    id("io.gitlab.arturbosch.detekt") version "1.17.0"
+    id("io.gitlab.arturbosch.detekt") version "1.17.1"
 }
 
 allprojects {
@@ -35,5 +35,5 @@ subprojects {
             html.destination = file("${project.buildDir}/reports/detekt/${project.name}.html")
         }
     }
-    dependencies.add("detektPlugins", "io.gitlab.arturbosch.detekt:detekt-formatting:1.17.0")
+    dependencies.add("detektPlugins", "io.gitlab.arturbosch.detekt:detekt-formatting:1.17.1")
 }
