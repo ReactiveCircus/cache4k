@@ -18,7 +18,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api("io.github.reactivecircus.cache4k:cache4k:0.1.1")
+                api("io.github.reactivecircus.cache4k:cache4k:0.2.0")
             }
         }
     }
