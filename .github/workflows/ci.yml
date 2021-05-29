@@ -91,7 +91,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ github.job }}-
       - run: |
-          ./gradlew androidApp:build
+          ./gradlew assembleDebug packForXcode detekt
         working-directory: samples/cache4k-kmm
 
   deploy-snapshot:
