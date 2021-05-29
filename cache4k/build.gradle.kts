@@ -36,10 +36,6 @@ kotlin {
     iosX64()
     iosArm64()
     macosX64()
-    watchosArm32()
-    watchosArm64()
-    tvosX64()
-    tvosArm64()
 
     sourceSets {
         all {
@@ -88,18 +84,6 @@ kotlin {
             dependsOn(nativeTest)
         }
         val macosX64Test by getting {
-            dependsOn(nativeTest)
-        }
-        val watchosArm32Test by getting {
-            dependsOn(nativeTest)
-        }
-        val watchosArm64Test by getting {
-            dependsOn(nativeTest)
-        }
-        val tvosX64Test by getting {
-            dependsOn(nativeTest)
-        }
-        val tvosArm64Test by getting {
             dependsOn(nativeTest)
         }
     }
