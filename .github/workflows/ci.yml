@@ -66,10 +66,36 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ github.job }}-
       - run: |
-          ./gradlew check
+          ./gradlew jvmTest jsIrTest iosX64Test detekt apiCheck
 
-  build-sample-cache4k-kmm:
-    name: Build cache4k-kmm sample
+  build-cache4k-kmm-android:
+    name: Build sample Android app
+    runs-on: ubuntu-latest
+    env:
+      JAVA_TOOL_OPTIONS: -Xmx4g -XX:+UseParallelGC
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: gradle/wrapper-validation-action@v1
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '15'
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            ~/.konan
+          key: ${{ runner.os }}-${{ github.job }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ github.job }}-
+      - run: |
+          ./gradlew assembleDebug detekt
+        working-directory: samples/cache4k-kmm
+
+  build-cache4k-kmm-ios:
+    name: Generate sample iOS framework for XCode
     runs-on: macos-latest
     env:
       JAVA_TOOL_OPTIONS: -Xmx4g -XX:+UseParallelGC
@@ -91,7 +117,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ github.job }}-
       - run: |
-          ./gradlew assembleDebug packForXcode detekt
+          ./gradlew packForXcode
         working-directory: samples/cache4k-kmm
 
   deploy-snapshot:

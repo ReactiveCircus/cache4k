@@ -1,9 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("multiplatform") version "1.4.32" apply false
+    kotlin("multiplatform") version "1.5.10" apply false
     id("com.android.application") version "4.2.1" apply false
-    id("org.jetbrains.compose") version "0.4.0-build181" apply false
+    id("org.jetbrains.compose") version "0.4.0-rc2" apply false
     id("io.gitlab.arturbosch.detekt") version "1.17.1"
 }
 
