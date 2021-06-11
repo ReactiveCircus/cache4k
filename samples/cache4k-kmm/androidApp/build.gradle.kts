@@ -6,8 +6,8 @@ plugins {
 
 dependencies {
     implementation(project(":shared"))
-    implementation("androidx.appcompat:appcompat:1.3.0")
-    implementation("androidx.activity:activity-compose:1.3.0-alpha08")
+    implementation("androidx.appcompat:appcompat:1.4.0-alpha02")
+    implementation("androidx.activity:activity-compose:1.3.0-beta01")
     implementation(compose.foundation)
     implementation(compose.material)
     implementation(compose.runtime)
