@@ -35,5 +35,5 @@ jobs:
         env:
           CI: true
           JAVA_TOOL_OPTIONS: -Xmx4g -XX:+UseParallelGC
-          GRADLE_OPTS: -Dorg.gradle.daemon=false -Dkotlin.incremental=false
+          GRADLE_OPTS: -Dkotlin.incremental=false
           DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
