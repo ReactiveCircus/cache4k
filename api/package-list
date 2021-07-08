@@ -1,0 +1,5 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+
+module:cache4k
+io.github.reactivecircus.cache4k
