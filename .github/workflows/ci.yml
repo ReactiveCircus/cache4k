@@ -121,4 +121,4 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ github.job }}-
       - run: |
-          ./gradlew clean uploadArchives --no-parallel
+          ./gradlew clean publish --no-parallel
