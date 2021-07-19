@@ -11,7 +11,7 @@ class CacheExpiryTest {
 
     @Test
     fun noWriteOrAccessExpiry_cacheNeverExpires() {
-        val cache = Cache.Builder.newBuilder()
+        val cache = Cache.Builder()
             .fakeTimeSource(fakeTimeSource)
             .build<Long, String>()
 
@@ -24,7 +24,7 @@ class CacheExpiryTest {
 
     @Test
     fun expiredAfterWrite_cacheEntryEvicted() {
-        val cache = Cache.Builder.newBuilder()
+        val cache = Cache.Builder()
             .fakeTimeSource(fakeTimeSource)
             .expireAfterWrite(Duration.minutes(1))
             .build<Long, String>()
@@ -44,7 +44,7 @@ class CacheExpiryTest {
 
     @Test
     fun replaceCacheValue_writeExpiryTimeReset() {
-        val cache = Cache.Builder.newBuilder()
+        val cache = Cache.Builder()
             .fakeTimeSource(fakeTimeSource)
             .expireAfterWrite(Duration.minutes(1))
             .build<Long, String>()
@@ -70,7 +70,7 @@ class CacheExpiryTest {
 
     @Test
     fun readCacheEntry_doesNotResetWriteExpiryTime() {
-        val cache = Cache.Builder.newBuilder()
+        val cache = Cache.Builder()
             .fakeTimeSource(fakeTimeSource)
             .expireAfterWrite(Duration.minutes(1))
             .build<Long, String>()
@@ -91,7 +91,7 @@ class CacheExpiryTest {
 
     @Test
     fun expiredAfterAccess_cacheEntryEvicted() {
-        val cache = Cache.Builder.newBuilder()
+        val cache = Cache.Builder()
             .fakeTimeSource(fakeTimeSource)
             .expireAfterAccess(Duration.minutes(2))
             .build<Long, String>()
@@ -109,7 +109,7 @@ class CacheExpiryTest {
 
     @Test
     fun replaceCacheValue_accessExpiryTimeReset() {
-        val cache = Cache.Builder.newBuilder()
+        val cache = Cache.Builder()
             .fakeTimeSource(fakeTimeSource)
             .expireAfterAccess(Duration.minutes(2))
             .build<Long, String>()
@@ -135,7 +135,7 @@ class CacheExpiryTest {
 
     @Test
     fun readCacheEntry_accessExpiryTimeReset() {
-        val cache = Cache.Builder.newBuilder()
+        val cache = Cache.Builder()
             .fakeTimeSource(fakeTimeSource)
             .expireAfterAccess(Duration.minutes(2))
             .build<Long, String>()
@@ -161,7 +161,7 @@ class CacheExpiryTest {
 
     @Test
     fun expiryRespectsBothExpireAfterWriteAndExpireAfterAccess() {
-        val cache = Cache.Builder.newBuilder()
+        val cache = Cache.Builder()
             .fakeTimeSource(fakeTimeSource)
             .expireAfterWrite(Duration.minutes(2))
             .expireAfterAccess(Duration.minutes(1))
@@ -191,7 +191,7 @@ class CacheExpiryTest {
 
     @Test
     fun onlyExpiredCacheEntriesAreEvicted() {
-        val cache = Cache.Builder.newBuilder()
+        val cache = Cache.Builder()
             .fakeTimeSource(fakeTimeSource)
             .expireAfterWrite(Duration.minutes(1))
             .build<Long, String>()
@@ -223,7 +223,7 @@ class CacheExpiryTest {
 
     @Test
     fun maxSizeLimitExceededBeforeExpectedExpiry_cacheEntryEvicted() {
-        val cache = Cache.Builder.newBuilder()
+        val cache = Cache.Builder()
             .fakeTimeSource(fakeTimeSource)
             .maximumCacheSize(2)
             .expireAfterWrite(Duration.minutes(1))

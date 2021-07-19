@@ -1,12 +1,12 @@
 package io.github.reactivecircus.cache4k
 
+import java.util.concurrent.Executors
+import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
-import java.util.concurrent.Executors
-import kotlin.time.Duration
-import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
 class JvmConcurrencyTest {
@@ -15,7 +15,7 @@ class JvmConcurrencyTest {
 
     @Test
     fun evictEntriesConcurrently() = runBlocking {
-        val cache = Cache.Builder.newBuilder()
+        val cache = Cache.Builder()
             .maximumCacheSize(2)
             .build<Long, String>()
 
@@ -29,7 +29,7 @@ class JvmConcurrencyTest {
 
     @Test
     fun expireEntriesConcurrently() = runBlocking {
-        val cache = Cache.Builder.newBuilder()
+        val cache = Cache.Builder()
             .fakeTimeSource(fakeTimeSource)
             .expireAfterWrite(Duration.seconds(2))
             .build<Long, String>()

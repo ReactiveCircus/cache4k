@@ -8,7 +8,7 @@ class CacheEvictionTest {
 
     @Test
     fun maxSizeLimitReached_addNewEntry_oldEntryEvicted() {
-        val cache = Cache.Builder.newBuilder()
+        val cache = Cache.Builder()
             .maximumCacheSize(2)
             .build<Long, String>()
 
@@ -33,7 +33,7 @@ class CacheEvictionTest {
 
     @Test
     fun maxSizeLimitReached_replaceCacheEntry_doesNotEvict() {
-        val cache = Cache.Builder.newBuilder()
+        val cache = Cache.Builder()
             .maximumCacheSize(2)
             .build<Long, String>()
 
@@ -50,7 +50,7 @@ class CacheEvictionTest {
 
     @Test
     fun readCacheEntry_accessOrderChanged() {
-        val cache = Cache.Builder.newBuilder()
+        val cache = Cache.Builder()
             .maximumCacheSize(3)
             .build<Long, String>()
 
@@ -73,7 +73,7 @@ class CacheEvictionTest {
 
     @Test
     fun replaceCacheValue_accessOrderChanged() {
-        val cache = Cache.Builder.newBuilder()
+        val cache = Cache.Builder()
             .maximumCacheSize(3)
             .build<Long, String>()
 
@@ -99,7 +99,7 @@ class CacheEvictionTest {
 
     @Test
     fun maximumCacheSizeIsOne_addNewEntry_existingEntryEvicted() {
-        val cache = Cache.Builder.newBuilder()
+        val cache = Cache.Builder()
             .maximumCacheSize(1)
             .build<Long, String>()
 
@@ -121,7 +121,7 @@ class CacheEvictionTest {
 
     @Test
     fun maximumCacheSizeIsZero_noValuesCached() {
-        val cache = Cache.Builder.newBuilder()
+        val cache = Cache.Builder()
             .maximumCacheSize(0)
             .build<Long, String>()
 
