@@ -2,7 +2,7 @@ package io.github.reactivecircus.cache4k.sample
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import io.github.reactivecircus.cache4k.sample.shared.User
 import io.github.reactivecircus.cache4k.sample.shared.userCache
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
 
     @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {

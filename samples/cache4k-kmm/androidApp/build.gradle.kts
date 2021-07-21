@@ -6,8 +6,7 @@ plugins {
 
 dependencies {
     implementation(project(":shared"))
-    implementation("androidx.appcompat:appcompat:1.4.0-alpha02")
-    implementation("androidx.activity:activity-compose:1.3.0-beta01")
+    implementation("androidx.activity:activity-compose:1.3.0-rc02")
     implementation(compose.foundation)
     implementation(compose.material)
     implementation(compose.runtime)
@@ -33,7 +32,7 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 }
