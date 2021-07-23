@@ -96,7 +96,7 @@ public interface Cache<in Key : Any, Value : Any> {
             /**
              * Returns a new [Cache.Builder] instance.
              */
-            public fun newBuilder(): Builder = CacheBuilderImpl()
+            public operator fun invoke(): Builder = CacheBuilderImpl()
         }
     }
 }

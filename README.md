@@ -55,7 +55,7 @@ kotlin {
 To create a new `Cache` instance using `Long` for the key and `String` for the value:
 
 ```kotlin
-val cache = Cache.Builder.newBuilder().build<Long, String>()
+val cache = Cache.Builder().build<Long, String>()
 ```
 
 To start writing entries to the cache:
@@ -87,7 +87,7 @@ cache.get(1) // returns "bird"
 
 ```kotlin
 runBlockingTest {
-    val cache = Cache.Builder.newBuilder().build<Long, User>()
+    val cache = Cache.Builder().build<Long, User>()
 
     val userId = 1L
     val user = cache.get(userId) {
@@ -111,10 +111,12 @@ Expiration time can be specified for entries in the cache.
 
 ##### Expire after access
 
-To set the maximum time an entry can live in the cache since the last access (also known as **time-to-idle**), where "access" means **reading the cache**, **adding a new cache entry**, or **replacing an existing entry with a new one**:
+To set the maximum time an entry can live in the cache since the last access (also known as **
+time-to-idle**), where "access" means **reading the cache**, **adding a new cache entry**, or **
+replacing an existing entry with a new one**:
 
 ```kotlin
-val cache = Cache.Builder.newBuilder()
+val cache = Cache.Builder()
     .expireAfterAccess(24.hours)
     .build<Long, String>()
 ```
@@ -123,10 +125,11 @@ An entry in this cache will be removed if it has not been read or replaced **aft
 
 ##### Expire after write
 
-To set the maximum time an entry can live in the cache since the last write (also known as **time-to-live**), where "write" means **adding a new cache entry** or **replacing an existing entry with a new one**:
+To set the maximum time an entry can live in the cache since the last write (also known as **
+time-to-live**), where "write" means **adding a new cache entry** or **replacing an existing entry with a new one**:
 
 ```kotlin
-val cache = Cache.Builder.newBuilder()
+val cache = Cache.Builder()
     .expireAfterWrite(30.minutes)
     .build<Long, String>()
 ```
@@ -140,21 +143,22 @@ _Note that cache entries are **not** removed immediately upon expiration at exac
 To set the maximum number of entries to be kept in the cache:
 
 ```kotlin
-val cache = Cache.Builder.newBuilder()
+val cache = Cache.Builder()
     .maximumCacheSize(100)
     .build<Long, String>()
 ```
 
-Once there are more than **100** entries in this cache, the **least recently used one** will be removed, where "used" means **reading the cache**, **adding a new cache entry**, or **replacing an existing entry with a new one**.
+Once there are more than **100** entries in this cache, the **least recently used one** will be removed, where "used" means **reading the cache**, **adding a new cache entry**, or **replacing an
+existing entry with a new one**.
 
 ### Getting all cache entries as a Map
 
 To get a copy of the current cache entries as a `Map`:
 
 ```kotlin
-val cache = Cache.Builder.newBuilder()
+val cache = Cache.Builder()
     .build<Long, String>()
-    
+
 cache.put(1, "dog")
 cache.put(2, "cat")
 
@@ -171,7 +175,7 @@ Cache entries can also be deleted explicitly.
 To delete a cache entry for a given key:
 
 ```kotlin
-val cache = Cache.Builder.newBuilder().build<Long, String>()
+val cache = Cache.Builder().build<Long, String>()
 cache.put(1, "dog")
 
 cache.invalidate(1)
@@ -187,13 +191,14 @@ cache.invalidateAll()
 
 ### Unit testing cache expirations
 
-To test logic that depends on cache expiration, pass in a `FakeTimeSource` when building a `Cache` so you can programmatically advance the reading of the time source:
+To test logic that depends on cache expiration, pass in a `FakeTimeSource` when building a `Cache`
+so you can programmatically advance the reading of the time source:
 
 ```kotlin
 @Test
 fun cacheEntryEvictedAfterExpiration() {
     private val fakeTimeSource = FakeTimeSource()
-    val cache = Cache.Builder.newBuilder()
+    val cache = Cache.Builder()
         .fakeTimeSource(fakeTimeSource)
         .expireAfterWrite(1.minutes)
         .build<Long, String>()
@@ -216,7 +221,8 @@ fun cacheEntryEvictedAfterExpiration() {
 
 ## Credits
 
-The library was ported from a kotlin / JVM cache which I contributed to [dropbox/Store](https://github.com/dropbox/Store) to help unblock Store's multiplatform support (it was reverted before the 1.0 release as multiplatform wasn't a priority). Many thanks to Store's owners and contributors for reviewing and improving the original implementation.
+The library was ported from a kotlin / JVM cache which I contributed to [dropbox/Store](https://github.com/dropbox/Store) to help unblock Store's multiplatform support (
+it was reverted before the 1.0 release as multiplatform wasn't a priority). Many thanks to Store's owners and contributors for reviewing and improving the original implementation.
 
 Native concurrency support of the library is powered by [touchlab/Stately](https://github.com/touchlab/Stately). Many thanks to Stately's authors and contributors for the great library.
 

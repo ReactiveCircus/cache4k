@@ -17,7 +17,7 @@ public abstract interface class io/github/reactivecircus/cache4k/Cache$Builder {
 }
 
 public final class io/github/reactivecircus/cache4k/Cache$Builder$Companion {
-	public final fun newBuilder ()Lio/github/reactivecircus/cache4k/Cache$Builder;
+	public final fun invoke ()Lio/github/reactivecircus/cache4k/Cache$Builder;
 }
 
 public final class io/github/reactivecircus/cache4k/FakeTimeSource : kotlin/time/AbstractLongTimeSource {
