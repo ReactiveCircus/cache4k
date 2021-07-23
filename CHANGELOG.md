@@ -1,10 +1,13 @@
 # Change Log
 
-## 0.2.0
+## Unreleased
 
 ### Changed
 
-- `fun newBuilder` to `operator fun invoke`
+- Change `fun newBuilder()` to `operator fun invoke()` - [#7](https://github.com/ReactiveCircus/cache4k/pull/7).
+- Compile with Kotlin 1.5.21.
+
+## 0.2.0
 
 ### Changed
 

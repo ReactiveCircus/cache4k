@@ -8,8 +8,7 @@ In-memory Cache for Kotlin Multiplatform.
 
 **Work in progress.**
 
-**cache4k** provides a simple in-memory key-value cache for **Kotlin Multiplatform**, with support
-for time-based (expiration) and size-based evictions.
+**cache4k** provides a simple in-memory key-value cache for **Kotlin Multiplatform**, with support for time-based (expiration) and size-based evictions.
 
 The following targets are currently supported:
 
@@ -25,8 +24,7 @@ The following targets are currently supported:
 
 ## Download
 
-Dependencies are hosted
-on [Maven Central](https://search.maven.org/artifact/io.github.reactivecircus.cache4k/cache4k).
+Dependencies are hosted on [Maven Central](https://search.maven.org/artifact/io.github.reactivecircus.cache4k/cache4k).
 
 ### Android
 
@@ -85,9 +83,7 @@ cache.get(1) // returns "bird"
 
 ### Cache loader
 
-**Cache** provides an API for getting cached value by key and using the
-provided `loader: suspend () -> Value` lambda to compute and cache the value automatically if none
-exists.
+**Cache** provides an API for getting cached value by key and using the provided `loader: suspend () -> Value` lambda to compute and cache the value automatically if none exists.
 
 ```kotlin
 runBlockingTest {
@@ -107,8 +103,7 @@ Any exceptions thrown by the `loader` will be propagated to the caller of this f
 
 ### Expirations and evictions
 
-By default, **Cache** has an unlimited number of entries which never expire. But a cache can be
-configured to support both **time-based expirations** and **size-based evictions**.
+By default, **Cache** has an unlimited number of entries which never expire. But a cache can be configured to support both **time-based expirations** and **size-based evictions**.
 
 #### Time-based expiration
 
@@ -126,14 +121,12 @@ val cache = Cache.Builder()
     .build<Long, String>()
 ```
 
-An entry in this cache will be removed if it has not been read or replaced **after 24 hours** since
-it's been written into the cache.
+An entry in this cache will be removed if it has not been read or replaced **after 24 hours** since it's been written into the cache.
 
 ##### Expire after write
 
 To set the maximum time an entry can live in the cache since the last write (also known as **
-time-to-live**), where "write" means **adding a new cache entry** or **replacing an existing entry
-with a new one**:
+time-to-live**), where "write" means **adding a new cache entry** or **replacing an existing entry with a new one**:
 
 ```kotlin
 val cache = Cache.Builder()
@@ -141,11 +134,9 @@ val cache = Cache.Builder()
     .build<Long, String>()
 ```
 
-An entry in this cache will be removed if it has not been replaced **after 30 minutes** since it's
-been written into the cache.
+An entry in this cache will be removed if it has not been replaced **after 30 minutes** since it's been written into the cache.
 
-_Note that cache entries are **not** removed immediately upon expiration at exact time. Expirations
-are checked in each interaction with the `cache`._
+_Note that cache entries are **not** removed immediately upon expiration at exact time. Expirations are checked in each interaction with the `cache`._
 
 ### Size-based eviction
 
@@ -157,8 +148,7 @@ val cache = Cache.Builder()
     .build<Long, String>()
 ```
 
-Once there are more than **100** entries in this cache, the **least recently used one** will be
-removed, where "used" means **reading the cache**, **adding a new cache entry**, or **replacing an
+Once there are more than **100** entries in this cache, the **least recently used one** will be removed, where "used" means **reading the cache**, **adding a new cache entry**, or **replacing an
 existing entry with a new one**.
 
 ### Getting all cache entries as a Map
@@ -231,14 +221,10 @@ fun cacheEntryEvictedAfterExpiration() {
 
 ## Credits
 
-The library was ported from a kotlin / JVM cache which I contributed
-to [dropbox/Store](https://github.com/dropbox/Store) to help unblock Store's multiplatform support (
-it was reverted before the 1.0 release as multiplatform wasn't a priority). Many thanks to Store's
-owners and contributors for reviewing and improving the original implementation.
+The library was ported from a kotlin / JVM cache which I contributed to [dropbox/Store](https://github.com/dropbox/Store) to help unblock Store's multiplatform support (
+it was reverted before the 1.0 release as multiplatform wasn't a priority). Many thanks to Store's owners and contributors for reviewing and improving the original implementation.
 
-Native concurrency support of the library is powered
-by [touchlab/Stately](https://github.com/touchlab/Stately). Many thanks to Stately's authors and
-contributors for the great library.
+Native concurrency support of the library is powered by [touchlab/Stately](https://github.com/touchlab/Stately). Many thanks to Stately's authors and contributors for the great library.
 
 ## License
 
