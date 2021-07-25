@@ -1,5 +1,14 @@
+enableFeaturePreview("VERSION_CATALOGS")
+
 rootProject.name = "cache4k"
 include(":cache4k")
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        maven("https://dl.bintray.com/kotlin/kotlin-eap")
+    }
+}
 
 pluginManagement {
     repositories {
