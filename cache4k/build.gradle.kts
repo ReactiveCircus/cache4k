@@ -1,12 +1,7 @@
-val statelyVersion = "1.1.7"
-val statelyIsoVersion = "1.1.7-a1"
-val coroutinesVersion = "1.5.0"
-
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.dokka")
     id("com.vanniktech.maven.publish")
-    id("binary-compatibility-validator")
 }
 
 group = property("GROUP") as String
@@ -48,33 +43,33 @@ kotlin {
         }
         val commonMain by getting {
             dependencies {
-                implementation("co.touchlab:stately-concurrency:$statelyVersion")
-                implementation("co.touchlab:stately-isolate:$statelyIsoVersion")
-                implementation("co.touchlab:stately-iso-collections:$statelyIsoVersion")
+                implementation(libs.stately.concurrency)
+                implementation(libs.stately.isolate)
+                implementation(libs.stately.isoCollections)
             }
         }
         val commonTest by getting {
             dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+                implementation(libs.kotlin.testCommon)
+                implementation(libs.kotlin.testAnnotationsCommon)
+                implementation(libs.coroutines.core)
             }
         }
         val jvmTest by getting {
             dependencies {
-                implementation(kotlin("test"))
-                implementation(kotlin("test-junit"))
+                implementation(libs.kotlin.test)
+                implementation(libs.kotlin.testJUnit)
             }
         }
         val jsTest by getting {
             dependencies {
-                implementation(kotlin("test-js"))
+                implementation(libs.kotlin.testJS)
             }
         }
         val nativeTest by creating {
             dependsOn(commonTest)
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+                implementation(libs.coroutines.core)
             }
         }
         val iosX64Test by getting {

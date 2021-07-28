@@ -1,0 +1,25 @@
+[versions]
+detekt = "1.17.1"
+dokka = "1.5.0"
+coroutines = "1.5.0"
+kotlin = "1.5.21"
+kotlinBinaryCompabilityValidator = "0.6.0"
+stately = "1.1.7"
+statelyIso = "1.1.7-a1"
+vanniktech = "0.17.0"
+
+[libraries]
+coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test" }
+kotlin-testAnnotationsCommon = { module = "org.jetbrains.kotlin:kotlin-test-annotations-common" }
+kotlin-testCommon = { module = "org.jetbrains.kotlin:kotlin-test-common" }
+kotlin-testJS = { module = "org.jetbrains.kotlin:kotlin-test-js" }
+kotlin-testJUnit = { module = "org.jetbrains.kotlin:kotlin-test-junit" }
+plugin-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+plugin-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
+plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+plugin-kotlinBinaryCompatibilityValidator = { module = "org.jetbrains.kotlinx:binary-compatibility-validator", version.ref = "kotlinBinaryCompabilityValidator" }
+plugin-vanniktech = { module ="com.vanniktech:gradle-maven-publish-plugin", version.ref = "vanniktech" }
+stately-concurrency = { module = "co.touchlab:stately-concurrency", version.ref = "stately" }
+stately-isolate = { module = "co.touchlab:stately-isolate", version.ref = "statelyIso" }
+stately-isoCollections = { module = "co.touchlab:stately-iso-collections", version.ref = "statelyIso" }
