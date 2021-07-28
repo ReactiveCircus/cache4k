@@ -1,8 +1,9 @@
-enableFeaturePreview("VERSION_CATALOGS")
-
 rootProject.name = "cache4k"
 include(":cache4k")
 
+enableFeaturePreview("VERSION_CATALOGS")
+
+@Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
