@@ -12,7 +12,7 @@ on:
 jobs:
   deploy-website:
     name: Generate API docs and deploy website
-    runs-on: macos-latest
+    runs-on: macos-11
     steps:
       - uses: actions/checkout@v2
       - uses: gradle/wrapper-validation-action@v1

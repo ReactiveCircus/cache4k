@@ -20,7 +20,7 @@ env:
 jobs:
   assemble:
     name: Assemble
-    runs-on: macos-latest
+    runs-on: macos-11
     env:
       JAVA_TOOL_OPTIONS: -Xmx4g -XX:+UseParallelGC
 
@@ -45,7 +45,7 @@ jobs:
 
   checks:
     name: Checks (unit tests, static analysis and binary compatibility API check)
-    runs-on: macos-latest
+    runs-on: macos-11
     env:
       JAVA_TOOL_OPTIONS: -Xmx4g -XX:+UseParallelGC
 
@@ -70,7 +70,7 @@ jobs:
 
   build-cache4k-kmm:
     name: Build cache4k-kmm sample
-    runs-on: macos-latest
+    runs-on: macos-11
     env:
       JAVA_TOOL_OPTIONS: -Xmx4g -XX:+UseParallelGC
 
@@ -98,7 +98,7 @@ jobs:
     name: Deploy snapshot
     needs: [assemble, checks]
     if: github.ref == 'refs/heads/main'
-    runs-on: macos-latest
+    runs-on: macos-11
     env:
       JAVA_TOOL_OPTIONS: -Xmx4g -XX:+UseParallelGC
       ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
