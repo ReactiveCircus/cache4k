@@ -4,7 +4,7 @@ plugins {
     kotlin("multiplatform") version "1.5.21" apply false
     id("com.android.application") version "7.0.1" apply false
     id("org.jetbrains.compose") version "0.5.0-build262" apply false
-    id("io.gitlab.arturbosch.detekt") version "1.18.0"
+    id("io.gitlab.arturbosch.detekt") version "1.18.1"
 }
 
 allprojects {

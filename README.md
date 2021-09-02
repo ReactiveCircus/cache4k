@@ -16,11 +16,9 @@ The following targets are currently supported:
 - js
 - iosX64
 - iosArm64
+- iosSimulatorArm64
 - macosX64
-- watchosArm32
-- watchosArm64
-- tvosX64
-- tvosArm64
+- macosArm64
 
 ## Download
 
