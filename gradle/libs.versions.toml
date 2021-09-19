@@ -2,7 +2,7 @@
 detekt = "1.18.1"
 dokka = "1.5.0"
 coroutines = "1.5.2"
-kotlin = "1.5.30"
+kotlin = "1.5.31"
 kotlinBinaryCompabilityValidator = "0.7.0"
 stately = "1.1.10"
 statelyIso = "1.1.10-a1"
