@@ -31,17 +31,9 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '15'
-      - uses: actions/cache@v2
+      - uses: gradle/gradle-build-action@v2
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-            ~/.konan
-          key: ${{ runner.os }}-${{ github.job }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/*.versions.toml') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ github.job }}-
-      - run: |
-          ./gradlew assemble
+          arguments: assemble
 
   checks:
     name: Checks (unit tests, static analysis and binary compatibility API check)
@@ -56,17 +48,9 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '15'
-      - uses: actions/cache@v2
+      - uses: gradle/gradle-build-action@v2
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-            ~/.konan
-          key: ${{ runner.os }}-${{ github.job }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/*.versions.toml') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ github.job }}-
-      - run: |
-          ./gradlew check
+          arguments: check
 
   build-cache4k-kmm:
     name: Build cache4k-kmm sample
@@ -81,18 +65,10 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '15'
-      - uses: actions/cache@v2
+      - uses: gradle/gradle-build-action@v2
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-            ~/.konan
-          key: ${{ runner.os }}-${{ github.job }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/*.versions.toml') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ github.job }}-
-      - run: |
-          ./gradlew assembleDebug packForXcode detekt
-        working-directory: samples/cache4k-kmm
+          build-root-directory: samples/cache4k-kmm
+          arguments: assembleDebug packForXcode detekt
 
   deploy-snapshot:
     name: Deploy snapshot
@@ -111,14 +87,6 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '15'
-      - uses: actions/cache@v2
+      - uses: gradle/gradle-build-action@v2
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-            ~/.konan
-          key: ${{ runner.os }}-${{ github.job }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/*.versions.toml') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ github.job }}-
-      - run: |
-          ./gradlew clean publish --no-parallel
+          arguments: clean publish --no-parallel
