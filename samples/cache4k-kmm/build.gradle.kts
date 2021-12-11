@@ -1,10 +1,12 @@
+import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("multiplatform") version "1.5.31" apply false
+    `kotlin-dsl`
+    kotlin("multiplatform") version "1.6.0" apply false
     id("com.android.application") version "7.0.3" apply false
     id("org.jetbrains.compose") version "1.0.0-beta5" apply false
-    id("io.gitlab.arturbosch.detekt") version "1.18.1"
+    id("io.gitlab.arturbosch.detekt") version "1.19.0"
 }
 
 allprojects {
@@ -31,8 +33,10 @@ subprojects {
         config = files("${project.rootDir}/detekt.yml")
         buildUponDefaultConfig = true
         allRules = true
+    }
+    tasks.withType<Detekt>().configureEach {
         reports {
-            html.destination = file("${project.buildDir}/reports/detekt/${project.name}.html")
+            html.outputLocation.set(file("build/reports/detekt/${project.name}.html"))
         }
     }
     dependencies.add("detektPlugins", "io.gitlab.arturbosch.detekt:detekt-formatting:1.17.1")

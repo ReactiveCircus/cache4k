@@ -55,7 +55,7 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.testCommon)
                 implementation(libs.kotlin.testAnnotationsCommon)
-                implementation(libs.coroutines.core)
+                implementation(libs.coroutines.test)
             }
         }
         val jvmTest by getting {
@@ -68,27 +68,6 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.testJS)
             }
-        }
-        val nativeTest by creating {
-            dependsOn(commonTest)
-            dependencies {
-                implementation(libs.coroutines.core)
-            }
-        }
-        val iosX64Test by getting {
-            dependsOn(nativeTest)
-        }
-        val iosArm64Test by getting {
-            dependsOn(nativeTest)
-        }
-        val iosSimulatorArm64Test by getting {
-            dependsOn(nativeTest)
-        }
-        val macosX64Test by getting {
-            dependsOn(nativeTest)
-        }
-        val macosArm64Test by getting {
-            dependsOn(nativeTest)
         }
     }
 }

@@ -1,9 +1,16 @@
 formatting:
   MaximumLineLength:
     active: false
+  ImportOrdering:
+    active: false
 
 style:
   MagicNumber:
     active: false
   MaxLineLength:
     active: false
+
+naming:
+  FunctionNaming:
+    ignoreAnnotated:
+      - Composable
