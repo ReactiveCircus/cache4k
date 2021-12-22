@@ -1,7 +1,7 @@
 [versions]
 detekt = "1.19.0"
 dokka = "1.6.0"
-coroutines = "1.6.0-RC3"
+coroutines = "1.6.0"
 kotlin = "1.6.10"
 kotlinBinaryCompabilityValidator = "0.8.0"
 stately = "1.2.1"
