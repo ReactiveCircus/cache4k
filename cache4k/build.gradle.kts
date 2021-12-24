@@ -12,7 +12,7 @@ kotlin {
     jvm {
         compilations.all {
             kotlinOptions {
-                kotlinOptions.jvmTarget = "1.8"
+                kotlinOptions.jvmTarget = "11"
                 freeCompilerArgs = freeCompilerArgs + listOf(
                     "-Xjvm-default=all"
                 )
@@ -56,20 +56,20 @@ kotlin {
         }
         val commonTest by getting {
             dependencies {
-                implementation(libs.kotlin.testCommon)
-                implementation(libs.kotlin.testAnnotationsCommon)
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
                 implementation(libs.coroutines.test)
             }
         }
         val jvmTest by getting {
             dependencies {
-                implementation(libs.kotlin.test)
-                implementation(libs.kotlin.testJUnit)
+                implementation(kotlin("test"))
+                implementation(kotlin("test-junit"))
             }
         }
         val jsTest by getting {
             dependencies {
-                implementation(libs.kotlin.testJS)
+                implementation(kotlin("test-js"))
             }
         }
     }

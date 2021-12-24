@@ -7,7 +7,6 @@ enableFeaturePreview("VERSION_CATALOGS")
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
-        maven("https://dl.bintray.com/kotlin/kotlin-eap")
     }
 }
 
@@ -15,7 +14,6 @@ pluginManagement {
     repositories {
         mavenCentral()
         gradlePluginPortal()
-        maven("https://dl.bintray.com/kotlin/kotlin-eap")
     }
 
     resolutionStrategy {
