@@ -30,7 +30,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'zulu'
-          java-version: '15'
+          java-version: '16'
       - uses: gradle/gradle-build-action@v2
         with:
           arguments: assemble
@@ -47,28 +47,10 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'zulu'
-          java-version: '15'
+          java-version: '16'
       - uses: gradle/gradle-build-action@v2
         with:
           arguments: check
-
-  build-cache4k-kmm:
-    name: Build cache4k-kmm sample
-    runs-on: macos-11
-    env:
-      JAVA_TOOL_OPTIONS: -Xmx4g -XX:+UseParallelGC
-
-    steps:
-      - uses: actions/checkout@v2
-      - uses: gradle/wrapper-validation-action@v1
-      - uses: actions/setup-java@v2
-        with:
-          distribution: 'zulu'
-          java-version: '15'
-      - uses: gradle/gradle-build-action@v2
-        with:
-          build-root-directory: samples/cache4k-kmm
-          arguments: assembleDebug packForXcode detekt
 
   deploy-snapshot:
     name: Deploy snapshot
@@ -86,7 +68,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'zulu'
-          java-version: '15'
+          java-version: '16'
       - uses: gradle/gradle-build-action@v2
         with:
           arguments: clean publish --no-parallel
