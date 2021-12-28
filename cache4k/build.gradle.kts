@@ -1,3 +1,5 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.dokka")
@@ -6,6 +8,10 @@ plugins {
 
 group = property("GROUP") as String
 version = property("VERSION_NAME") as String
+
+mavenPublish {
+    sonatypeHost = SonatypeHost.S01
+}
 
 kotlin {
     explicitApi()
