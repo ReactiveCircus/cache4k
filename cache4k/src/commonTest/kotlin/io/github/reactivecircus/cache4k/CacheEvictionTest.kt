@@ -8,9 +8,7 @@ class CacheEvictionTest {
 
     @Test
     fun maxSizeLimitReached_addNewEntry_oldEntryEvicted() {
-        val cache = Cache.Builder()
-            .maximumCacheSize(2)
-            .build<Long, String>()
+        val cache = cacheConfig<Long, String> { maximumCacheSize(2) }
 
         cache.put(1, "dog")
         cache.put(2, "cat")
@@ -33,9 +31,7 @@ class CacheEvictionTest {
 
     @Test
     fun maxSizeLimitReached_replaceCacheEntry_doesNotEvict() {
-        val cache = Cache.Builder()
-            .maximumCacheSize(2)
-            .build<Long, String>()
+        val cache = cacheConfig<Long, String> { maximumCacheSize(2) }
 
         cache.put(1, "dog")
         cache.put(2, "cat")
@@ -50,10 +46,7 @@ class CacheEvictionTest {
 
     @Test
     fun readCacheEntry_accessOrderChanged() {
-        val cache = Cache.Builder()
-            .maximumCacheSize(3)
-            .build<Long, String>()
-
+        val cache = cacheConfig<Long, String> { maximumCacheSize(3) }
         cache.put(1, "dog")
         cache.put(2, "cat")
         cache.put(3, "bird")
@@ -73,9 +66,7 @@ class CacheEvictionTest {
 
     @Test
     fun replaceCacheValue_accessOrderChanged() {
-        val cache = Cache.Builder()
-            .maximumCacheSize(3)
-            .build<Long, String>()
+        val cache = cacheConfig<Long, String> { maximumCacheSize(3) }
 
         cache.put(1, "dog")
         cache.put(2, "cat")
@@ -99,9 +90,7 @@ class CacheEvictionTest {
 
     @Test
     fun maximumCacheSizeIsOne_addNewEntry_existingEntryEvicted() {
-        val cache = Cache.Builder()
-            .maximumCacheSize(1)
-            .build<Long, String>()
+        val cache = cacheConfig<Long, String> { maximumCacheSize(1) }
 
         cache.put(1, "dog")
 
@@ -121,10 +110,7 @@ class CacheEvictionTest {
 
     @Test
     fun maximumCacheSizeIsZero_noValuesCached() {
-        val cache = Cache.Builder()
-            .maximumCacheSize(0)
-            .build<Long, String>()
-
+        val cache = cacheConfig<Long, String> { maximumCacheSize(0) }
         cache.put(1, "dog")
         cache.put(2, "cat")
 

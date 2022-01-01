@@ -14,9 +14,7 @@ class CacheBuilderTest {
     @Test
     fun expireAfterWrite_zeroDuration() {
         val exception = assertFailsWith<IllegalArgumentException> {
-            Cache.Builder()
-                .expireAfterWrite(0.nanoseconds)
-                .build<Any, Any>()
+            cacheConfig<Any, Any> { expireAfterWrite(0.nanoseconds) }
         }
 
         assertEquals("expireAfterWrite duration must be positive", exception.message)
@@ -24,9 +22,9 @@ class CacheBuilderTest {
 
     @Test
     fun expireAfterWrite_positiveDuration() {
-        val cache = Cache.Builder()
-            .expireAfterWrite(24.hours)
-            .build<Any, Any>() as RealCache
+        val cache = cacheConfig<Any, Any> {
+            expireAfterWrite(24.hours)
+        } as RealCache
 
         assertEquals(24.hours, cache.expireAfterWriteDuration)
     }
@@ -34,9 +32,7 @@ class CacheBuilderTest {
     @Test
     fun expireAfterWrite_negativeDuration() {
         val exception = assertFailsWith<IllegalArgumentException> {
-            Cache.Builder()
-                .expireAfterWrite((-1).nanoseconds)
-                .build<Any, Any>() as RealCache
+            cacheConfig<Any, Any> { expireAfterWrite((-1).nanoseconds) } as RealCache
         }
 
         assertEquals("expireAfterWrite duration must be positive", exception.message)
@@ -45,19 +41,14 @@ class CacheBuilderTest {
     @Test
     fun expireAfterAccess_zeroDuration() {
         val exception = assertFailsWith<IllegalArgumentException> {
-            Cache.Builder()
-                .expireAfterAccess(0.nanoseconds)
-                .build<Any, Any>() as RealCache
+            cacheConfig<Any, Any> { expireAfterAccess(0.nanoseconds) } as RealCache
         }
-
         assertEquals("expireAfterAccess duration must be positive", exception.message)
     }
 
     @Test
     fun expireAfterAccess_positiveDuration() {
-        val cache = Cache.Builder()
-            .expireAfterAccess(24.hours)
-            .build<Any, Any>() as RealCache
+        val cache = cacheConfig<Any, Any> { expireAfterAccess(24.hours) } as RealCache
 
         assertEquals(24.hours, cache.expireAfterAccessDuration)
     }
@@ -65,9 +56,7 @@ class CacheBuilderTest {
     @Test
     fun expireAfterAccess_negativeDuration() {
         val exception = assertFailsWith<IllegalArgumentException> {
-            Cache.Builder()
-                .expireAfterAccess((-1).nanoseconds)
-                .build<Any, Any>() as RealCache
+            cacheConfig<Any, Any> { expireAfterAccess((-1).nanoseconds) } as RealCache
         }
 
         assertEquals("expireAfterAccess duration must be positive", exception.message)
@@ -75,18 +64,14 @@ class CacheBuilderTest {
 
     @Test
     fun maximumCacheSize_zero() {
-        val cache = Cache.Builder()
-            .maximumCacheSize(0)
-            .build<Any, Any>() as RealCache
+        val cache = cacheConfig<Any, Any> { maximumCacheSize(0) } as RealCache
 
         assertEquals(0, cache.maxSize)
     }
 
     @Test
     fun maximumCacheSize_positiveValue() {
-        val cache = Cache.Builder()
-            .maximumCacheSize(10)
-            .build<Any, Any>() as RealCache
+        val cache = cacheConfig<Any, Any> { maximumCacheSize(10) } as RealCache
 
         assertEquals(10, cache.maxSize)
     }
@@ -94,9 +79,7 @@ class CacheBuilderTest {
     @Test
     fun maximumCacheSize_negativeValue() {
         val exception = assertFailsWith<IllegalArgumentException> {
-            Cache.Builder()
-                .maximumCacheSize(-1)
-                .build<Any, Any>() as RealCache
+            cacheConfig<Any, Any> { maximumCacheSize(-1) } as RealCache
         }
 
         assertEquals("maximum size must not be negative", exception.message)
@@ -105,16 +88,14 @@ class CacheBuilderTest {
     @Test
     fun fakeTimeSource() {
         val fakeTimeSource = FakeTimeSource()
-        val cache = Cache.Builder()
-            .fakeTimeSource(fakeTimeSource)
-            .build<Any, Any>() as RealCache
+        val cache = cacheConfig<Any, Any> { fakeTimeSource(fakeTimeSource) } as RealCache
 
         assertEquals(fakeTimeSource, cache.timeSource)
     }
 
     @Test
     fun buildWithDefaults() {
-        val cache = Cache.Builder().build<Any, Any>() as RealCache
+        val cache = cacheConfig<Any, Any> { } as RealCache
 
         assertEquals(Duration.INFINITE, cache.expireAfterWriteDuration)
         assertEquals(Duration.INFINITE, cache.expireAfterAccessDuration)
