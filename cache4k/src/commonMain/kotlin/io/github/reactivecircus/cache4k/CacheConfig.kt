@@ -5,3 +5,6 @@ public fun <K : Any, V : Any> cacheConfig(init: Cache.Builder.() -> Unit): Cache
     cacheBuilder.init()
     return cacheBuilder.build()
 }
+
+public fun <K : Any, V : Any> defaultCacheConfig(): Cache<K, V> = cacheConfig {}
+

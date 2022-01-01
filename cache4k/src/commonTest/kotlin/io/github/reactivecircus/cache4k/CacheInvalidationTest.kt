@@ -9,7 +9,7 @@ class CacheInvalidationTest {
 
     @Test
     fun invalidateByKey_associatedEntryEvicted() {
-        val cache = cacheConfig<Long, String> { }
+        val cache = defaultCacheConfig<Long, String>()
 
         cache.put(1, "dog")
         cache.put(2, "cat")
@@ -49,7 +49,7 @@ class CacheInvalidationTest {
 
     @Test
     fun invalidateAll_allEntriesEvicted() {
-        val cache = cacheConfig<Long, String> { }
+        val cache = defaultCacheConfig<Long, String>()
 
         cache.put(1, "dog")
         cache.put(2, "cat")
