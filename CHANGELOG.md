@@ -1,5 +1,22 @@
 # Change Log
 
+## 0.4.0
+
+### Added
+
+Added new targets:
+- `iosSimulatorArm64`
+- `macosArm64`
+- `tvosArm64` 
+- `tvosSimulatorArm64`
+- `tvosX64`
+
+### Changed
+
+- Kotlin 1.6.10.
+- Stately 1.2.1.
+- Target Java 11.
+
 ## 0.3.0
 
 ### Changed

@@ -1,3 +1,5 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.dokka")
@@ -7,12 +9,16 @@ plugins {
 group = property("GROUP") as String
 version = property("VERSION_NAME") as String
 
+mavenPublish {
+    sonatypeHost = SonatypeHost.S01
+}
+
 kotlin {
     explicitApi()
     jvm {
         compilations.all {
             kotlinOptions {
-                kotlinOptions.jvmTarget = "1.8"
+                kotlinOptions.jvmTarget = "11"
                 freeCompilerArgs = freeCompilerArgs + listOf(
                     "-Xjvm-default=all"
                 )
@@ -33,6 +39,9 @@ kotlin {
     iosSimulatorArm64()
     macosX64()
     macosArm64()
+    tvosArm64()
+    tvosSimulatorArm64()
+    tvosX64()
 
     sourceSets {
         all {
@@ -53,42 +62,21 @@ kotlin {
         }
         val commonTest by getting {
             dependencies {
-                implementation(libs.kotlin.testCommon)
-                implementation(libs.kotlin.testAnnotationsCommon)
-                implementation(libs.coroutines.core)
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
+                implementation(libs.coroutines.test)
             }
         }
         val jvmTest by getting {
             dependencies {
-                implementation(libs.kotlin.test)
-                implementation(libs.kotlin.testJUnit)
+                implementation(kotlin("test"))
+                implementation(kotlin("test-junit"))
             }
         }
         val jsTest by getting {
             dependencies {
-                implementation(libs.kotlin.testJS)
+                implementation(kotlin("test-js"))
             }
-        }
-        val nativeTest by creating {
-            dependsOn(commonTest)
-            dependencies {
-                implementation(libs.coroutines.core)
-            }
-        }
-        val iosX64Test by getting {
-            dependsOn(nativeTest)
-        }
-        val iosArm64Test by getting {
-            dependsOn(nativeTest)
-        }
-        val iosSimulatorArm64Test by getting {
-            dependsOn(nativeTest)
-        }
-        val macosX64Test by getting {
-            dependsOn(nativeTest)
-        }
-        val macosArm64Test by getting {
-            dependsOn(nativeTest)
         }
     }
 }

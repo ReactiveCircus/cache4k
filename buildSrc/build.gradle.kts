@@ -16,5 +16,5 @@ dependencies {
     implementation(libs.plugin.dokka)
     implementation(libs.plugin.kotlin)
     implementation(libs.plugin.kotlinBinaryCompatibilityValidator)
-    implementation(libs.plugin.vanniktech)
+    implementation(libs.plugin.mavenPublish)
 }
