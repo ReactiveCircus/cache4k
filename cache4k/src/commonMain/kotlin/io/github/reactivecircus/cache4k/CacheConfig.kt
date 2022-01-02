@@ -7,4 +7,3 @@ public fun <K : Any, V : Any> buildCache(init: Cache.Builder.() -> Unit): Cache<
 }
 
 public fun <K : Any, V : Any> defaultBuildCache(): Cache<K, V> = buildCache {}
-
