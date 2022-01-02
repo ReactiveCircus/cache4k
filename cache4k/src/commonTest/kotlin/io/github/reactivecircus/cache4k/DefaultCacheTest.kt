@@ -8,14 +8,14 @@ class DefaultCacheTest {
 
     @Test
     fun noEntryWithAssociatedKeyExists_get_returnsNull() {
-        val cache = cacheConfig<Long, String> { }
+        val cache = buildCache<Long, String> { }
 
         assertNull(cache.get(1))
     }
 
     @Test
     fun entryWithAssociatedKeyExists_get_returnsValue() {
-        val cache = cacheConfig<Long, String> { }
+        val cache = buildCache<Long, String> { }
 
         cache.put(1, "dog")
         cache.put(2, "cat")
@@ -26,7 +26,7 @@ class DefaultCacheTest {
 
     @Test
     fun getMultipleTimesWithSameKey_returnsSameValue() {
-        val cache = cacheConfig<Long, String> { }
+        val cache = buildCache<Long, String> { }
 
         cache.put(1, "dog")
 
@@ -39,7 +39,7 @@ class DefaultCacheTest {
 
     @Test
     fun valuesReplacedForSameKey_get_returnsLatestValue() {
-        val cache = cacheConfig<Long, String> { }
+        val cache = buildCache<Long, String> { }
 
         cache.put(1, "dog")
         cache.put(2, "cat")
@@ -51,7 +51,7 @@ class DefaultCacheTest {
 
     @Test
     fun cacheComplexTypeValueWithHashCode() {
-        val cache = defaultCacheConfig<Long, TypeWithHashCode>()
+        val cache = defaultBuildCache<Long, TypeWithHashCode>()
 
         cache.put(1, TypeWithHashCode("dog", 10))
         cache.put(2, TypeWithHashCode("cat", 15))
@@ -62,7 +62,7 @@ class DefaultCacheTest {
 
     @Test
     fun cacheComplexTypeValueWithoutHashCode() {
-        val cache = defaultCacheConfig<Long, TypeWithoutHashCode>()
+        val cache = defaultBuildCache<Long, TypeWithoutHashCode>()
         cache.put(1, TypeWithoutHashCode("dog", 10))
 
         val value = cache.get(1)
@@ -73,7 +73,7 @@ class DefaultCacheTest {
 
     @Test
     fun cacheWithComplexTypeKeyWithHashcode() {
-        val cache = defaultCacheConfig<TypeWithHashCode, String>()
+        val cache = defaultBuildCache<TypeWithHashCode, String>()
 
         cache.put(TypeWithHashCode("a", 1), "dog")
 
@@ -84,7 +84,7 @@ class DefaultCacheTest {
 
     @Test
     fun cacheWithComplexTypeKeyWithoutHashcode() {
-        val cache = defaultCacheConfig<TypeWithoutHashCode, String>()
+        val cache = defaultBuildCache<TypeWithoutHashCode, String>()
 
         val key = TypeWithoutHashCode("a", 1)
 
@@ -99,7 +99,7 @@ class DefaultCacheTest {
 
     @Test
     fun cacheWithSameValueAndDifferentKeys() {
-        val cache = defaultCacheConfig<Long, TypeWithoutHashCode>()
+        val cache = defaultBuildCache<Long, TypeWithoutHashCode>()
 
         val valueToCache = TypeWithoutHashCode("dog", 10)
 
@@ -112,7 +112,7 @@ class DefaultCacheTest {
 
     @Test
     fun cacheUsingUnitAsKey() {
-        val cache = defaultCacheConfig<Unit, String>()
+        val cache = defaultBuildCache<Unit, String>()
 
         cache.put(Unit, "dog")
         cache.put(Unit, "cat")
@@ -122,7 +122,7 @@ class DefaultCacheTest {
 
     @Test
     fun asMap_returnsAllEntries() {
-        val cache = defaultCacheConfig<Long, String>()
+        val cache = defaultBuildCache<Long, String>()
 
         cache.put(1, "dog")
         cache.put(2, "cat")
@@ -132,7 +132,7 @@ class DefaultCacheTest {
 
     @Test
     fun asMap_createsDefensiveCopy() {
-        val cache = defaultCacheConfig<Long, String>()
+        val cache = defaultBuildCache<Long, String>()
 
         cache.put(1, "dog")
         cache.put(2, "cat")

@@ -15,7 +15,7 @@ class JvmConcurrencyTest {
 
     @Test
     fun evictEntriesConcurrently() = runTest {
-        val cache = cacheConfig<Long, String> { maximumCacheSize(2) }
+        val cache = buildCache<Long, String> { maximumCacheSize(2) }
         // should not produce a ConcurrentModificationException
         repeat(10) {
             launch(Executors.newSingleThreadExecutor().asCoroutineDispatcher()) {
@@ -26,7 +26,7 @@ class JvmConcurrencyTest {
 
     @Test
     fun expireEntriesConcurrently() = runTest {
-        val cache = cacheConfig<Long, String> {
+        val cache = buildCache<Long, String> {
             fakeTimeSource(fakeTimeSource)
             expireAfterWrite(2.seconds)
         }

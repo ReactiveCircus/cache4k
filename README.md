@@ -56,13 +56,13 @@ kotlin {
 To create a new `Cache` instance using `Long` for the key and `String` for the value:
 
 ```kotlin
-val cache = cacheConfig<Long, String> { } 
+val cache = buildCache<Long, String> { } 
 ```
 
 To create a new `Cache` instance using `Long` for the key `String` with default configuration from this project, follow the example:
 
 ```kotlin
-val cache = defaultCacheConfig<Long, String>()
+val cache = defaultBuildCache<Long, String>()
 ```
 
 To start writing entries to the cache:
@@ -95,7 +95,7 @@ cache.get(1) // returns "bird"
 
 ```kotlin
 runBlockingTest {
-    val cache = defaultCacheConfig<Long, String>()
+    val cache = defaultBuildCache<Long, String>()
 
     val userId = 1L
     val user = cache.get(userId) {
@@ -124,7 +124,7 @@ time-to-idle**), where "access" means **reading the cache**, **adding a new cach
 replacing an existing entry with a new one**:
 
 ```kotlin
-val cache = cacheConfig<Long, String> { expireAfterAccess(24.hours) }
+val cache = buildCache<Long, String> { expireAfterAccess(24.hours) }
 ```
 
 An entry in this cache will be removed if it has not been read or replaced **after 24 hours** since it's been written into the cache.
@@ -147,7 +147,7 @@ _Note that cache entries are **not** removed immediately upon expiration at exac
 To set the maximum number of entries to be kept in the cache:
 
 ```kotlin
-val cache = cacheConfig<Long, String> { maximumCacheSize(100) }
+val cache = buildCache<Long, String> { maximumCacheSize(100) }
 ```
 
 Once there are more than **100** entries in this cache, the **least recently used one** will be removed, where "used" means **reading the cache**, **adding a new cache entry**, or **replacing an
@@ -158,7 +158,7 @@ existing entry with a new one**.
 To get a copy of the current cache entries as a `Map`:
 
 ```kotlin
-val cache = defaultCacheConfig<Long, String>()
+val cache = defaultBuildCache<Long, String>()
 
 cache.put(1, "dog")
 cache.put(2, "cat")
@@ -176,7 +176,7 @@ Cache entries can also be deleted explicitly.
 To delete a cache entry for a given key:
 
 ```kotlin
-val cache = defaultCacheConfig<Long, String>()
+val cache = defaultBuildCache<Long, String>()
 cache.put(1, "dog")
 
 cache.invalidate(1)
@@ -200,7 +200,7 @@ so you can programmatically advance the reading of the time source:
 fun cacheEntryEvictedAfterExpiration() {
     private val fakeTimeSource = FakeTimeSource()
 
-    val cache = cacheConfig<Long, String> {
+    val cache = buildCache<Long, String> {
         fakeTimeSource(fakeTimeSource)
         expireAfterWrite(1.minutes)
     }
