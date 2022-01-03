@@ -95,7 +95,7 @@ class CacheBuilderTest {
 
     @Test
     fun buildWithDefaults() {
-        val cache = defaultBuildCache<Any, Any>() as RealCache
+        val cache = buildDefaultCache<Any, Any>() as RealCache
 
         assertEquals(Duration.INFINITE, cache.expireAfterWriteDuration)
         assertEquals(Duration.INFINITE, cache.expireAfterAccessDuration)

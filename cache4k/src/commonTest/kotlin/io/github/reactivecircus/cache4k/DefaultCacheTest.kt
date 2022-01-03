@@ -51,7 +51,7 @@ class DefaultCacheTest {
 
     @Test
     fun cacheComplexTypeValueWithHashCode() {
-        val cache = defaultBuildCache<Long, TypeWithHashCode>()
+        val cache = buildDefaultCache<Long, TypeWithHashCode>()
 
         cache.put(1, TypeWithHashCode("dog", 10))
         cache.put(2, TypeWithHashCode("cat", 15))
@@ -62,7 +62,7 @@ class DefaultCacheTest {
 
     @Test
     fun cacheComplexTypeValueWithoutHashCode() {
-        val cache = defaultBuildCache<Long, TypeWithoutHashCode>()
+        val cache = buildDefaultCache<Long, TypeWithoutHashCode>()
         cache.put(1, TypeWithoutHashCode("dog", 10))
 
         val value = cache.get(1)
@@ -73,7 +73,7 @@ class DefaultCacheTest {
 
     @Test
     fun cacheWithComplexTypeKeyWithHashcode() {
-        val cache = defaultBuildCache<TypeWithHashCode, String>()
+        val cache = buildDefaultCache<TypeWithHashCode, String>()
 
         cache.put(TypeWithHashCode("a", 1), "dog")
 
@@ -84,7 +84,7 @@ class DefaultCacheTest {
 
     @Test
     fun cacheWithComplexTypeKeyWithoutHashcode() {
-        val cache = defaultBuildCache<TypeWithoutHashCode, String>()
+        val cache = buildDefaultCache<TypeWithoutHashCode, String>()
 
         val key = TypeWithoutHashCode("a", 1)
 
@@ -99,7 +99,7 @@ class DefaultCacheTest {
 
     @Test
     fun cacheWithSameValueAndDifferentKeys() {
-        val cache = defaultBuildCache<Long, TypeWithoutHashCode>()
+        val cache = buildDefaultCache<Long, TypeWithoutHashCode>()
 
         val valueToCache = TypeWithoutHashCode("dog", 10)
 
@@ -112,7 +112,7 @@ class DefaultCacheTest {
 
     @Test
     fun cacheUsingUnitAsKey() {
-        val cache = defaultBuildCache<Unit, String>()
+        val cache = buildDefaultCache<Unit, String>()
 
         cache.put(Unit, "dog")
         cache.put(Unit, "cat")
@@ -122,7 +122,7 @@ class DefaultCacheTest {
 
     @Test
     fun asMap_returnsAllEntries() {
-        val cache = defaultBuildCache<Long, String>()
+        val cache = buildDefaultCache<Long, String>()
 
         cache.put(1, "dog")
         cache.put(2, "cat")
@@ -132,7 +132,7 @@ class DefaultCacheTest {
 
     @Test
     fun asMap_createsDefensiveCopy() {
-        val cache = defaultBuildCache<Long, String>()
+        val cache = buildDefaultCache<Long, String>()
 
         cache.put(1, "dog")
         cache.put(2, "cat")
