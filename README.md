@@ -62,7 +62,7 @@ val cache = buildCache<Long, String> { }
 To create a new `Cache` instance using `Long` for the key `String` with default configuration from this project, follow the example:
 
 ```kotlin
-val cache = defaultBuildCache<Long, String>()
+val cache = buildDefaultCache<Long, String>()
 ```
 
 To start writing entries to the cache:
@@ -95,7 +95,7 @@ cache.get(1) // returns "bird"
 
 ```kotlin
 runBlockingTest {
-    val cache = defaultBuildCache<Long, String>()
+    val cache = buildDefaultCache<Long, String>()
 
     val userId = 1L
     val user = cache.get(userId) {
@@ -158,7 +158,7 @@ existing entry with a new one**.
 To get a copy of the current cache entries as a `Map`:
 
 ```kotlin
-val cache = defaultBuildCache<Long, String>()
+val cache = buildDefaultCache<Long, String>()
 
 cache.put(1, "dog")
 cache.put(2, "cat")
@@ -176,7 +176,7 @@ Cache entries can also be deleted explicitly.
 To delete a cache entry for a given key:
 
 ```kotlin
-val cache = defaultBuildCache<Long, String>()
+val cache = buildDefaultCache<Long, String>()
 cache.put(1, "dog")
 
 cache.invalidate(1)
