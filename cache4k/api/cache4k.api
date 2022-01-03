@@ -22,7 +22,7 @@ public final class io/github/reactivecircus/cache4k/Cache$Builder$Companion {
 
 public final class io/github/reactivecircus/cache4k/CacheConfigKt {
 	public static final fun buildCache (Lkotlin/jvm/functions/Function1;)Lio/github/reactivecircus/cache4k/Cache;
-	public static final fun defaultBuildCache ()Lio/github/reactivecircus/cache4k/Cache;
+	public static final fun buildDefaultCache ()Lio/github/reactivecircus/cache4k/Cache;
 }
 
 public final class io/github/reactivecircus/cache4k/FakeTimeSource : kotlin/time/AbstractLongTimeSource {
