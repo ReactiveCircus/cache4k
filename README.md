@@ -135,7 +135,7 @@ To set the maximum time an entry can live in the cache since the last write (als
 time-to-live**), where "write" means **adding a new cache entry** or **replacing an existing entry with a new one**:
 
 ```kotlin
-val cache = cacheCOnfig<Long, String> { expireAfterWrite(30.minutes) }
+val cache = buildCache<Long, String> { expireAfterWrite(30.minutes) }
 ```
 
 An entry in this cache will be removed if it has not been replaced **after 30 minutes** since it's been written into the cache.
