@@ -6,7 +6,7 @@ kotlin = "1.6.10"
 kotlinBinaryCompabilityValidator = "0.8.0"
 stately = "1.2.1"
 statelyIso = "1.1.10-a1"
-mavenPublish = "0.17.0"
+mavenPublish = "0.19.0"
 
 [libraries]
 plugin-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
