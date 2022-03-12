@@ -2,11 +2,6 @@ plugins {
     `kotlin-dsl`
 }
 
-repositories {
-    mavenCentral()
-    gradlePluginPortal()
-}
-
 dependencies {
     // TODO: remove when this fixed
     //  https://github.com/gradle/gradle/issues/15383#issuecomment-779893192
