@@ -54,6 +54,11 @@ internal class RealCache<Key : Any, Value : Any>(
     private val expiresAfterAccess = expireAfterAccessDuration.isFinite()
 
     /**
+     * A key-based synchronizer for running cache loaders.
+     */
+    private val loadersSynchronizer = KeyedSynchronizer<Key>()
+
+    /**
      * A queue of unique cache entries ordered by write time.
      * Used for performing write-time based cache expiration.
      */
@@ -89,23 +94,25 @@ internal class RealCache<Key : Any, Value : Any>(
     }
 
     override suspend fun get(key: Key, loader: suspend () -> Value): Value {
-        return cacheEntries[key]?.let {
-            if (it.isExpired()) {
-                // clean up expired entries
-                expireEntries()
-                null
-            } else {
-                // update eviction metadata
-                recordRead(it)
-                it.value.get()
-            }
-        } ?: loader().let { loadedValue ->
-            val existingValue = get(key)
-            if (existingValue != null) {
-                existingValue
-            } else {
-                put(key, loadedValue)
-                loadedValue
+        return loadersSynchronizer.synchronizedFor(key) {
+            cacheEntries[key]?.let {
+                if (it.isExpired()) {
+                    // clean up expired entries
+                    expireEntries()
+                    null
+                } else {
+                    // update eviction metadata
+                    recordRead(it)
+                    it.value.get()
+                }
+            } ?: loader().let { loadedValue ->
+                val existingValue = get(key)
+                if (existingValue != null) {
+                    existingValue
+                } else {
+                    put(key, loadedValue)
+                    loadedValue
+                }
             }
         }
     }

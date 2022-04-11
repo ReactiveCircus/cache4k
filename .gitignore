@@ -18,3 +18,4 @@ local.properties
 # Docs
 site
 docs/api
+.DS_Store
