@@ -15,7 +15,7 @@ class KeyedSynchronizerTest {
     private val testDispatcher = StandardTestDispatcher()
 
     @Test
-    fun `actions associated with the same key are mutually exclusive`() = runTest(testDispatcher) {
+    fun actionsAssociatedWithTheSameKeyAreMutuallyExclusive() = runTest(testDispatcher) {
         val key = "a"
         var action1Started = false
         var action2Started = false
@@ -64,7 +64,7 @@ class KeyedSynchronizerTest {
     }
 
     @Test
-    fun `actions associated with different keys can run concurrently`() = runTest(testDispatcher) {
+    fun actionsAssociatedWithDifferentKeys_run_concurrently() = runTest(testDispatcher) {
         var action1Started = false
         var action2Started = false
         var action3Started = false
@@ -100,7 +100,7 @@ class KeyedSynchronizerTest {
     }
 
     @Test
-    fun `a new action is queued after existing blocked actions using the same key from different thread`() =
+    fun newActionUsingSameKeyFromDifferentThread_is_queuedAfterExistingBlockedActions() =
         runTest(testDispatcher) {
             val key = "a"
             var action1Started = false
@@ -154,7 +154,7 @@ class KeyedSynchronizerTest {
         }
 
     @Test
-    fun `the next blocked action is unblocked when an action using the same key from another thread throws an exception`() =
+    fun whenActionUsingSameKeyFromAnotherThreadThrowsErrorTheNextAction_is_unblocked() =
         runTest(testDispatcher) {
             val key = "a"
             var action1Started = false
