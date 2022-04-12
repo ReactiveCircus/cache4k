@@ -45,7 +45,6 @@ class KeyedSynchronizerTest {
 
         delay(10)
 
-
         // action 1 starts immediately
         assertTrue(action1Started)
         assertFalse(action2Started)
@@ -170,7 +169,7 @@ class KeyedSynchronizerTest {
                     synchronizer.synchronizedFor<String>(key) {
                         action1Started = true
                         delay(actionTime)
-                        throw Exception()
+                        throw IllegalStateException()
                     }
                 }
 
