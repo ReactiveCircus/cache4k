@@ -7,6 +7,11 @@ import co.touchlab.stately.concurrency.value
 import kotlin.time.Duration
 import kotlin.time.TimeMark
 import kotlin.time.TimeSource
+import kotlin.native.concurrent.*
+
+@OptIn(ExperimentalStdlibApi::class)
+internal val isNewMM: Boolean
+    get() = kotlin.native.isExperimentalMM()
 
 /**
  * A Kotlin Multiplatform [Cache] implementation powered by touchlab/Stately.
@@ -36,7 +41,7 @@ internal class RealCache<Key : Any, Value : Any>(
     val timeSource: TimeSource,
 ) : Cache<Key, Value> {
 
-    private val cacheEntries = IsoMutableMap<Key, CacheEntry<Key, Value>>()
+    private val cacheEntries: MutableMap<Key, CacheEntry<Key, Value>> = if (isNewMM) IsoMutableMap() else mutableMapOf()
 
     /**
      * Whether to perform size based evictions.
@@ -62,9 +67,9 @@ internal class RealCache<Key : Any, Value : Any>(
      * A queue of unique cache entries ordered by write time.
      * Used for performing write-time based cache expiration.
      */
-    private val writeQueue: IsoMutableSet<CacheEntry<Key, Value>>? =
+    private val writeQueue: MutableSet<CacheEntry<Key, Value>>? =
         takeIf { expiresAfterWrite }?.let {
-            ReorderingIsoMutableSet()
+            if (isNewMM) IsoMutableSet() else mutableSetOf()
         }
 
     /**
@@ -74,9 +79,9 @@ internal class RealCache<Key : Any, Value : Any>(
      *
      * Note that a write is also considered an access.
      */
-    private val accessQueue: IsoMutableSet<CacheEntry<Key, Value>>? =
+    private val accessQueue: MutableSet<CacheEntry<Key, Value>>? =
         takeIf { expiresAfterAccess || evictsBySize }?.let {
-            ReorderingIsoMutableSet()
+            if (isNewMM) IsoMutableSet() else mutableSetOf()
         }
 
     override fun get(key: Key): Value? {
@@ -171,7 +176,7 @@ internal class RealCache<Key : Any, Value : Any>(
         )
 
         queuesToProcess.forEach { queue ->
-            queue.access {
+            queue.safeAccess {
                 val iterator = queue.iterator()
                 for (entry in iterator) {
                     if (entry.isExpired()) {
@@ -206,7 +211,7 @@ internal class RealCache<Key : Any, Value : Any>(
         checkNotNull(accessQueue)
 
         while (cacheEntries.size > maxSize) {
-            accessQueue.access {
+            accessQueue.safeAccess {
                 it.firstOrNull()?.run {
                     cacheEntries.remove(key)
                     writeQueue?.remove(this)
@@ -224,7 +229,7 @@ internal class RealCache<Key : Any, Value : Any>(
             val accessTimeMark = cacheEntry.accessTimeMark.value
             cacheEntry.accessTimeMark.set(accessTimeMark + accessTimeMark.elapsedNow())
         }
-        accessQueue?.add(cacheEntry)
+        accessQueue?.addLastOrReorder(cacheEntry)
     }
 
     /**
@@ -240,8 +245,8 @@ internal class RealCache<Key : Any, Value : Any>(
             val writeTimeMark = cacheEntry.writeTimeMark.value
             cacheEntry.writeTimeMark.set(writeTimeMark + writeTimeMark.elapsedNow())
         }
-        accessQueue?.add(cacheEntry)
-        writeQueue?.add(cacheEntry)
+        accessQueue?.addLastOrReorder(cacheEntry)
+        writeQueue?.addLastOrReorder(cacheEntry)
     }
 }
 
