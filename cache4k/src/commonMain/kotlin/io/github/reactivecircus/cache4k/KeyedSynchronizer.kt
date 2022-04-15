@@ -1,8 +1,7 @@
 package io.github.reactivecircus.cache4k
 
-import co.touchlab.stately.collections.IsoMutableMap
-import co.touchlab.stately.concurrency.Lock
-import co.touchlab.stately.concurrency.withLock
+import kotlinx.atomicfu.locks.reentrantLock
+import kotlinx.atomicfu.locks.withLock
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -11,9 +10,9 @@ import kotlinx.coroutines.sync.withLock
  */
 internal class KeyedSynchronizer<Key : Any> {
 
-    private val keyBasedMutexes = IsoMutableMap<Key, MutexEntry>()
+    private val keyBasedMutexes: MutableMap<Key, MutexEntry> = mutableMapOf()
 
-    private val mapLock = Lock()
+    private val mapLock = reentrantLock()
 
     /**
      * Executes the given [action] under a mutex associated with the [key].
@@ -34,7 +33,7 @@ internal class KeyedSynchronizer<Key : Any> {
      * If one cannot be found, create a new [MutexEntry], save it to the map, and return it.
      */
     private fun getMutex(key: Key): Mutex {
-        return mapLock.withLock {
+        mapLock.withLock {
             val mutexEntry = keyBasedMutexes[key] ?: MutexEntry(Mutex(), 0)
             // increment the counter to indicate a new thread is using the lock
             mutexEntry.counter++
@@ -43,7 +42,7 @@ internal class KeyedSynchronizer<Key : Any> {
                 keyBasedMutexes[key] = mutexEntry
             }
 
-            mutexEntry.mutex
+            return mutexEntry.mutex
         }
     }
 
@@ -55,7 +54,7 @@ internal class KeyedSynchronizer<Key : Any> {
         mapLock.withLock {
             // decrement the counter to indicate the lock is no longer needed for this thread,
             // then remove the lock entry from map if no other thread is still holding this lock
-            val mutexEntry = keyBasedMutexes[key] ?: return@withLock
+            val mutexEntry = keyBasedMutexes[key] ?: return
             mutexEntry.counter--
             if (mutexEntry.counter == 0) {
                 keyBasedMutexes.remove(key)

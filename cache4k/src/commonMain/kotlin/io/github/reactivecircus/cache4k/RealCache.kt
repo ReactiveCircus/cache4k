@@ -1,7 +1,7 @@
 package io.github.reactivecircus.cache4k
 
-import co.touchlab.stately.concurrency.AtomicReference
-import co.touchlab.stately.concurrency.value
+import kotlinx.atomicfu.AtomicRef
+import kotlinx.atomicfu.atomic
 import kotlin.time.Duration
 import kotlin.time.TimeMark
 import kotlin.time.TimeSource
@@ -86,7 +86,7 @@ internal class RealCache<Key : Any, Value : Any>(
             } else {
                 // update eviction metadata
                 recordRead(it)
-                it.value.get()
+                it.value.value
             }
         }
     }
@@ -101,7 +101,7 @@ internal class RealCache<Key : Any, Value : Any>(
                 } else {
                     // update eviction metadata
                     recordRead(it)
-                    it.value.get()
+                    it.value.value
                 }
             } ?: loader().let { loadedValue ->
                 val existingValue = get(key)
@@ -122,15 +122,15 @@ internal class RealCache<Key : Any, Value : Any>(
         if (existingEntry != null) {
             // cache entry found
             recordWrite(existingEntry)
-            existingEntry.value.set(value)
+            existingEntry.value.value = value
         } else {
             // create a new cache entry
             val nowTimeMark = timeSource.markNow()
             val newEntry = CacheEntry(
                 key = key,
-                value = AtomicReference(value),
-                accessTimeMark = AtomicReference(nowTimeMark),
-                writeTimeMark = AtomicReference(nowTimeMark),
+                value = atomic(value),
+                accessTimeMark = atomic(nowTimeMark),
+                writeTimeMark = atomic(nowTimeMark),
             )
             recordWrite(newEntry)
             cacheEntries[key] = newEntry
@@ -155,7 +155,7 @@ internal class RealCache<Key : Any, Value : Any>(
 
     override fun asMap(): Map<in Key, Value> {
         return cacheEntries.values.associate { entry ->
-            entry.key to entry.value.get()
+            entry.key to entry.value.value
         }
     }
 
@@ -187,8 +187,8 @@ internal class RealCache<Key : Any, Value : Any>(
      * Check whether the [CacheEntry] has expired based on either access time or write time.
      */
     private fun CacheEntry<Key, Value>.isExpired(): Boolean {
-        return expiresAfterAccess && (accessTimeMark.get() + expireAfterAccessDuration).hasPassedNow() ||
-            expiresAfterWrite && (writeTimeMark.get() + expireAfterWriteDuration).hasPassedNow()
+        return expiresAfterAccess && (accessTimeMark.value + expireAfterAccessDuration).hasPassedNow() ||
+            expiresAfterWrite && (writeTimeMark.value + expireAfterWriteDuration).hasPassedNow()
     }
 
     /**
@@ -216,7 +216,7 @@ internal class RealCache<Key : Any, Value : Any>(
     private fun recordRead(cacheEntry: CacheEntry<Key, Value>) {
         if (expiresAfterAccess) {
             val accessTimeMark = cacheEntry.accessTimeMark.value
-            cacheEntry.accessTimeMark.set(accessTimeMark + accessTimeMark.elapsedNow())
+            cacheEntry.accessTimeMark.value = (accessTimeMark + accessTimeMark.elapsedNow())
         }
         accessQueue?.addLastOrReorder(cacheEntry)
     }
@@ -228,11 +228,11 @@ internal class RealCache<Key : Any, Value : Any>(
     private fun recordWrite(cacheEntry: CacheEntry<Key, Value>) {
         if (expiresAfterAccess) {
             val accessTimeMark = cacheEntry.accessTimeMark.value
-            cacheEntry.accessTimeMark.set(accessTimeMark + accessTimeMark.elapsedNow())
+            cacheEntry.accessTimeMark.value = (accessTimeMark + accessTimeMark.elapsedNow())
         }
         if (expiresAfterWrite) {
             val writeTimeMark = cacheEntry.writeTimeMark.value
-            cacheEntry.writeTimeMark.set(writeTimeMark + writeTimeMark.elapsedNow())
+            cacheEntry.writeTimeMark.value = (writeTimeMark + writeTimeMark.elapsedNow())
         }
         accessQueue?.addLastOrReorder(cacheEntry)
         writeQueue?.addLastOrReorder(cacheEntry)
@@ -245,7 +245,7 @@ internal class RealCache<Key : Any, Value : Any>(
  */
 private class CacheEntry<Key : Any, Value : Any>(
     val key: Key,
-    val value: AtomicReference<Value>,
-    val accessTimeMark: AtomicReference<TimeMark>,
-    val writeTimeMark: AtomicReference<TimeMark>,
+    val value: AtomicRef<Value>,
+    val accessTimeMark: AtomicRef<TimeMark>,
+    val writeTimeMark: AtomicRef<TimeMark>,
 )

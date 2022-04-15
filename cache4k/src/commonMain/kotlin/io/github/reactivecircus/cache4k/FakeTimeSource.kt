@@ -1,6 +1,7 @@
 package io.github.reactivecircus.cache4k
 
-import co.touchlab.stately.concurrency.AtomicLong
+import kotlinx.atomicfu.AtomicLong
+import kotlinx.atomicfu.atomic
 import kotlin.time.AbstractLongTimeSource
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
@@ -12,9 +13,9 @@ import kotlin.time.DurationUnit
  */
 public class FakeTimeSource : AbstractLongTimeSource(unit = DurationUnit.NANOSECONDS) {
 
-    private val reading = AtomicLong(0)
+    private val reading = atomic(0L)
 
-    override fun read(): Long = reading.get()
+    override fun read(): Long = reading.value
 
     /**
      * Advances the current reading value of this time source by the specified [duration].
@@ -28,21 +29,24 @@ public class FakeTimeSource : AbstractLongTimeSource(unit = DurationUnit.NANOSEC
     public operator fun plusAssign(duration: Duration) {
         val delta = duration.toDouble(unit)
         val longDelta = delta.toLong()
-        reading.set(
-            reading.get().let { currentReading ->
+        reading.value =
+            reading.value.let { currentReading ->
                 if (longDelta != Long.MIN_VALUE && longDelta != Long.MAX_VALUE) {
                     // when delta fits in long, add it as long
                     val newReading = currentReading + longDelta
-                    if (currentReading xor longDelta >= 0 && currentReading xor newReading < 0) overflow(duration)
+                    if (currentReading xor longDelta >= 0 && currentReading xor newReading < 0) overflow(
+                        duration
+                    )
                     newReading
                 } else {
                     // when delta is greater than long, add it as double
                     val newReading = currentReading + delta
-                    if (newReading > Long.MAX_VALUE || newReading < Long.MIN_VALUE) overflow(duration)
+                    if (newReading > Long.MAX_VALUE || newReading < Long.MIN_VALUE) overflow(
+                        duration
+                    )
                     newReading.toLong()
                 }
             }
-        )
     }
 
     private fun overflow(duration: Duration) {
