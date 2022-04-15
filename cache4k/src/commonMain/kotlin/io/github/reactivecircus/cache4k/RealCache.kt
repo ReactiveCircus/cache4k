@@ -1,17 +1,10 @@
 package io.github.reactivecircus.cache4k
 
-import co.touchlab.stately.collections.IsoMutableMap
-import co.touchlab.stately.collections.IsoMutableSet
 import co.touchlab.stately.concurrency.AtomicReference
 import co.touchlab.stately.concurrency.value
 import kotlin.time.Duration
 import kotlin.time.TimeMark
 import kotlin.time.TimeSource
-import kotlin.native.concurrent.*
-
-@OptIn(ExperimentalStdlibApi::class)
-internal val isNewMM: Boolean
-    get() = kotlin.native.isExperimentalMM()
 
 /**
  * A Kotlin Multiplatform [Cache] implementation powered by touchlab/Stately.
@@ -41,7 +34,7 @@ internal class RealCache<Key : Any, Value : Any>(
     val timeSource: TimeSource,
 ) : Cache<Key, Value> {
 
-    private val cacheEntries: MutableMap<Key, CacheEntry<Key, Value>> = if (isNewMM) IsoMutableMap() else mutableMapOf()
+    private val cacheEntries: MutableMap<Key, CacheEntry<Key, Value>> = mutableMapOf()
 
     /**
      * Whether to perform size based evictions.
@@ -69,7 +62,7 @@ internal class RealCache<Key : Any, Value : Any>(
      */
     private val writeQueue: MutableSet<CacheEntry<Key, Value>>? =
         takeIf { expiresAfterWrite }?.let {
-            if (isNewMM) IsoMutableSet() else mutableSetOf()
+            mutableSetOf()
         }
 
     /**
@@ -81,7 +74,7 @@ internal class RealCache<Key : Any, Value : Any>(
      */
     private val accessQueue: MutableSet<CacheEntry<Key, Value>>? =
         takeIf { expiresAfterAccess || evictsBySize }?.let {
-            if (isNewMM) IsoMutableSet() else mutableSetOf()
+            mutableSetOf()
         }
 
     override fun get(key: Key): Value? {
@@ -176,17 +169,15 @@ internal class RealCache<Key : Any, Value : Any>(
         )
 
         queuesToProcess.forEach { queue ->
-            queue.safeAccess {
-                val iterator = queue.iterator()
-                for (entry in iterator) {
-                    if (entry.isExpired()) {
-                        cacheEntries.remove(entry.key)
-                        // remove the entry from the current queue
-                        iterator.remove()
-                    } else {
-                        // found unexpired entry, no need to look any further
-                        break
-                    }
+            val iterator = queue.iterator()
+            for (entry in iterator) {
+                if (entry.isExpired()) {
+                    cacheEntries.remove(entry.key)
+                    // remove the entry from the current queue
+                    iterator.remove()
+                } else {
+                    // found unexpired entry, no need to look any further
+                    break
                 }
             }
         }
@@ -211,12 +202,10 @@ internal class RealCache<Key : Any, Value : Any>(
         checkNotNull(accessQueue)
 
         while (cacheEntries.size > maxSize) {
-            accessQueue.safeAccess {
-                it.firstOrNull()?.run {
-                    cacheEntries.remove(key)
-                    writeQueue?.remove(this)
-                    accessQueue.remove(this)
-                }
+            accessQueue.firstOrNull()?.run {
+                cacheEntries.remove(key)
+                writeQueue?.remove(this)
+                accessQueue.remove(this)
             }
         }
     }
