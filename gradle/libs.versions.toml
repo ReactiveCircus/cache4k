@@ -15,6 +15,7 @@ plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.
 plugin-kotlinBinaryCompatibilityValidator = { module = "org.jetbrains.kotlinx:binary-compatibility-validator", version.ref = "kotlinBinaryCompabilityValidator" }
 plugin-mavenPublish = { module ="com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublish" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 stately-concurrency = { module = "co.touchlab:stately-concurrency", version.ref = "stately" }
 stately-isolate = { module = "co.touchlab:stately-isolate", version.ref = "statelyIso" }
 stately-isoCollections = { module = "co.touchlab:stately-iso-collections", version.ref = "statelyIso" }
