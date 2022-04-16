@@ -9,6 +9,8 @@ complexity:
 formatting:
   MaximumLineLength:
     active: false
+  TrailingComma:
+    active: false
 
 style:
   MaxLineLength:
