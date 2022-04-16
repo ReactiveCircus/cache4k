@@ -225,8 +225,6 @@ fun cacheEntryEvictedAfterExpiration() {
 The library was ported from a kotlin / JVM cache which I contributed to [dropbox/Store](https://github.com/dropbox/Store) to help unblock Store's multiplatform support (
 it was reverted before the 1.0 release as multiplatform wasn't a priority). Many thanks to Store's owners and contributors for reviewing and improving the original implementation.
 
-Native concurrency support of the library is powered by [touchlab/Stately](https://github.com/touchlab/Stately). Many thanks to Stately's authors and contributors for the great library.
-
 ## License
 
 ```

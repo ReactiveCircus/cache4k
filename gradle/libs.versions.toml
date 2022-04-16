@@ -4,9 +4,8 @@ dokka = "1.6.20"
 coroutines = "1.6.1"
 kotlin = "1.6.20"
 kotlinBinaryCompabilityValidator = "0.8.0"
-stately = "1.2.1"
-statelyIso = "1.1.10-a1"
 mavenPublish = "0.19.0"
+atomicfu = "0.17.2"
 
 [libraries]
 plugin-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
@@ -16,6 +15,4 @@ plugin-kotlinBinaryCompatibilityValidator = { module = "org.jetbrains.kotlinx:bi
 plugin-mavenPublish = { module ="com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublish" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
-stately-concurrency = { module = "co.touchlab:stately-concurrency", version.ref = "stately" }
-stately-isolate = { module = "co.touchlab:stately-isolate", version.ref = "statelyIso" }
-stately-isoCollections = { module = "co.touchlab:stately-iso-collections", version.ref = "statelyIso" }
+atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfu" }

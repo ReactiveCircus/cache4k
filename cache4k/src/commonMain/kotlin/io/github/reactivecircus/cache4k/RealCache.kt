@@ -1,9 +1,8 @@
 package io.github.reactivecircus.cache4k
 
-import co.touchlab.stately.collections.IsoMutableMap
-import co.touchlab.stately.collections.IsoMutableSet
-import co.touchlab.stately.concurrency.AtomicReference
-import co.touchlab.stately.concurrency.value
+import kotlinx.atomicfu.AtomicRef
+import kotlinx.atomicfu.atomic
+import kotlinx.atomicfu.update
 import kotlin.time.Duration
 import kotlin.time.TimeMark
 import kotlin.time.TimeSource
@@ -36,7 +35,7 @@ internal class RealCache<Key : Any, Value : Any>(
     val timeSource: TimeSource,
 ) : Cache<Key, Value> {
 
-    private val cacheEntries = IsoMutableMap<Key, CacheEntry<Key, Value>>()
+    private val cacheEntries: MutableMap<Key, CacheEntry<Key, Value>> = mutableMapOf()
 
     /**
      * Whether to perform size based evictions.
@@ -62,9 +61,9 @@ internal class RealCache<Key : Any, Value : Any>(
      * A queue of unique cache entries ordered by write time.
      * Used for performing write-time based cache expiration.
      */
-    private val writeQueue: IsoMutableSet<CacheEntry<Key, Value>>? =
+    private val writeQueue: MutableSet<CacheEntry<Key, Value>>? =
         takeIf { expiresAfterWrite }?.let {
-            ReorderingIsoMutableSet()
+            mutableSetOf()
         }
 
     /**
@@ -74,9 +73,9 @@ internal class RealCache<Key : Any, Value : Any>(
      *
      * Note that a write is also considered an access.
      */
-    private val accessQueue: IsoMutableSet<CacheEntry<Key, Value>>? =
+    private val accessQueue: MutableSet<CacheEntry<Key, Value>>? =
         takeIf { expiresAfterAccess || evictsBySize }?.let {
-            ReorderingIsoMutableSet()
+            mutableSetOf()
         }
 
     override fun get(key: Key): Value? {
@@ -88,7 +87,7 @@ internal class RealCache<Key : Any, Value : Any>(
             } else {
                 // update eviction metadata
                 recordRead(it)
-                it.value.get()
+                it.value.value
             }
         }
     }
@@ -103,7 +102,7 @@ internal class RealCache<Key : Any, Value : Any>(
                 } else {
                     // update eviction metadata
                     recordRead(it)
-                    it.value.get()
+                    it.value.value
                 }
             } ?: loader().let { loadedValue ->
                 val existingValue = get(key)
@@ -124,15 +123,15 @@ internal class RealCache<Key : Any, Value : Any>(
         if (existingEntry != null) {
             // cache entry found
             recordWrite(existingEntry)
-            existingEntry.value.set(value)
+            existingEntry.value.value = value
         } else {
             // create a new cache entry
             val nowTimeMark = timeSource.markNow()
             val newEntry = CacheEntry(
                 key = key,
-                value = AtomicReference(value),
-                accessTimeMark = AtomicReference(nowTimeMark),
-                writeTimeMark = AtomicReference(nowTimeMark),
+                value = atomic(value),
+                accessTimeMark = atomic(nowTimeMark),
+                writeTimeMark = atomic(nowTimeMark),
             )
             recordWrite(newEntry)
             cacheEntries[key] = newEntry
@@ -157,7 +156,7 @@ internal class RealCache<Key : Any, Value : Any>(
 
     override fun asMap(): Map<in Key, Value> {
         return cacheEntries.values.associate { entry ->
-            entry.key to entry.value.get()
+            entry.key to entry.value.value
         }
     }
 
@@ -171,17 +170,15 @@ internal class RealCache<Key : Any, Value : Any>(
         )
 
         queuesToProcess.forEach { queue ->
-            queue.access {
-                val iterator = queue.iterator()
-                for (entry in iterator) {
-                    if (entry.isExpired()) {
-                        cacheEntries.remove(entry.key)
-                        // remove the entry from the current queue
-                        iterator.remove()
-                    } else {
-                        // found unexpired entry, no need to look any further
-                        break
-                    }
+            val iterator = queue.iterator()
+            for (entry in iterator) {
+                if (entry.isExpired()) {
+                    cacheEntries.remove(entry.key)
+                    // remove the entry from the current queue
+                    iterator.remove()
+                } else {
+                    // found unexpired entry, no need to look any further
+                    break
                 }
             }
         }
@@ -191,8 +188,8 @@ internal class RealCache<Key : Any, Value : Any>(
      * Check whether the [CacheEntry] has expired based on either access time or write time.
      */
     private fun CacheEntry<Key, Value>.isExpired(): Boolean {
-        return expiresAfterAccess && (accessTimeMark.get() + expireAfterAccessDuration).hasPassedNow() ||
-            expiresAfterWrite && (writeTimeMark.get() + expireAfterWriteDuration).hasPassedNow()
+        return expiresAfterAccess && (accessTimeMark.value + expireAfterAccessDuration).hasPassedNow() ||
+            expiresAfterWrite && (writeTimeMark.value + expireAfterWriteDuration).hasPassedNow()
     }
 
     /**
@@ -206,12 +203,10 @@ internal class RealCache<Key : Any, Value : Any>(
         checkNotNull(accessQueue)
 
         while (cacheEntries.size > maxSize) {
-            accessQueue.access {
-                it.firstOrNull()?.run {
-                    cacheEntries.remove(key)
-                    writeQueue?.remove(this)
-                    accessQueue.remove(this)
-                }
+            accessQueue.firstOrNull()?.run {
+                cacheEntries.remove(key)
+                writeQueue?.remove(this)
+                accessQueue.remove(this)
             }
         }
     }
@@ -222,9 +217,9 @@ internal class RealCache<Key : Any, Value : Any>(
     private fun recordRead(cacheEntry: CacheEntry<Key, Value>) {
         if (expiresAfterAccess) {
             val accessTimeMark = cacheEntry.accessTimeMark.value
-            cacheEntry.accessTimeMark.set(accessTimeMark + accessTimeMark.elapsedNow())
+            cacheEntry.accessTimeMark.update { (accessTimeMark + accessTimeMark.elapsedNow()) }
         }
-        accessQueue?.add(cacheEntry)
+        accessQueue?.addLastOrReorder(cacheEntry)
     }
 
     /**
@@ -234,14 +229,14 @@ internal class RealCache<Key : Any, Value : Any>(
     private fun recordWrite(cacheEntry: CacheEntry<Key, Value>) {
         if (expiresAfterAccess) {
             val accessTimeMark = cacheEntry.accessTimeMark.value
-            cacheEntry.accessTimeMark.set(accessTimeMark + accessTimeMark.elapsedNow())
+            cacheEntry.accessTimeMark.update { (accessTimeMark + accessTimeMark.elapsedNow()) }
         }
         if (expiresAfterWrite) {
             val writeTimeMark = cacheEntry.writeTimeMark.value
-            cacheEntry.writeTimeMark.set(writeTimeMark + writeTimeMark.elapsedNow())
+            cacheEntry.writeTimeMark.update { (writeTimeMark + writeTimeMark.elapsedNow()) }
         }
-        accessQueue?.add(cacheEntry)
-        writeQueue?.add(cacheEntry)
+        accessQueue?.addLastOrReorder(cacheEntry)
+        writeQueue?.addLastOrReorder(cacheEntry)
     }
 }
 
@@ -251,7 +246,7 @@ internal class RealCache<Key : Any, Value : Any>(
  */
 private class CacheEntry<Key : Any, Value : Any>(
     val key: Key,
-    val value: AtomicReference<Value>,
-    val accessTimeMark: AtomicReference<TimeMark>,
-    val writeTimeMark: AtomicReference<TimeMark>,
+    val value: AtomicRef<Value>,
+    val accessTimeMark: AtomicRef<TimeMark>,
+    val writeTimeMark: AtomicRef<TimeMark>,
 )

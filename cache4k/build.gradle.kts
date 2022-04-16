@@ -56,9 +56,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.coroutines.core)
-                implementation(libs.stately.concurrency)
-                implementation(libs.stately.isolate)
-                implementation(libs.stately.isoCollections)
+                implementation(libs.atomicfu)
             }
         }
         val commonTest by getting {
