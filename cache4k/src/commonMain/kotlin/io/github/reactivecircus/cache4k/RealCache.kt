@@ -2,6 +2,7 @@ package io.github.reactivecircus.cache4k
 
 import kotlinx.atomicfu.AtomicRef
 import kotlinx.atomicfu.atomic
+import kotlinx.atomicfu.update
 import kotlin.time.Duration
 import kotlin.time.TimeMark
 import kotlin.time.TimeSource
@@ -216,7 +217,7 @@ internal class RealCache<Key : Any, Value : Any>(
     private fun recordRead(cacheEntry: CacheEntry<Key, Value>) {
         if (expiresAfterAccess) {
             val accessTimeMark = cacheEntry.accessTimeMark.value
-            cacheEntry.accessTimeMark.value = (accessTimeMark + accessTimeMark.elapsedNow())
+            cacheEntry.accessTimeMark.update { (accessTimeMark + accessTimeMark.elapsedNow()) }
         }
         accessQueue?.addLastOrReorder(cacheEntry)
     }
@@ -228,11 +229,11 @@ internal class RealCache<Key : Any, Value : Any>(
     private fun recordWrite(cacheEntry: CacheEntry<Key, Value>) {
         if (expiresAfterAccess) {
             val accessTimeMark = cacheEntry.accessTimeMark.value
-            cacheEntry.accessTimeMark.value = (accessTimeMark + accessTimeMark.elapsedNow())
+            cacheEntry.accessTimeMark.update { (accessTimeMark + accessTimeMark.elapsedNow()) }
         }
         if (expiresAfterWrite) {
             val writeTimeMark = cacheEntry.writeTimeMark.value
-            cacheEntry.writeTimeMark.value = (writeTimeMark + writeTimeMark.elapsedNow())
+            cacheEntry.writeTimeMark.update { (writeTimeMark + writeTimeMark.elapsedNow()) }
         }
         accessQueue?.addLastOrReorder(cacheEntry)
         writeQueue?.addLastOrReorder(cacheEntry)
