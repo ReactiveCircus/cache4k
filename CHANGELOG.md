@@ -11,7 +11,7 @@ This release adds support for new native memory model and drops support for the 
 ### Changed
 
 - Kotlin 1.6.20.
-- Coroutines 1.6.1
+- Coroutines 1.6.1.
 
 ## 0.4.0
 

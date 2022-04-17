@@ -102,6 +102,8 @@ runBlockingTest {
 }
 ```
 
+Note that loader is executed on the caller's coroutine context. Concurrent calls from multiple threads using the same key will be blocked. Assuming the 1st call successfully computes a new value, none of the loader from the other calls will be executed and the cached value computed by the first loader will be returned for those calls.
+
 Any exceptions thrown by the `loader` will be propagated to the caller of this function.
 
 ### Expirations and evictions
