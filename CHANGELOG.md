@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.5.0
+
+This release adds support for new native memory model and drops support for the old one. Many thanks to @dcvz for the contribution. 
+
+### Added
+- Synchronize cache loader by key - [#15](https://github.com/ReactiveCircus/cache4k/pull/15)
+- Support new native memory model and drop support for old memory model - [#17](https://github.com/ReactiveCircus/cache4k/pull/17)
+
+### Changed
+
+- Kotlin 1.6.20.
+- Coroutines 1.6.1
+
 ## 0.4.0
 
 ### Added

@@ -10,6 +10,8 @@ In-memory Cache for Kotlin Multiplatform.
 
 **cache4k** provides a simple in-memory key-value cache for **Kotlin Multiplatform**, with support for time-based (expiration) and size-based evictions.
 
+**Note that only the new Kotlin Native memory model is supported.**
+
 The following targets are currently supported:
 
 - jvm

@@ -217,7 +217,7 @@ internal class RealCache<Key : Any, Value : Any>(
     private fun recordRead(cacheEntry: CacheEntry<Key, Value>) {
         if (expiresAfterAccess) {
             val accessTimeMark = cacheEntry.accessTimeMark.value
-            cacheEntry.accessTimeMark.update { (accessTimeMark + accessTimeMark.elapsedNow()) }
+            cacheEntry.accessTimeMark.update { accessTimeMark + accessTimeMark.elapsedNow() }
         }
         accessQueue?.addLastOrReorder(cacheEntry)
     }
