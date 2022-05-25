@@ -79,8 +79,7 @@ public interface Cache<in Key : Any, Value : Any> {
         public fun maximumCacheSize(size: Long): Builder
 
         /**
-         * Specifies a [TimeSource] provided externally.
-         *
+         * Specifies a [TimeSource] to be used for expiry checks.
          * If not specified, [TimeSource.Monotonic] will be used.
          */
         public fun timeSource(timeSource: TimeSource): Builder
