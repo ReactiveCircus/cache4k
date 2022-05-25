@@ -27,7 +27,7 @@ class CacheInvalidationTest {
         val oneMinute = 1.minutes
 
         val cache = Cache.Builder()
-            .fakeTimeSource(fakeTimeSource)
+            .timeSource(fakeTimeSource)
             .expireAfterWrite(oneMinute)
             .build<Long, String>()
 

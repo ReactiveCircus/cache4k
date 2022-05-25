@@ -204,7 +204,7 @@ so you can programmatically advance the reading of the time source:
 fun cacheEntryEvictedAfterExpiration() {
     private val fakeTimeSource = FakeTimeSource()
     val cache = Cache.Builder()
-        .fakeTimeSource(fakeTimeSource)
+        .timeSource(fakeTimeSource)
         .expireAfterWrite(1.minutes)
         .build<Long, String>()
 

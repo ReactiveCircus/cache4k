@@ -106,7 +106,7 @@ class CacheBuilderTest {
     fun fakeTimeSource() {
         val fakeTimeSource = FakeTimeSource()
         val cache = Cache.Builder()
-            .fakeTimeSource(fakeTimeSource)
+            .timeSource(fakeTimeSource)
             .build<Any, Any>() as RealCache
 
         assertEquals(fakeTimeSource, cache.timeSource)

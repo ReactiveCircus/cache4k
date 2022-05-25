@@ -36,7 +36,7 @@ class CacheLoaderTest {
     fun expiredEntryWithAssociatedKeyExists_getWithLoader_returnsValueFromLoader() = runTest {
         val cache = Cache.Builder()
             .expireAfterWrite(expiryDuration)
-            .fakeTimeSource(fakeTimeSource)
+            .timeSource(fakeTimeSource)
             .build<Long, String>()
 
         cache.put(1, "cat")
@@ -60,7 +60,7 @@ class CacheLoaderTest {
     fun unexpiredEntryWithAssociatedKeyExists_getWithLoader_returnsExistingValue() = runTest {
         val cache = Cache.Builder()
             .expireAfterAccess(expiryDuration)
-            .fakeTimeSource(fakeTimeSource)
+            .timeSource(fakeTimeSource)
             .build<Long, String>()
 
         cache.put(1, "dog")
