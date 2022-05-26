@@ -1,10 +1,11 @@
 # Change Log
 
-## 0.6.0
+## Unreleased
 
 ### Changed
 
-- Time Source can be provided externally
+- `fakeTimeSource` in `Cache.Builder` has been renamed to `timeSource`, and the `FakeTimeSource` implementation has been removed (still available in our tests) - [#20](https://github.com/ReactiveCircus/cache4k/pull/20)
+- Kotlin 1.6.21.
 
 ## 0.5.0
 

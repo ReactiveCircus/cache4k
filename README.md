@@ -196,7 +196,7 @@ cache.invalidateAll()
 
 ### Unit testing cache expirations
 
-To test logic that depends on cache expiration, pass in a `FakeTimeSource` when building a `Cache`
+To test logic that depends on cache expiration, pass in a fake `TimeSource` implementation when building a `Cache`
 so you can programmatically advance the reading of the time source:
 
 ```kotlin
@@ -223,6 +223,8 @@ fun cacheEntryEvictedAfterExpiration() {
         .isNull()
 }
 ```
+
+A sample `FakeTimeSource` implementation can be found in [our tests](https://github.com/ReactiveCircus/cache4k/blob/8376a5f6198b3d8f82f42184fd1cabe4aa08e754/cache4k/src/commonTest/kotlin/io/github/reactivecircus/cache4k/FakeTimeSource.kt).
 
 ## Credits
 
