@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.6.0
+
+### Changed
+
+- Time Source can be provided externally
+
 ## 0.5.0
 
 This release adds support for new native memory model and drops support for the old one. Many thanks to @dcvz for the contribution. 

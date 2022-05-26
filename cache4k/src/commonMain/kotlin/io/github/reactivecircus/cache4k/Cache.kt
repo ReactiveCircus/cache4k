@@ -79,12 +79,10 @@ public interface Cache<in Key : Any, Value : Any> {
         public fun maximumCacheSize(size: Long): Builder
 
         /**
-         * Specifies a [FakeTimeSource] for programmatically advancing the reading of the underlying
-         * [TimeSource] used for expiry checks in tests.
-         *
-         * If not specified, [TimeSource.Monotonic] will be used for expiry checks.
+         * Specifies a [TimeSource] to be used for expiry checks.
+         * If not specified, [TimeSource.Monotonic] will be used.
          */
-        public fun fakeTimeSource(fakeTimeSource: FakeTimeSource): Builder
+        public fun timeSource(timeSource: TimeSource): Builder
 
         /**
          * Builds a new instance of [Cache] with the specified configurations.
@@ -110,7 +108,7 @@ internal class CacheBuilderImpl : Cache.Builder {
 
     private var expireAfterAccessDuration = Duration.INFINITE
     private var maxSize = UNSET_LONG
-    private var fakeTimeSource: FakeTimeSource? = null
+    private var timeSource: TimeSource? = null
 
     override fun expireAfterWrite(duration: Duration): CacheBuilderImpl = apply {
         require(duration.isPositive()) {
@@ -133,8 +131,8 @@ internal class CacheBuilderImpl : Cache.Builder {
         this.maxSize = size
     }
 
-    override fun fakeTimeSource(fakeTimeSource: FakeTimeSource): CacheBuilderImpl = apply {
-        this.fakeTimeSource = fakeTimeSource
+    override fun timeSource(timeSource: TimeSource): Cache.Builder = apply {
+        this.timeSource = timeSource
     }
 
     override fun <K : Any, V : Any> build(): Cache<K, V> {
@@ -142,7 +140,7 @@ internal class CacheBuilderImpl : Cache.Builder {
             expireAfterWriteDuration,
             expireAfterAccessDuration,
             maxSize,
-            fakeTimeSource ?: TimeSource.Monotonic,
+            timeSource ?: TimeSource.Monotonic,
         )
     }
 

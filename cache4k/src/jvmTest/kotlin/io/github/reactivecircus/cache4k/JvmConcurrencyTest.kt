@@ -30,7 +30,7 @@ class JvmConcurrencyTest {
     @Test
     fun expireEntriesConcurrently() = runTest {
         val cache = Cache.Builder()
-            .fakeTimeSource(fakeTimeSource)
+            .timeSource(fakeTimeSource)
             .expireAfterWrite(2.seconds)
             .build<Long, String>()
 
