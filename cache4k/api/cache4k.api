@@ -12,8 +12,8 @@ public abstract interface class io/github/reactivecircus/cache4k/Cache$Builder {
 	public abstract fun build ()Lio/github/reactivecircus/cache4k/Cache;
 	public abstract fun expireAfterAccess-LRDsOJo (J)Lio/github/reactivecircus/cache4k/Cache$Builder;
 	public abstract fun expireAfterWrite-LRDsOJo (J)Lio/github/reactivecircus/cache4k/Cache$Builder;
-	public abstract fun timeSource (Lkotlin/time/TimeSource;)Lio/github/reactivecircus/cache4k/Cache$Builder;
 	public abstract fun maximumCacheSize (J)Lio/github/reactivecircus/cache4k/Cache$Builder;
+	public abstract fun timeSource (Lkotlin/time/TimeSource;)Lio/github/reactivecircus/cache4k/Cache$Builder;
 }
 
 public final class io/github/reactivecircus/cache4k/Cache$Builder$Companion {
