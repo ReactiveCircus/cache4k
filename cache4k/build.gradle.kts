@@ -9,8 +9,10 @@ plugins {
 group = property("GROUP") as String
 version = property("VERSION_NAME") as String
 
-mavenPublish {
-    sonatypeHost = SonatypeHost.S01
+@Suppress("UnstableApiUsage")
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.S01)
+    signAllPublications()
 }
 
 kotlin {
@@ -57,6 +59,8 @@ kotlin {
             dependencies {
                 implementation(libs.coroutines.core)
                 implementation(libs.atomicfu)
+                // TODO remove once https://github.com/Kotlin/kotlinx.coroutines/issues/3305 is fixed
+                implementation("org.jetbrains.kotlin:atomicfu:1.6.21")
             }
         }
         val commonTest by getting {
