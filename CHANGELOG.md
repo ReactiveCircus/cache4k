@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.7.0
+
+### Changed
+
+- Kotlin 1.7.0.
+- Coroutines 1.6.3.
+- AtomicFU 0.18.2.
+
 ## 0.6.0
 
 ### Changed
