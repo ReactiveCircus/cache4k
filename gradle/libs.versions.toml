@@ -4,7 +4,7 @@ dokka = "1.6.20"
 coroutines = "1.6.3"
 kotlin = "1.7.10"
 kotlinBinaryCompabilityValidator = "0.10.1"
-mavenPublish = "0.20.0"
+mavenPublish = "0.21.0"
 atomicfu = "0.18.2"
 
 [libraries]
