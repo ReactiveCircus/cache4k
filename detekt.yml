@@ -15,3 +15,5 @@ formatting:
 style:
   MaxLineLength:
     active: false
+  UseCheckOrError:
+    active: false
