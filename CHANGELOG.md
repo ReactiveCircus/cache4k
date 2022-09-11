@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.8.0
+
+### Added
+
+Added new targets:
+- `linuxX64`
+- `macosArm64`
+
+### Changed
+
+- Kotlin 1.7.10.
+- Coroutines 1.6.4.
+- AtomicFU 0.18.3.
+
 ## 0.7.0
 
 ### Changed
@@ -20,6 +34,7 @@
 This release adds support for new native memory model and drops support for the old one. Many thanks to @dcvz for the contribution. 
 
 ### Added
+
 - Synchronize cache loader by key - [#15](https://github.com/ReactiveCircus/cache4k/pull/15)
 - Support new native memory model and drop support for old memory model - [#17](https://github.com/ReactiveCircus/cache4k/pull/17)
 
