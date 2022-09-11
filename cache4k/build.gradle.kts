@@ -44,6 +44,8 @@ kotlin {
     tvosArm64()
     tvosSimulatorArm64()
     tvosX64()
+    linuxX64()
+    mingwX64()
 
     sourceSets {
         all {
