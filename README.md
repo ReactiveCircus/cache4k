@@ -24,6 +24,8 @@ The following targets are currently supported:
 - tvosArm64
 - tvosSimulatorArm64
 - tvosX64
+- linuxX64
+- mingwX64
 
 ## Download
 
