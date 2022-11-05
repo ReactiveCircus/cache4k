@@ -29,8 +29,11 @@ jobs:
           key: ${{ runner.os }}-${{ github.job }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-${{ github.job }}-
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
       - run: |
-          pip3 install mkdocs-material mkdocs-minify-plugin
+          pip install mkdocs-material mkdocs-minify-plugin
           .buildscript/deploy_website.sh
         env:
           CI: true
