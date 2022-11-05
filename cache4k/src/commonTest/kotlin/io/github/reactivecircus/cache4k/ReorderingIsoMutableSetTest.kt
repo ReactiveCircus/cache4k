@@ -5,36 +5,36 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class MutableSetExtTest {
+class ReorderingIsoMutableSetTest {
 
-    private val set: MutableSet<String> = mutableSetOf()
+    private val set = ReorderingIsoMutableSet<String>()
 
     @Test
     fun maintainsOriginalInsertionOrder() {
-        set.addLastOrReorder("a")
-        set.addLastOrReorder("b")
+        set.add("a")
+        set.add("b")
 
         assertEquals(listOf("a", "b"), set.toList())
     }
 
     @Test
     fun reInsertedElementMovedToTheEnd() {
-        set.addLastOrReorder("a")
-        set.addLastOrReorder("b")
-        set.addLastOrReorder("a")
+        set.add("a")
+        set.add("b")
+        set.add("a")
 
         assertEquals(listOf("b", "a"), set.toList())
     }
 
     @Test
     fun add_elementExists() {
-        set.addLastOrReorder("a")
+        set.add("a")
         assertFalse(set.add("a"))
     }
 
     @Test
     fun add_elementNotExists() {
-        assertTrue(set.addLastOrReorder("a"))
-        assertTrue(set.addLastOrReorder("b"))
+        assertTrue(set.add("a"))
+        assertTrue(set.add("b"))
     }
 }
