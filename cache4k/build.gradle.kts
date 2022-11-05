@@ -59,6 +59,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.coroutines.core)
+                implementation(libs.stately.isoCollections)
                 implementation(libs.atomicfu)
             }
         }

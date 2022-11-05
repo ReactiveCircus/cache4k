@@ -6,6 +6,7 @@ kotlin = "1.7.20"
 kotlinBinaryCompabilityValidator = "0.12.1"
 mavenPublish = "0.22.0"
 atomicfu = "0.18.5"
+statelyIso = "1.2.2"
 
 [libraries]
 plugin-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
@@ -13,6 +14,7 @@ plugin-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-kotlinBinaryCompatibilityValidator = { module = "org.jetbrains.kotlinx:binary-compatibility-validator", version.ref = "kotlinBinaryCompabilityValidator" }
 plugin-mavenPublish = { module ="com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublish" }
-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfu" }
+stately-isoCollections = { module = "co.touchlab:stately-iso-collections", version.ref = "statelyIso" }
