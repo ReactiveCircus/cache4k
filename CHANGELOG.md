@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.9.0
+
+### Fixed
+
+- Revert to using `state-collections` to fix JVM concurrency issue - [#23](https://github.com/ReactiveCircus/cache4k/issues/23)
+
+### Changed
+
+- Kotlin 1.7.20.
+- AtomicFU 0.18.5.
+
 ## 0.8.0
 
 ### Added
