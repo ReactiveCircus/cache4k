@@ -34,22 +34,24 @@ class FakeTimeSource : AbstractLongTimeSource(unit = DurationUnit.NANOSECONDS) {
             if (longDelta != Long.MIN_VALUE && longDelta != Long.MAX_VALUE) {
                 // when delta fits in long, add it as long
                 val newReading = currentReading + longDelta
-                if (currentReading xor longDelta >= 0 && currentReading xor newReading < 0) overflow(
-                    duration
-                )
+                if (currentReading xor longDelta >= 0 && currentReading xor newReading < 0) {
+                    overflow(duration)
+                }
                 newReading
             } else {
                 // when delta is greater than long, add it as double
                 val newReading = currentReading + delta
-                if (newReading > Long.MAX_VALUE || newReading < Long.MIN_VALUE) overflow(
-                    duration
-                )
+                if (newReading > Long.MAX_VALUE || newReading < Long.MIN_VALUE) {
+                    overflow(duration)
+                }
                 newReading.toLong()
             }
         }
     }
 
     private fun overflow(duration: Duration) {
-        throw IllegalStateException("FakeTimeSource will overflow if its reading ${reading}ns is advanced by $duration.")
+        throw IllegalStateException(
+            "FakeTimeSource will overflow if its reading ${reading}ns is advanced by $duration."
+        )
     }
 }
