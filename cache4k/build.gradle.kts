@@ -49,7 +49,7 @@ kotlin {
     sourceSets {
         all {
             languageSettings.apply {
-                languageVersion = "1.7"
+                languageVersion = "1.8"
                 progressiveMode = true
                 enableLanguageFeature("NewInference")
                 optIn("kotlin.Experimental")
