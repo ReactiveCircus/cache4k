@@ -1,4 +1,6 @@
 import com.vanniktech.maven.publish.SonatypeHost
+import org.jetbrains.kotlin.gradle.dsl.JsModuleKind
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     kotlin("multiplatform")
@@ -18,18 +20,18 @@ kotlin {
     explicitApi()
     jvm {
         compilations.all {
-            kotlinOptions {
-                kotlinOptions.jvmTarget = "11"
-                freeCompilerArgs = freeCompilerArgs + listOf(
+            compilerOptions.configure {
+                jvmTarget.set(JvmTarget.JVM_11)
+                freeCompilerArgs.addAll(
                     "-Xjvm-default=all"
                 )
             }
         }
     }
-    js(BOTH) {
+    js(IR) {
         compilations.all {
-            kotlinOptions {
-                moduleKind = "commonjs"
+            compilerOptions.configure {
+                moduleKind.set(JsModuleKind.MODULE_COMMONJS)
             }
         }
         browser()
