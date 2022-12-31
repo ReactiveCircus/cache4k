@@ -27,6 +27,10 @@ kotlin {
                 )
             }
         }
+        jvmToolchain {
+            languageVersion.set(JavaLanguageVersion.of(19))
+            vendor.set(JvmVendorSpec.AZUL)
+        }
     }
     js(IR) {
         compilations.all {

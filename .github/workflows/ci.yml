@@ -30,7 +30,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '18'
+          java-version: '19'
       - uses: gradle/gradle-build-action@v2
       - name: Assemble
         run: ./gradlew assemble
@@ -47,7 +47,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '18'
+          java-version: '19'
       - uses: gradle/gradle-build-action@v2
       - name: Check
         run: ./gradlew check
@@ -68,7 +68,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '18'
+          java-version: '19'
       - uses: gradle/gradle-build-action@v2
       - name: Publish snapshot
         run: ./gradlew clean publish
