@@ -16,6 +16,7 @@ subprojects {
         allRules = true
     }
     tasks.withType<Detekt>().configureEach {
+        jvmTarget = "11"
         reports {
             html.outputLocation.set(file("build/reports/detekt/${project.name}.html"))
         }
