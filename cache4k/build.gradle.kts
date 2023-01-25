@@ -1,6 +1,5 @@
 import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.dsl.JsModuleKind
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     kotlin("multiplatform")
@@ -21,14 +20,13 @@ kotlin {
     jvm {
         compilations.all {
             compilerOptions.configure {
-                jvmTarget.set(JvmTarget.JVM_11)
                 freeCompilerArgs.addAll(
                     "-Xjvm-default=all"
                 )
             }
         }
         jvmToolchain {
-            languageVersion.set(JavaLanguageVersion.of(19))
+            languageVersion.set(JavaLanguageVersion.of(11))
             vendor.set(JvmVendorSpec.AZUL)
         }
     }
