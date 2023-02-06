@@ -12,7 +12,7 @@ import kotlin.time.DurationUnit
  *
  * Implementation is identical to [kotlin.time.TestTimeSource] except the internal [reading] is an [AtomicLong].
  */
-class FakeTimeSource : AbstractLongTimeSource(unit = DurationUnit.NANOSECONDS) {
+public class FakeTimeSource : AbstractLongTimeSource(unit = DurationUnit.NANOSECONDS) {
 
     private val reading = atomic(0L)
 
