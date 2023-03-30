@@ -56,7 +56,6 @@ kotlin {
                 languageVersion = "1.8"
                 progressiveMode = true
                 enableLanguageFeature("NewInference")
-                optIn("kotlin.Experimental")
                 optIn("kotlin.time.ExperimentalTime")
             }
         }
