@@ -3,9 +3,9 @@ detekt = "1.22.0"
 dokka = "1.7.20"
 coroutines = "1.6.4"
 kotlin = "1.8.20"
-kotlinBinaryCompabilityValidator = "0.12.1"
-mavenPublish = "0.23.1"
-atomicfu = "0.19.0"
+kotlinBinaryCompabilityValidator = "0.13.0"
+mavenPublish = "0.25.1"
+atomicfu = "0.20.2"
 statelyIso = "2.0.0-rc1"
 
 [libraries]
