@@ -1,5 +1,22 @@
 # Change Log
 
+## 0.10.0
+
+### Added
+
+Added new targets:
+- `watchosArm64`
+- `watchosSimulatorArm64`
+- `watchosX64`
+
+`FakeTimeSource` is now public - [#30](https://github.com/ReactiveCircus/cache4k/pull/30)
+
+### Changed
+
+- Kotlin 1.8.20.
+- AtomicFU 0.20.2.
+- Stately 2.0.0-rc1.
+
 ## 0.9.0
 
 ### Fixed
