@@ -14,7 +14,7 @@ on:
 
 env:
   CI: true
-  GRADLE_OPTS: -Dkotlin.incremental.useClasspathSnapshot=false -Dorg.gradle.jvmargs="-Xmx4g -XX:+HeapDumpOnOutOfMemoryError"
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx4g -XX:+HeapDumpOnOutOfMemoryError"
   TERM: dumb
 
 jobs:
@@ -32,6 +32,8 @@ jobs:
           distribution: 'zulu'
           java-version: '19'
       - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-home-cache-cleanup: true
       - name: Assemble
         run: ./gradlew assemble
 
@@ -49,6 +51,8 @@ jobs:
           distribution: 'zulu'
           java-version: '19'
       - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-home-cache-cleanup: true
       - name: Check
         run: ./gradlew check
 
@@ -70,5 +74,7 @@ jobs:
           distribution: 'zulu'
           java-version: '19'
       - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-home-cache-cleanup: true
       - name: Publish snapshot
         run: ./gradlew publishAllPublicationsToMavenCentral
