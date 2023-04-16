@@ -24,6 +24,9 @@ The following targets are currently supported:
 - tvosArm64
 - tvosSimulatorArm64
 - tvosX64
+- watchosArm64
+- watchosSimulatorArm64
+- watchosX64
 - linuxX64
 - mingwX64
 
