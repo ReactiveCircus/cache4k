@@ -71,4 +71,4 @@ jobs:
           java-version: '19'
       - uses: gradle/gradle-build-action@v2
       - name: Publish snapshot
-        run: ./gradlew clean publish
+        run: ./gradlew publishAllPublicationsToMavenCentral
