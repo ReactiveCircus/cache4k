@@ -4,7 +4,7 @@ dokka = "1.8.10"
 coroutines = "1.6.4"
 kotlin = "1.8.20"
 kotlinBinaryCompabilityValidator = "0.13.0"
-mavenPublish = "0.25.1"
+mavenPublish = "0.25.2"
 atomicfu = "0.20.2"
 statelyIso = "2.0.0-rc1"
 
