@@ -31,7 +31,7 @@ public fun interface CacheEventListener<Key : Any, Value : Any> {
      * |:-------------------|:--------------------------|:----------|:-------------------------------------------------|
      * | {}                 | put(K, V)                 | {K: V}    | (Created, K, null, V)                            |
      * | {K: V1}            | put(K, V2)                | {K: V2}   | (Updated, K, V1, V2)                             |
-     * | {K: V}             | invalidate(K)             | {}        | (Removed, K, V1, null)                           |
+     * | {K: V}             | invalidate(K)             | {}        | (Removed, K, V, null)                            |
      * | {K1: V1, K2: V2}   | invalidateAll()           | {}        | (Removed, K1, V1, null), (Removed, K2, V2, null) |
      * | {K: V}             | any operation, K expired  | {}        | (Expired, K, V, null)                            |
      * | {K1: V1}           | put(K2, V2), K1 evicted   | {K2: V2}  | (Evicted, K1, V1, null), (Created, K2, null, V2) |
