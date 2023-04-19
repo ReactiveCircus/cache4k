@@ -47,7 +47,7 @@ public interface Cache<in Key : Any, Value : Any> {
     /**
      * Main entry point for creating a [Cache].
      */
-    public interface Builder {
+    public interface Builder<K : Any, V : Any> {
 
         /**
          * Specifies that each entry should be automatically removed from the cache once a fixed duration
@@ -56,7 +56,7 @@ public interface Cache<in Key : Any, Value : Any> {
          * When [duration] is zero, the cache's max size will be set to 0
          * meaning no values will be cached.
          */
-        public fun expireAfterWrite(duration: Duration): Builder
+        public fun expireAfterWrite(duration: Duration): Builder<K, V>
 
         /**
          * Specifies that each entry should be automatically removed from the cache once a fixed duration
@@ -66,7 +66,7 @@ public interface Cache<in Key : Any, Value : Any> {
          * When [duration] is zero, the cache's max size will be set to 0
          * meaning no values will be cached.
          */
-        public fun expireAfterAccess(duration: Duration): Builder
+        public fun expireAfterAccess(duration: Duration): Builder<K, V>
 
         /**
          * Specifies the maximum number of entries the cache may contain.
@@ -76,25 +76,30 @@ public interface Cache<in Key : Any, Value : Any> {
          *
          * If not set, cache size will be unlimited.
          */
-        public fun maximumCacheSize(size: Long): Builder
+        public fun maximumCacheSize(size: Long): Builder<K, V>
 
         /**
          * Specifies a [TimeSource] to be used for expiry checks.
          * If not specified, [TimeSource.Monotonic] will be used.
          */
-        public fun timeSource(timeSource: TimeSource): Builder
+        public fun timeSource(timeSource: TimeSource): Builder<K, V>
+
+        /**
+         * Specifies a [CacheEventListener] to be used to handle cache events.
+         */
+        public fun eventListener(listener: CacheEventListener<K, V>): Builder<K, V>
 
         /**
          * Builds a new instance of [Cache] with the specified configurations.
          */
-        public fun <K : Any, V : Any> build(): Cache<K, V>
+        public fun build(): Cache<K, V>
 
         public companion object {
 
             /**
              * Returns a new [Cache.Builder] instance.
              */
-            public operator fun invoke(): Builder = CacheBuilderImpl()
+            public operator fun <K : Any, V : Any> invoke(): Builder<K, V> = CacheBuilderImpl()
         }
     }
 }
@@ -102,45 +107,51 @@ public interface Cache<in Key : Any, Value : Any> {
 /**
  * A default implementation of [Cache.Builder].
  */
-internal class CacheBuilderImpl : Cache.Builder {
+internal class CacheBuilderImpl<K : Any, V : Any> : Cache.Builder<K, V> {
 
     private var expireAfterWriteDuration = Duration.INFINITE
 
     private var expireAfterAccessDuration = Duration.INFINITE
     private var maxSize = UNSET_LONG
     private var timeSource: TimeSource? = null
+    private var eventListener: CacheEventListener<K, V>? = null
 
-    override fun expireAfterWrite(duration: Duration): CacheBuilderImpl = apply {
+    override fun expireAfterWrite(duration: Duration): CacheBuilderImpl<K, V> = apply {
         require(duration.isPositive()) {
             "expireAfterWrite duration must be positive"
         }
         this.expireAfterWriteDuration = duration
     }
 
-    override fun expireAfterAccess(duration: Duration): CacheBuilderImpl = apply {
+    override fun expireAfterAccess(duration: Duration): CacheBuilderImpl<K, V> = apply {
         require(duration.isPositive()) {
             "expireAfterAccess duration must be positive"
         }
         this.expireAfterAccessDuration = duration
     }
 
-    override fun maximumCacheSize(size: Long): CacheBuilderImpl = apply {
+    override fun maximumCacheSize(size: Long): CacheBuilderImpl<K, V> = apply {
         require(size >= 0) {
             "maximum size must not be negative"
         }
         this.maxSize = size
     }
 
-    override fun timeSource(timeSource: TimeSource): Cache.Builder = apply {
+    override fun timeSource(timeSource: TimeSource): Cache.Builder<K, V> = apply {
         this.timeSource = timeSource
     }
 
-    override fun <K : Any, V : Any> build(): Cache<K, V> {
+    override fun eventListener(listener: CacheEventListener<K, V>): Cache.Builder<K, V> = apply {
+        eventListener = listener
+    }
+
+    override fun build(): Cache<K, V> {
         return RealCache(
             expireAfterWriteDuration,
             expireAfterAccessDuration,
             maxSize,
             timeSource ?: TimeSource.Monotonic,
+            eventListener,
         )
     }
 

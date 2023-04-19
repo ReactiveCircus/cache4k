@@ -15,9 +15,9 @@ class JvmConcurrencyTest {
 
     @Test
     fun evictEntriesConcurrently() = runTest {
-        val cache = Cache.Builder()
+        val cache = Cache.Builder<Long, String>()
             .maximumCacheSize(2)
-            .build<Long, String>()
+            .build()
 
         // should not produce a ConcurrentModificationException
         repeat(10) {
@@ -29,10 +29,10 @@ class JvmConcurrencyTest {
 
     @Test
     fun expireEntriesConcurrently() = runTest {
-        val cache = Cache.Builder()
+        val cache = Cache.Builder<Long, String>()
             .timeSource(fakeTimeSource)
             .expireAfterWrite(2.seconds)
-            .build<Long, String>()
+            .build()
 
         repeat(10) {
             cache.put(it.toLong(), "value for $it")

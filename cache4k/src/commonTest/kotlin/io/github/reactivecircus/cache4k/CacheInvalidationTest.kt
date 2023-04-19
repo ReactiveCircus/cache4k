@@ -9,8 +9,8 @@ class CacheInvalidationTest {
 
     @Test
     fun invalidateByKey_associatedEntryEvicted() {
-        val cache = Cache.Builder()
-            .build<Long, String>()
+        val cache = Cache.Builder<Long, String>()
+            .build()
 
         cache.put(1, "dog")
         cache.put(2, "cat")
@@ -26,10 +26,10 @@ class CacheInvalidationTest {
         val fakeTimeSource = FakeTimeSource()
         val oneMinute = 1.minutes
 
-        val cache = Cache.Builder()
+        val cache = Cache.Builder<Long, String>()
             .timeSource(fakeTimeSource)
             .expireAfterWrite(oneMinute)
-            .build<Long, String>()
+            .build()
 
         cache.put(1, "dog")
         cache.put(2, "cat")
@@ -51,8 +51,8 @@ class CacheInvalidationTest {
 
     @Test
     fun invalidateAll_allEntriesEvicted() {
-        val cache = Cache.Builder()
-            .build<Long, String>()
+        val cache = Cache.Builder<Long, String>()
+            .build()
 
         cache.put(1, "dog")
         cache.put(2, "cat")
