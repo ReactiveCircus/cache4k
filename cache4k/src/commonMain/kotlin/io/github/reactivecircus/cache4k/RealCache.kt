@@ -169,15 +169,17 @@ internal class RealCache<Key : Any, Value : Any>(
     }
 
     override fun invalidateAll() {
-        cacheEntries.values.forEach { entry ->
-            onEvent(
-                CacheEvent(
-                    type = CacheEventType.Removed,
-                    key = entry.key,
-                    oldValue = entry.value.value,
-                    newValue = null
+        if (eventListener != null) {
+            cacheEntries.values.forEach { entry ->
+                onEvent(
+                    CacheEvent(
+                        type = CacheEventType.Removed,
+                        key = entry.key,
+                        oldValue = entry.value.value,
+                        newValue = null
+                    )
                 )
-            )
+            }
         }
         cacheEntries.clear()
         writeQueue?.clear()
