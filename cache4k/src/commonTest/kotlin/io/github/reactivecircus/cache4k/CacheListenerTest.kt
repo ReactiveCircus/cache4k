@@ -141,7 +141,6 @@ class CacheListenerTest {
         )
     }
 
-
     @Test
     fun expiry() {
         val eventListener = TestEventListener()
