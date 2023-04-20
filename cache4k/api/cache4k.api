@@ -10,6 +10,7 @@ public abstract interface class io/github/reactivecircus/cache4k/Cache {
 public abstract interface class io/github/reactivecircus/cache4k/Cache$Builder {
 	public static final field Companion Lio/github/reactivecircus/cache4k/Cache$Builder$Companion;
 	public abstract fun build ()Lio/github/reactivecircus/cache4k/Cache;
+	public abstract fun eventListener (Lio/github/reactivecircus/cache4k/CacheEventListener;)Lio/github/reactivecircus/cache4k/Cache$Builder;
 	public abstract fun expireAfterAccess-LRDsOJo (J)Lio/github/reactivecircus/cache4k/Cache$Builder;
 	public abstract fun expireAfterWrite-LRDsOJo (J)Lio/github/reactivecircus/cache4k/Cache$Builder;
 	public abstract fun maximumCacheSize (J)Lio/github/reactivecircus/cache4k/Cache$Builder;
@@ -18,6 +19,37 @@ public abstract interface class io/github/reactivecircus/cache4k/Cache$Builder {
 
 public final class io/github/reactivecircus/cache4k/Cache$Builder$Companion {
 	public final fun invoke ()Lio/github/reactivecircus/cache4k/Cache$Builder;
+}
+
+public final class io/github/reactivecircus/cache4k/CacheEvent {
+	public fun <init> (Lio/github/reactivecircus/cache4k/CacheEventType;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V
+	public final fun component1 ()Lio/github/reactivecircus/cache4k/CacheEventType;
+	public final fun component2 ()Ljava/lang/Object;
+	public final fun component3 ()Ljava/lang/Object;
+	public final fun component4 ()Ljava/lang/Object;
+	public final fun copy (Lio/github/reactivecircus/cache4k/CacheEventType;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Lio/github/reactivecircus/cache4k/CacheEvent;
+	public static synthetic fun copy$default (Lio/github/reactivecircus/cache4k/CacheEvent;Lio/github/reactivecircus/cache4k/CacheEventType;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;ILjava/lang/Object;)Lio/github/reactivecircus/cache4k/CacheEvent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getKey ()Ljava/lang/Object;
+	public final fun getNewValue ()Ljava/lang/Object;
+	public final fun getOldValue ()Ljava/lang/Object;
+	public final fun getType ()Lio/github/reactivecircus/cache4k/CacheEventType;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/reactivecircus/cache4k/CacheEventListener {
+	public abstract fun onEvent (Lio/github/reactivecircus/cache4k/CacheEvent;)V
+}
+
+public final class io/github/reactivecircus/cache4k/CacheEventType : java/lang/Enum {
+	public static final field Created Lio/github/reactivecircus/cache4k/CacheEventType;
+	public static final field Evicted Lio/github/reactivecircus/cache4k/CacheEventType;
+	public static final field Expired Lio/github/reactivecircus/cache4k/CacheEventType;
+	public static final field Removed Lio/github/reactivecircus/cache4k/CacheEventType;
+	public static final field Updated Lio/github/reactivecircus/cache4k/CacheEventType;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/reactivecircus/cache4k/CacheEventType;
+	public static fun values ()[Lio/github/reactivecircus/cache4k/CacheEventType;
 }
 
 public final class io/github/reactivecircus/cache4k/FakeTimeSource : kotlin/time/AbstractLongTimeSource {
