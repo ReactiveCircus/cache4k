@@ -1,17 +1,17 @@
 package io.github.reactivecircus.cache4k
 
 import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.assertContentEquals
 import kotlin.test.assertNull
 import kotlin.time.Duration.Companion.minutes
 
 private fun eventListOf(vararg elements: CacheEvent<Long, String>) = listOf(elements = elements)
 
 private class TestEventListener : CacheEventListener<Long, String> {
-    val events = mutableMapOf<CacheEventType, List<CacheEvent<Long, String>>>()
+    val events = mutableListOf<CacheEvent<Long, String>>()
 
     override fun onEvent(event: CacheEvent<Long, String>) {
-        events[event.type] = events[event.type]?.let { it + event } ?: listOf(event)
+        events.add(event)
     }
 }
 
@@ -29,12 +29,10 @@ class CacheListenerTest {
         cache.put(1, "dog")
         cache.put(2, "cat")
 
-        assertEquals(
-            mapOf(
-                CacheEventType.Created to eventListOf(
-                    CacheEvent(CacheEventType.Created, 1, null, "dog"),
-                    CacheEvent(CacheEventType.Created, 2, null, "cat"),
-                ),
+        assertContentEquals(
+            eventListOf(
+                CacheEvent.Created(1, "dog"),
+                CacheEvent.Created(2, "cat"),
             ),
             eventListener.events,
         )
@@ -51,14 +49,10 @@ class CacheListenerTest {
         cache.put(1, "dog")
         cache.put(1, "cat")
 
-        assertEquals(
-            mapOf(
-                CacheEventType.Created to eventListOf(
-                    CacheEvent(CacheEventType.Created, 1, null, "dog"),
-                ),
-                CacheEventType.Updated to eventListOf(
-                    CacheEvent(CacheEventType.Updated, 1, "dog", "cat"),
-                ),
+        assertContentEquals(
+            eventListOf(
+                CacheEvent.Created(1, "dog"),
+                CacheEvent.Updated(1, "dog", "cat"),
             ),
             eventListener.events,
         )
@@ -75,14 +69,10 @@ class CacheListenerTest {
         cache.put(1, "dog")
         cache.invalidate(1)
 
-        assertEquals(
-            mapOf(
-                CacheEventType.Created to eventListOf(
-                    CacheEvent(CacheEventType.Created, 1, null, "dog"),
-                ),
-                CacheEventType.Removed to eventListOf(
-                    CacheEvent(CacheEventType.Removed, 1, "dog", null),
-                ),
+        assertContentEquals(
+            eventListOf(
+                CacheEvent.Created(1, "dog"),
+                CacheEvent.Removed(1, "dog"),
             ),
             eventListener.events,
         )
@@ -100,16 +90,12 @@ class CacheListenerTest {
         cache.put(2, "cat")
         cache.invalidateAll()
 
-        assertEquals(
-            mapOf(
-                CacheEventType.Created to eventListOf(
-                    CacheEvent(CacheEventType.Created, 1, null, "dog"),
-                    CacheEvent(CacheEventType.Created, 2, null, "cat"),
-                ),
-                CacheEventType.Removed to eventListOf(
-                    CacheEvent(CacheEventType.Removed, 1, "dog", null),
-                    CacheEvent(CacheEventType.Removed, 2, "cat", null),
-                ),
+        assertContentEquals(
+            eventListOf(
+                CacheEvent.Created(1, "dog"),
+                CacheEvent.Created(2, "cat"),
+                CacheEvent.Removed(1, "dog"),
+                CacheEvent.Removed(2, "cat"),
             ),
             eventListener.events,
         )
@@ -127,15 +113,11 @@ class CacheListenerTest {
         cache.put(1, "dog")
         cache.put(2, "cat")
 
-        assertEquals(
-            mapOf(
-                CacheEventType.Created to eventListOf(
-                    CacheEvent(CacheEventType.Created, 1, null, "dog"),
-                    CacheEvent(CacheEventType.Created, 2, null, "cat"),
-                ),
-                CacheEventType.Evicted to eventListOf(
-                    CacheEvent(CacheEventType.Evicted, 1, "dog", null),
-                ),
+        assertContentEquals(
+            eventListOf(
+                CacheEvent.Created(1, "dog"),
+                CacheEvent.Created(2, "cat"),
+                CacheEvent.Evicted(1, "dog"),
             ),
             eventListener.events,
         )
@@ -154,14 +136,10 @@ class CacheListenerTest {
         fakeTimeSource += 1.minutes
         assertNull(cache.get(1))
 
-        assertEquals(
-            mapOf(
-                CacheEventType.Created to eventListOf(
-                    CacheEvent(CacheEventType.Created, 1, null, "dog"),
-                ),
-                CacheEventType.Expired to eventListOf(
-                    CacheEvent(CacheEventType.Expired, 1, "dog", null),
-                ),
+        assertContentEquals(
+            eventListOf(
+                CacheEvent.Created(1, "dog"),
+                CacheEvent.Expired(1, "dog"),
             ),
             eventListener.events,
         )

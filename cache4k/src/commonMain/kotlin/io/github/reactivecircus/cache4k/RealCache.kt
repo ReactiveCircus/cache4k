@@ -141,12 +141,9 @@ internal class RealCache<Key : Any, Value : Any>(
             cacheEntries[key] = newEntry
         }
         onEvent(
-            CacheEvent(
-                type = existingEntry?.let { CacheEventType.Updated } ?: CacheEventType.Created,
-                key = key,
-                oldValue = oldValue,
-                newValue = value
-            )
+            oldValue?.let {
+                CacheEvent.Updated(key = key, oldValue = it, newValue = value)
+            } ?: CacheEvent.Created(key = key, value = value)
         )
 
         evictEntries()
@@ -158,11 +155,9 @@ internal class RealCache<Key : Any, Value : Any>(
             writeQueue?.remove(it)
             accessQueue?.remove(it)
             onEvent(
-                CacheEvent(
-                    type = CacheEventType.Removed,
+                CacheEvent.Removed(
                     key = it.key,
-                    oldValue = it.value.value,
-                    newValue = null
+                    value = it.value.value,
                 )
             )
         }
@@ -172,11 +167,9 @@ internal class RealCache<Key : Any, Value : Any>(
         if (eventListener != null) {
             cacheEntries.values.forEach { entry ->
                 onEvent(
-                    CacheEvent(
-                        type = CacheEventType.Removed,
+                    CacheEvent.Removed(
                         key = entry.key,
-                        oldValue = entry.value.value,
-                        newValue = null
+                        value = entry.value.value,
                     )
                 )
             }
@@ -210,11 +203,9 @@ internal class RealCache<Key : Any, Value : Any>(
                         // remove the entry from the current queue
                         iterator.remove()
                         onEvent(
-                            CacheEvent(
-                                type = CacheEventType.Expired,
+                            CacheEvent.Expired(
                                 key = entry.key,
-                                oldValue = entry.value.value,
-                                newValue = null
+                                value = entry.value.value,
                             )
                         )
                     } else {
@@ -251,11 +242,9 @@ internal class RealCache<Key : Any, Value : Any>(
                     writeQueue?.remove(this)
                     accessQueue.remove(this)
                     onEvent(
-                        CacheEvent(
-                            type = CacheEventType.Evicted,
+                        CacheEvent.Evicted(
                             key = key,
-                            oldValue = value.value,
-                            newValue = null
+                            value = value.value,
                         )
                     )
                 }
