@@ -35,6 +35,7 @@ internal class RealCache<Key : Any, Value : Any>(
     val expireAfterAccessDuration: Duration,
     val maxSize: Long,
     val timeSource: TimeSource,
+    private val eventListener: CacheEventListener<Key, Value>?,
 ) : Cache<Key, Value> {
 
     private val cacheEntries = IsoMutableMap<Key, CacheEntry<Key, Value>>()
@@ -122,6 +123,7 @@ internal class RealCache<Key : Any, Value : Any>(
         expireEntries()
 
         val existingEntry = cacheEntries[key]
+        val oldValue = existingEntry?.value?.value
         if (existingEntry != null) {
             // cache entry found
             recordWrite(existingEntry)
@@ -138,6 +140,11 @@ internal class RealCache<Key : Any, Value : Any>(
             recordWrite(newEntry)
             cacheEntries[key] = newEntry
         }
+        onEvent(
+            oldValue?.let {
+                CacheEvent.Updated(key = key, oldValue = it, newValue = value)
+            } ?: CacheEvent.Created(key = key, value = value)
+        )
 
         evictEntries()
     }
@@ -147,10 +154,26 @@ internal class RealCache<Key : Any, Value : Any>(
         cacheEntries.remove(key)?.also {
             writeQueue?.remove(it)
             accessQueue?.remove(it)
+            onEvent(
+                CacheEvent.Removed(
+                    key = it.key,
+                    value = it.value.value,
+                )
+            )
         }
     }
 
     override fun invalidateAll() {
+        if (eventListener != null) {
+            cacheEntries.values.forEach { entry ->
+                onEvent(
+                    CacheEvent.Removed(
+                        key = entry.key,
+                        value = entry.value.value,
+                    )
+                )
+            }
+        }
         cacheEntries.clear()
         writeQueue?.clear()
         accessQueue?.clear()
@@ -179,6 +202,12 @@ internal class RealCache<Key : Any, Value : Any>(
                         cacheEntries.remove(entry.key)
                         // remove the entry from the current queue
                         iterator.remove()
+                        onEvent(
+                            CacheEvent.Expired(
+                                key = entry.key,
+                                value = entry.value.value,
+                            )
+                        )
                     } else {
                         // found unexpired entry, no need to look any further
                         break
@@ -212,6 +241,12 @@ internal class RealCache<Key : Any, Value : Any>(
                     cacheEntries.remove(key)
                     writeQueue?.remove(this)
                     accessQueue.remove(this)
+                    onEvent(
+                        CacheEvent.Evicted(
+                            key = key,
+                            value = value.value,
+                        )
+                    )
                 }
             }
         }
@@ -243,6 +278,10 @@ internal class RealCache<Key : Any, Value : Any>(
         }
         accessQueue?.add(cacheEntry)
         writeQueue?.add(cacheEntry)
+    }
+
+    private fun onEvent(event: CacheEvent<Key, Value>) {
+        eventListener?.onEvent(event)
     }
 }
 

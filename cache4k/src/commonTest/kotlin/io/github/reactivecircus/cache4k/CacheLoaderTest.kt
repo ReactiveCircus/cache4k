@@ -17,8 +17,7 @@ class CacheLoaderTest {
 
     @Test
     fun entryWithAssociatedKeyNotExists_getWithLoader_returnsValueFromLoader() = runTest {
-        val cache = Cache.Builder()
-            .build<Long, String>()
+        val cache = Cache.Builder<Long, String>().build()
 
         var loaderInvokeCount = 0
         val loader = suspend {
@@ -34,10 +33,10 @@ class CacheLoaderTest {
 
     @Test
     fun expiredEntryWithAssociatedKeyExists_getWithLoader_returnsValueFromLoader() = runTest {
-        val cache = Cache.Builder()
+        val cache = Cache.Builder<Long, String>()
             .expireAfterWrite(expiryDuration)
             .timeSource(fakeTimeSource)
-            .build<Long, String>()
+            .build()
 
         cache.put(1, "cat")
 
@@ -58,10 +57,10 @@ class CacheLoaderTest {
 
     @Test
     fun unexpiredEntryWithAssociatedKeyExists_getWithLoader_returnsExistingValue() = runTest {
-        val cache = Cache.Builder()
+        val cache = Cache.Builder<Long, String>()
             .expireAfterAccess(expiryDuration)
             .timeSource(fakeTimeSource)
-            .build<Long, String>()
+            .build()
 
         cache.put(1, "dog")
 
@@ -82,8 +81,8 @@ class CacheLoaderTest {
 
     @Test
     fun loaderThrowsException_getWithLoader_exceptionPropagated() = runTest {
-        val cache = Cache.Builder()
-            .build<Long, String>()
+        val cache = Cache.Builder<Long, String>()
+            .build()
 
         var loaderInvokeCount = 0
         val loader = suspend {
