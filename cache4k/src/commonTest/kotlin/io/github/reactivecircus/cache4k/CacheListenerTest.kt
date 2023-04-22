@@ -169,7 +169,6 @@ class CacheListenerTest {
             ).map { it.hashCode() },
         )
     }
-
 }
 
 private fun eventListOf(vararg elements: CacheEvent<Long, String>) = listOf(elements = elements)
@@ -181,4 +180,3 @@ private class TestEventListener : CacheEventListener<Long, String> {
         events.add(event)
     }
 }
-
