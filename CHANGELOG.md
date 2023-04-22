@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.11.0
+
+### Added
+
+- New event listener APIs (@darkxanter) - [35](https://github.com/ReactiveCircus/cache4k/pull/35)
+
+### Fixed
+
+- Downgrade stately to 1.2.5 to fix duplicate class error - [36](https://github.com/ReactiveCircus/cache4k/pull/36)
+
 ## 0.10.0
 
 ### Added
