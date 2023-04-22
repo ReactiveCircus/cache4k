@@ -63,7 +63,7 @@ kotlin {
 To create a new `Cache` instance using `Long` for the key and `String` for the value:
 
 ```kotlin
-val cache = Cache.Builder().build<Long, String>()
+val cache = Cache.Builder<Long, String>().build()
 ```
 
 To start writing entries to the cache:
@@ -95,7 +95,7 @@ cache.get(1) // returns "bird"
 
 ```kotlin
 runBlockingTest {
-    val cache = Cache.Builder().build<Long, User>()
+    val cache = Cache.Builder<Long, User>().build()
 
     val userId = 1L
     val user = cache.get(userId) {
@@ -126,9 +126,9 @@ time-to-idle**), where "access" means **reading the cache**, **adding a new cach
 replacing an existing entry with a new one**:
 
 ```kotlin
-val cache = Cache.Builder()
+val cache = Cache.Builder<Long, String>()
     .expireAfterAccess(24.hours)
-    .build<Long, String>()
+    .build()
 ```
 
 An entry in this cache will be removed if it has not been read or replaced **after 24 hours** since it's been written into the cache.
@@ -139,9 +139,9 @@ To set the maximum time an entry can live in the cache since the last write (als
 time-to-live**), where "write" means **adding a new cache entry** or **replacing an existing entry with a new one**:
 
 ```kotlin
-val cache = Cache.Builder()
+val cache = Cache.Builder<Long, String>()
     .expireAfterWrite(30.minutes)
-    .build<Long, String>()
+    .build()
 ```
 
 An entry in this cache will be removed if it has not been replaced **after 30 minutes** since it's been written into the cache.
@@ -153,9 +153,9 @@ _Note that cache entries are **not** removed immediately upon expiration at exac
 To set the maximum number of entries to be kept in the cache:
 
 ```kotlin
-val cache = Cache.Builder()
+val cache = Cache.Builder<Long, String>()
     .maximumCacheSize(100)
-    .build<Long, String>()
+    .build()
 ```
 
 Once there are more than **100** entries in this cache, the **least recently used one** will be removed, where "used" means **reading the cache**, **adding a new cache entry**, or **replacing an
@@ -166,8 +166,8 @@ existing entry with a new one**.
 To get a copy of the current cache entries as a `Map`:
 
 ```kotlin
-val cache = Cache.Builder()
-    .build<Long, String>()
+val cache = Cache.Builder<Long, String>()
+    .build()
 
 cache.put(1, "dog")
 cache.put(2, "cat")
@@ -185,7 +185,7 @@ Cache entries can also be deleted explicitly.
 To delete a cache entry for a given key:
 
 ```kotlin
-val cache = Cache.Builder().build<Long, String>()
+val cache = Cache.Builder<Long, String>().build()
 cache.put(1, "dog")
 
 cache.invalidate(1)
@@ -199,6 +199,54 @@ To delete all entries in the cache:
 cache.invalidateAll()
 ```
 
+### Event listener
+
+You can set an event listener as a lambda:
+
+```kotlin
+val cache1 = Cache.Builder<Long, String>()
+    .eventListener { event ->
+        println("onEvent: $event")
+    }
+    .build()
+```
+
+Or declare it as a class and share logic across many stores:
+
+```kotlin
+class FileDeleteEventListener : CacheEventListener<Long, File> {
+    override fun onEvent(event: CacheEvent<Long, File>) {
+        when(event) {
+            is CacheEvent.Created -> {}
+            is CacheEvent.Updated -> event.oldValue.delete()
+            is CacheEvent.Evicted -> event.value.delete()
+            is CacheEvent.Expired -> event.value.delete()
+            is CacheEvent.Removed -> event.value.delete()
+        }
+    }
+}
+val fileDeleteEventListener = FileDeleteEventListener()
+
+val cache1 = Cache.Builder<Long, File>()
+    .eventListener(fileDeleteEventListener)
+    .build()
+
+val cache2 = Cache.Builder<Long, File>()
+    .eventListener(fileDeleteEventListener)
+    .build()
+```
+
+Cache entry event firing behaviors for mutative methods:
+
+| Initial value    | Operation                | New value | Event                            |
+|:-----------------|:-------------------------|:----------|:---------------------------------|
+| {}               | put(K, V)                | {K: V}    | Created(K, V)                    |
+| {K: V1}          | put(K, V2)               | {K: V2}   | Updated(K, V1, V2)               |
+| {K: V}           | invalidate(K)            | {}        | Removed(K, V)                    |
+| {K1: V1, K2: V2} | invalidateAll()          | {}        | Removed(K1, V1), Removed(K2, V2) |
+| {K: V}           | any operation, K expired | {}        | Expired(K, V)                    |
+| {K1: V1}         | put(K2, V2), K1 evicted  | {K2: V2}  | Created(K2, V2), Evicted(K1, V1) |
+
 ### Unit testing cache expirations
 
 To test logic that depends on cache expiration, pass in a `FakeTimeSource` when building a `Cache`
@@ -208,10 +256,10 @@ so you can programmatically advance the reading of the time source:
 @Test
 fun cacheEntryEvictedAfterExpiration() {
     private val fakeTimeSource = FakeTimeSource()
-    val cache = Cache.Builder()
+    val cache = Cache.Builder<Long, String>()
         .timeSource(fakeTimeSource)
         .expireAfterWrite(1.minutes)
-        .build<Long, String>()
+        .build()
 
     cache.put(1, "dog")
 
