@@ -20,7 +20,7 @@ env:
 jobs:
   assemble:
     name: Assemble
-    runs-on: macos-11
+    runs-on: macos-latest
     env:
       JAVA_TOOL_OPTIONS: -Xmx4g -XX:+UseParallelGC
 
@@ -39,7 +39,7 @@ jobs:
 
   checks:
     name: Checks (unit tests, static analysis and binary compatibility API check)
-    runs-on: macos-11
+    runs-on: macos-latest
     env:
       JAVA_TOOL_OPTIONS: -Xmx4g -XX:+UseParallelGC
 
@@ -60,7 +60,7 @@ jobs:
     name: Deploy snapshot
     needs: [assemble, checks]
     if: github.ref == 'refs/heads/main'
-    runs-on: macos-11
+    runs-on: macos-latest
     env:
       JAVA_TOOL_OPTIONS: -Xmx4g -XX:+UseParallelGC
       ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
