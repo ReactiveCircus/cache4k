@@ -13,12 +13,19 @@ kotlin {
         }
         val jvmAndIosMain by getting {
             dependencies {
+                dependsOn(commonMain)
                 implementation(libs.androidx.collection)
             }
         }
         val unixDesktopMain by getting {
             dependencies {
+                dependsOn(commonMain)
                 implementation(libs.androidx.collection)
+            }
+        }
+        val nonIosAppleMain by getting {
+            dependencies {
+                dependsOn(commonMain)
             }
         }
         val commonTest by getting {
