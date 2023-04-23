@@ -1,4 +1,5 @@
 import com.vanniktech.maven.publish.SonatypeHost
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JsModuleKind
 
 plugins {
@@ -17,6 +18,30 @@ mavenPublishing {
 
 kotlin {
     explicitApi()
+
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    targetHierarchy.default {
+        group("jvmAndIos") {
+            withJvm()
+            withIosX64()
+            withIosArm64()
+            withIosSimulatorArm64()
+        }
+        group("unixDesktop") {
+            withLinuxX64()
+            withMacosX64()
+            withMacosArm64()
+        }
+        group("nonIosApple") {
+            withTvosX64()
+            withTvosArm64()
+            withTvosSimulatorArm64()
+            withWatchosX64()
+            withWatchosArm64()
+            withWatchosSimulatorArm64()
+        }
+    }
+
     jvm {
         compilations.all {
             compilerOptions.configure {
@@ -44,12 +69,12 @@ kotlin {
     iosSimulatorArm64()
     macosX64()
     macosArm64()
+    tvosX64()
     tvosArm64()
     tvosSimulatorArm64()
-    tvosX64()
+    watchosX64()
     watchosArm64()
     watchosSimulatorArm64()
-    watchosX64()
     linuxX64()
     mingwX64()
 

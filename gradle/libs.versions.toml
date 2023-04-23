@@ -1,18 +1,19 @@
 [versions]
-detekt = "1.22.0"
-dokka = "1.8.10"
-coroutines = "1.6.4"
 kotlin = "1.8.20"
+dokka = "1.8.10"
 kotlinBinaryCompabilityValidator = "0.13.0"
+toolchainsResolver = "0.4.0"
+detekt = "1.22.0"
 mavenPublish = "0.25.2"
+coroutines = "1.6.4"
 atomicfu = "0.20.2"
 statelyIso = "1.2.5"
 
 [libraries]
-plugin-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
-plugin-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+plugin-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
 plugin-kotlinBinaryCompatibilityValidator = { module = "org.jetbrains.kotlinx:binary-compatibility-validator", version.ref = "kotlinBinaryCompabilityValidator" }
+plugin-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 plugin-mavenPublish = { module ="com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublish" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }

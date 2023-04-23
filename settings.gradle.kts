@@ -21,8 +21,19 @@ pluginManagement {
             }
         }
     }
+
+    val toolchainsResolverVersion = file("$rootDir/gradle/libs.versions.toml")
+        .readLines()
+        .first { it.contains("toolchainsResolver") }
+        .substringAfter("=")
+        .trim()
+        .removeSurrounding("\"")
+
+    plugins {
+        id("org.gradle.toolchains.foojay-resolver-convention") version toolchainsResolverVersion
+    }
 }
 
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version("0.4.0")
+    id("org.gradle.toolchains.foojay-resolver-convention")
 }
