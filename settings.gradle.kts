@@ -33,6 +33,11 @@ pluginManagement {
 @Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
     repositories {
+        google {
+            content {
+                includeGroupByRegex("androidx.*")
+            }
+        }
         mavenCentral()
     }
 }

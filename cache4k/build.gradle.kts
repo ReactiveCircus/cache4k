@@ -11,6 +11,16 @@ kotlin {
                 implementation(libs.atomicfu)
             }
         }
+        val jvmAndIosMain by getting {
+            dependencies {
+                implementation(libs.androidx.collection)
+            }
+        }
+        val unixDesktopMain by getting {
+            dependencies {
+                implementation(libs.androidx.collection)
+            }
+        }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test-common"))
