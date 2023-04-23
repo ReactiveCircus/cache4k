@@ -9,6 +9,11 @@ on:
       - 'mkdocs.yml'
       - '.github/workflows/**'
 
+env:
+  CI: true
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xms4g -Xmx4g -XX:+UseParallelGC -XX:+HeapDumpOnOutOfMemoryError"
+  TERM: dumb
+
 jobs:
   deploy-website:
     name: Generate API docs and deploy website
@@ -30,7 +35,4 @@ jobs:
           pip install mkdocs-material mkdocs-minify-plugin
           .buildscript/deploy_website.sh
         env:
-          CI: true
-          JAVA_TOOL_OPTIONS: -Xmx4g -XX:+UseParallelGC
-          GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx4g -XX:+HeapDumpOnOutOfMemoryError"
           DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
