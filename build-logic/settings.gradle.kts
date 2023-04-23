@@ -1,6 +1,4 @@
 pluginManagement {
-    includeBuild("build-logic")
-
     repositories {
         gradlePluginPortal {
             content {
@@ -10,15 +8,7 @@ pluginManagement {
         mavenCentral()
     }
 
-    resolutionStrategy {
-        eachPlugin {
-            if (requested.id.id == "binary-compatibility-validator") {
-                useModule("org.jetbrains.kotlinx:binary-compatibility-validator:${requested.version}")
-            }
-        }
-    }
-
-    val toolchainsResolverVersion = file("$rootDir/gradle/libs.versions.toml")
+    val toolchainsResolverVersion = file("../gradle/libs.versions.toml")
         .readLines()
         .first { it.contains("toolchainsResolver") }
         .substringAfter("=")
@@ -35,11 +25,13 @@ dependencyResolutionManagement {
     repositories {
         mavenCentral()
     }
+    versionCatalogs {
+        create("libs") {
+            from(files("../gradle/libs.versions.toml"))
+        }
+    }
 }
 
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention")
 }
-
-rootProject.name = "cache4k"
-include(":cache4k")

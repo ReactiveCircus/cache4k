@@ -50,7 +50,7 @@ jobs:
         with:
           gradle-home-cache-cleanup: true
       - name: Check
-        run: ./gradlew check
+        run: ./gradlew check && ./gradlew -p build-logic detekt
 
   deploy-snapshot:
     name: Deploy snapshot
