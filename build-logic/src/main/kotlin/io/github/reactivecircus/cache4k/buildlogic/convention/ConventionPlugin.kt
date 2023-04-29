@@ -6,6 +6,7 @@ import com.vanniktech.maven.publish.SonatypeHost
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import kotlinx.validation.BinaryCompatibilityValidatorPlugin
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -14,65 +15,87 @@ import org.gradle.jvm.toolchain.JvmVendorSpec
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.the
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
 import org.jetbrains.dokka.gradle.DokkaPlugin
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JsModuleKind
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
-internal class LibraryConventionPlugin : Plugin<Project> {
+internal class ConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
-        // configure KMP library project
-        pluginManager.apply("org.jetbrains.kotlin.multiplatform")
-        group = property("GROUP") as String
-        version = property("VERSION_NAME") as String
-
-        plugins.withId("org.jetbrains.kotlin.multiplatform") {
-            extensions.configure<KotlinMultiplatformExtension> {
-                explicitApi()
-                configureTargets()
-                sourceSets.configureEach {
-                    languageSettings.apply {
-                        languageVersion = "1.8"
-                        progressiveMode = true
-                        enableLanguageFeature("NewInference")
-                        optIn("kotlin.time.ExperimentalTime")
-                    }
-                }
-            }
-        }
-
         // apply dokka plugin
         pluginManager.apply(DokkaPlugin::class.java)
 
-        // configure detekt
-        pluginManager.apply(DetektPlugin::class.java)
-        dependencies.add("detektPlugins", the<LibrariesForLibs>().plugin.detektFormatting)
-        plugins.withType<DetektPlugin> {
-            extensions.configure<DetektExtension> {
-                source = files("src/")
-                config = files("${project.rootDir}/detekt.yml")
-                buildUponDefaultConfig = true
-                allRules = true
-                parallel = true
-            }
-            tasks.withType<Detekt>().configureEach {
-                jvmTarget = JvmTarget.JVM_11.target
-                reports {
-                    xml.required.set(false)
-                    txt.required.set(false)
-                    sarif.required.set(false)
-                    md.required.set(false)
+        if (target.rootProject == this) {
+            configureRootProject()
+        } else {
+            configureSubproject()
+        }
+    }
+}
+
+private fun Project.configureRootProject() {
+    tasks.withType<DokkaMultiModuleTask>().configureEach {
+        val apiDir = rootDir.resolve("docs/api")
+        outputDirectory.set(apiDir)
+        doLast {
+            apiDir.resolve("-modules.html").renameTo(apiDir.resolve("index.html"))
+        }
+    }
+
+    // configure compatibility validator
+    pluginManager.apply(BinaryCompatibilityValidatorPlugin::class.java)
+}
+
+private fun Project.configureSubproject() {
+    // configure KMP library project
+    pluginManager.apply("org.jetbrains.kotlin.multiplatform")
+    group = property("GROUP") as String
+    version = property("VERSION_NAME") as String
+
+    plugins.withId("org.jetbrains.kotlin.multiplatform") {
+        extensions.configure<KotlinMultiplatformExtension> {
+            explicitApi()
+            configureTargets()
+            sourceSets.configureEach {
+                languageSettings.apply {
+                    languageVersion = "1.8"
+                    progressiveMode = true
+                    enableLanguageFeature("NewInference")
+                    optIn("kotlin.time.ExperimentalTime")
                 }
             }
         }
+    }
 
-        // configure publishing
-        pluginManager.apply(MavenPublishPlugin::class.java)
-        extensions.configure<MavenPublishBaseExtension> {
-            publishToMavenCentral(SonatypeHost.S01, automaticRelease = true)
-            signAllPublications()
+    // configure detekt
+    pluginManager.apply(DetektPlugin::class.java)
+    dependencies.add("detektPlugins", the<LibrariesForLibs>().plugin.detektFormatting)
+    plugins.withType<DetektPlugin> {
+        extensions.configure<DetektExtension> {
+            source = files("src/")
+            config = files("${project.rootDir}/detekt.yml")
+            buildUponDefaultConfig = true
+            allRules = true
+            parallel = true
         }
+        tasks.withType<Detekt>().configureEach {
+            jvmTarget = JvmTarget.JVM_11.target
+            reports {
+                xml.required.set(false)
+                txt.required.set(false)
+                sarif.required.set(false)
+                md.required.set(false)
+            }
+        }
+    }
+
+    // configure publishing
+    pluginManager.apply(MavenPublishPlugin::class.java)
+    extensions.configure<MavenPublishBaseExtension> {
+        publishToMavenCentral(SonatypeHost.S01, automaticRelease = true)
+        signAllPublications()
     }
 }
 

@@ -1,3 +1,3 @@
 plugins {
-    id("cache4k.root")
+    id("cache4k.convention")
 }

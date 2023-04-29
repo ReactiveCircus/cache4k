@@ -45,13 +45,9 @@ tasks.withType<Detekt>().configureEach {
 
 gradlePlugin {
     plugins {
-        register("root") {
-            id = "cache4k.root"
-            implementationClass = "io.github.reactivecircus.cache4k.buildlogic.convention.RootPlugin"
-        }
-        register("library") {
-            id = "cache4k.library"
-            implementationClass = "io.github.reactivecircus.cache4k.buildlogic.convention.LibraryConventionPlugin"
+        register("convention") {
+            id = "cache4k.convention"
+            implementationClass = "io.github.reactivecircus.cache4k.buildlogic.convention.ConventionPlugin"
         }
     }
 }

@@ -1,5 +1,5 @@
 plugins {
-    id("cache4k.library")
+    id("cache4k.convention")
 }
 
 kotlin {
@@ -21,7 +21,6 @@ kotlin {
         val jvmTest by getting {
             dependencies {
                 implementation(kotlin("test"))
-                implementation(kotlin("test-junit"))
             }
         }
         val jsTest by getting {
@@ -29,5 +28,12 @@ kotlin {
                 implementation(kotlin("test-js"))
             }
         }
+    }
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
     }
 }

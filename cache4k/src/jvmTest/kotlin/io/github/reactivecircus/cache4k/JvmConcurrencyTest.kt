@@ -1,11 +1,10 @@
 package io.github.reactivecircus.cache4k
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
-import org.junit.Test
-import java.util.concurrent.Executors
+import org.junit.jupiter.api.RepeatedTest
 import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -13,21 +12,21 @@ class JvmConcurrencyTest {
 
     private val fakeTimeSource = FakeTimeSource()
 
-    @Test
+    @RepeatedTest(100)
     fun evictEntriesConcurrently() = runTest {
         val cache = Cache.Builder<Long, String>()
             .maximumCacheSize(2)
             .build()
 
         // should not produce a ConcurrentModificationException
-        repeat(10) {
-            launch(Executors.newSingleThreadExecutor().asCoroutineDispatcher()) {
+        repeat(2) {
+            launch(Dispatchers.IO) {
                 cache.put(it.toLong(), "value for $it")
             }
         }
     }
 
-    @Test
+    @RepeatedTest(100)
     fun expireEntriesConcurrently() = runTest {
         val cache = Cache.Builder<Long, String>()
             .timeSource(fakeTimeSource)
@@ -39,8 +38,8 @@ class JvmConcurrencyTest {
         }
 
         // should not produce a ConcurrentModificationException
-        repeat(10) {
-            launch(Executors.newSingleThreadExecutor().asCoroutineDispatcher()) {
+        repeat(2) {
+            launch(Dispatchers.IO) {
                 cache.get(it.toLong())
                 fakeTimeSource += 1.seconds
             }
