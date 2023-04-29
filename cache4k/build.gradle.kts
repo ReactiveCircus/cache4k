@@ -11,6 +11,11 @@ kotlin {
                 implementation(libs.atomicfu)
             }
         }
+        val nonJvmMain by getting {
+            dependencies {
+                dependsOn(commonMain)
+            }
+        }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test-common"))

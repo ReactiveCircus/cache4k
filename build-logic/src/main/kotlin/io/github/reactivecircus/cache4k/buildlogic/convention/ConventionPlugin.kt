@@ -111,22 +111,22 @@ private fun KotlinMultiplatformExtension.configureTargets() {
         targetHierarchy.default {
             group("jvmAndIos") {
                 withJvm()
+            }
+            group("nonJvm") {
+                withJs()
                 withIosX64()
                 withIosArm64()
                 withIosSimulatorArm64()
-            }
-            group("unixDesktop") {
-                withLinuxX64()
                 withMacosX64()
                 withMacosArm64()
-            }
-            group("nonIosApple") {
                 withTvosX64()
                 withTvosArm64()
                 withTvosSimulatorArm64()
                 withWatchosX64()
                 withWatchosArm64()
                 withWatchosSimulatorArm64()
+                withLinuxX64()
+                withMingwX64()
             }
         }
 
