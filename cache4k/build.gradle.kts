@@ -25,7 +25,14 @@ kotlin {
         }
         val jvmTest by getting {
             dependencies {
-                implementation(kotlin("test"))
+                implementation(kotlin("test-junit5"))
+            }
+        }
+        val jvmLincheck by getting {
+            dependencies {
+                dependsOn(commonMain)
+                implementation(kotlin("test-junit5"))
+                implementation(libs.lincheck)
             }
         }
         val jsTest by getting {
@@ -33,12 +40,5 @@ kotlin {
                 implementation(kotlin("test-js"))
             }
         }
-    }
-}
-
-tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
-    testLogging {
-        events("passed", "skipped", "failed")
     }
 }

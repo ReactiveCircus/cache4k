@@ -10,9 +10,11 @@ import kotlinx.validation.BinaryCompatibilityValidatorPlugin
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.testing.Test
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.jvm.toolchain.JvmVendorSpec
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.the
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
@@ -23,11 +25,11 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal class ConventionPlugin : Plugin<Project> {
-    override fun apply(target: Project) = with(target) {
+    override fun apply(project: Project) = with(project) {
         // apply dokka plugin
         pluginManager.apply(DokkaPlugin::class.java)
 
-        if (target.rootProject == this) {
+        if (rootProject == this) {
             configureRootProject()
         } else {
             configureSubproject()
@@ -57,7 +59,7 @@ private fun Project.configureSubproject() {
     plugins.withId("org.jetbrains.kotlin.multiplatform") {
         extensions.configure<KotlinMultiplatformExtension> {
             explicitApi()
-            configureTargets()
+            configureTargets(this@configureSubproject)
             sourceSets.configureEach {
                 languageSettings.apply {
                     languageVersion = "1.8"
@@ -91,6 +93,14 @@ private fun Project.configureSubproject() {
         }
     }
 
+    // configure test
+    tasks.withType<Test>().configureEach {
+        useJUnitPlatform()
+        testLogging {
+            events("passed", "skipped", "failed")
+        }
+    }
+
     // configure publishing
     pluginManager.apply(MavenPublishPlugin::class.java)
     extensions.configure<MavenPublishBaseExtension> {
@@ -100,7 +110,7 @@ private fun Project.configureSubproject() {
 }
 
 @Suppress("LongMethod", "MagicNumber")
-private fun KotlinMultiplatformExtension.configureTargets() {
+private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
     targets {
         jvmToolchain {
             languageVersion.set(JavaLanguageVersion.of(20))
@@ -136,6 +146,29 @@ private fun KotlinMultiplatformExtension.configureTargets() {
                     jvmTarget.set(JvmTarget.JVM_11)
                     freeCompilerArgs.addAll(
                         "-Xjvm-default=all"
+                    )
+                }
+            }
+            val main = compilations.getByName("main")
+            compilations.create("lincheck") {
+                defaultSourceSet {
+                    dependencies {
+                        implementation(main.compileDependencyFiles + main.output.classesDirs)
+                    }
+                }
+                project.tasks.register<Test>("jvmLincheck") {
+                    classpath = compileDependencyFiles + runtimeDependencyFiles + output.allOutputs
+                    testClassesDirs = output.classesDirs
+                    useJUnitPlatform()
+                    testLogging {
+                        events("passed", "skipped", "failed")
+                    }
+                    jvmArgs(
+                        "--add-opens", "java.base/jdk.internal.misc=ALL-UNNAMED",
+                        "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+                        "--add-exports", "java.base/jdk.internal.util=ALL-UNNAMED",
+                        "--add-exports", "java.base/jdk.internal.vm=ALL-UNNAMED",
+                        "--add-exports", "java.base/jdk.internal.access=ALL-UNNAMED",
                     )
                 }
             }

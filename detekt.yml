@@ -19,3 +19,5 @@ style:
     active: false
   UseCheckOrError:
     active: false
+  MagicNumber:
+    excludes: ["**/*Test/**", "**/*Lincheck/**"]
