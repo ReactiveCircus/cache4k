@@ -24,6 +24,7 @@ kotlin {
         }
         jvmLincheck {
             dependencies {
+                dependsOn(jvmMain)
                 implementation(kotlin("test-junit5"))
                 implementation(libs.lincheck)
             }

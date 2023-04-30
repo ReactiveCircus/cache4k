@@ -1,6 +1,5 @@
 package io.github.reactivecircus.cache4k
 
-import co.touchlab.stately.collections.IsoMutableMap
 import kotlinx.atomicfu.locks.reentrantLock
 import kotlinx.atomicfu.locks.withLock
 import kotlinx.coroutines.sync.Mutex
@@ -11,7 +10,7 @@ import kotlinx.coroutines.sync.withLock
  */
 internal class KeyedSynchronizer<Key : Any> {
 
-    private val keyBasedMutexes = IsoMutableMap<Key, MutexEntry>()
+    private val keyBasedMutexes = ConcurrentMutableMap<Key, MutexEntry>()
 
     private val mapLock = reentrantLock()
 
@@ -40,7 +39,7 @@ internal class KeyedSynchronizer<Key : Any> {
             mutexEntry.counter++
             // save the lock entry to the map if it has just been created
             if (keyBasedMutexes[key] == null) {
-                keyBasedMutexes[key] = mutexEntry
+                keyBasedMutexes.put(key, mutexEntry)
             }
 
             return mutexEntry.mutex

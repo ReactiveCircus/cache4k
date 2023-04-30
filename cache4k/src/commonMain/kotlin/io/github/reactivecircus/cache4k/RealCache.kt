@@ -1,6 +1,5 @@
 package io.github.reactivecircus.cache4k
 
-import co.touchlab.stately.collections.IsoMutableMap
 import co.touchlab.stately.collections.IsoMutableSet
 import kotlinx.atomicfu.AtomicRef
 import kotlinx.atomicfu.atomic
@@ -38,7 +37,7 @@ internal class RealCache<Key : Any, Value : Any>(
     private val eventListener: CacheEventListener<Key, Value>?,
 ) : Cache<Key, Value> {
 
-    private val cacheEntries = IsoMutableMap<Key, CacheEntry<Key, Value>>()
+    private val cacheEntries = ConcurrentMutableMap<Key, CacheEntry<Key, Value>>()
 
     /**
      * Whether to perform size based evictions.
@@ -138,7 +137,7 @@ internal class RealCache<Key : Any, Value : Any>(
                 writeTimeMark = atomic(nowTimeMark),
             )
             recordWrite(newEntry)
-            cacheEntries[key] = newEntry
+            cacheEntries.put(key, newEntry)
         }
         onEvent(
             oldValue?.let {
