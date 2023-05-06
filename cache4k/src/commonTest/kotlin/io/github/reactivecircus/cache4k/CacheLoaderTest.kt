@@ -1,6 +1,5 @@
 package io.github.reactivecircus.cache4k
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -9,7 +8,6 @@ import kotlin.test.assertNull
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.nanoseconds
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class CacheLoaderTest {
 
     private val fakeTimeSource = FakeTimeSource()

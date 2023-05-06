@@ -1,13 +1,11 @@
 package io.github.reactivecircus.cache4k
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.RepeatedTest
 import kotlin.time.Duration.Companion.seconds
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class JvmConcurrencyTest {
 
     private val fakeTimeSource = FakeTimeSource()
