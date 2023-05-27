@@ -76,8 +76,8 @@ private fun Project.configureSubproject() {
     dependencies.add("detektPlugins", the<LibrariesForLibs>().plugin.detektFormatting)
     plugins.withType<DetektPlugin> {
         extensions.configure<DetektExtension> {
-            source = files("src/")
-            config = files("${project.rootDir}/detekt.yml")
+            source.from(files("src/"))
+            config.from(files("${project.rootDir}/detekt.yml"))
             buildUponDefaultConfig = true
             allRules = true
             parallel = true

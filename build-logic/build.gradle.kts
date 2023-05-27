@@ -26,8 +26,8 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 detekt {
-    source = files("src/")
-    config = files("../detekt.yml")
+    source.from(files("src/"))
+    config.from(files("../detekt.yml"))
     buildUponDefaultConfig = true
     allRules = true
     parallel = true
