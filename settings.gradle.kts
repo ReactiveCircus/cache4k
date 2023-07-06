@@ -10,14 +10,6 @@ pluginManagement {
         mavenCentral()
     }
 
-    resolutionStrategy {
-        eachPlugin {
-            if (requested.id.id == "binary-compatibility-validator") {
-                useModule("org.jetbrains.kotlinx:binary-compatibility-validator:${requested.version}")
-            }
-        }
-    }
-
     val toolchainsResolverVersion = file("$rootDir/gradle/libs.versions.toml")
         .readLines()
         .first { it.contains("toolchainsResolver") }
