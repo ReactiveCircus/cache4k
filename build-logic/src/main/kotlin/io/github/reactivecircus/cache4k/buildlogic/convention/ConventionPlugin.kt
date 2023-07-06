@@ -62,7 +62,7 @@ private fun Project.configureSubproject() {
             configureTargets(this@configureSubproject)
             sourceSets.configureEach {
                 languageSettings.apply {
-                    languageVersion = "1.8"
+                    languageVersion = "1.9"
                     progressiveMode = true
                     enableLanguageFeature("NewInference")
                     optIn("kotlin.time.ExperimentalTime")
