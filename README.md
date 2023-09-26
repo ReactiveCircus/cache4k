@@ -28,6 +28,7 @@ The following targets are currently supported:
 - watchosArm64
 - watchosSimulatorArm64
 - linuxX64
+- linuxArm64
 - mingwX64
 
 ## Download

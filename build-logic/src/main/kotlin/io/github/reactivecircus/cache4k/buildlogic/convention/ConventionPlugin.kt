@@ -136,6 +136,7 @@ private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
                 withWatchosArm64()
                 withWatchosSimulatorArm64()
                 withLinuxX64()
+                withLinuxArm64()
                 withMingwX64()
             }
         }
@@ -194,6 +195,7 @@ private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
         watchosArm64()
         watchosSimulatorArm64()
         linuxX64()
+        linuxArm64()
         mingwX64()
     }
 }
