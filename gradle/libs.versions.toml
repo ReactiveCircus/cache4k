@@ -8,7 +8,7 @@ mavenPublish = "0.25.3"
 coroutines = "1.7.2"
 atomicfu = "0.21.0"
 lincheck = "2.17"
-statelyIso = "2.0.4"
+statelyIso = "2.0.5"
 
 [libraries]
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
