@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.12.0
+
+### Added
+
+Added new targets:
+- `linuxArm64`
+
+### Changed
+
+- Kotlin 1.9.10
+- Coroutines 1.7.2
+- AtomicFU 0.21.0
+- Stately 2.0.5
+
 ## 0.11.0
 
 ### Added
