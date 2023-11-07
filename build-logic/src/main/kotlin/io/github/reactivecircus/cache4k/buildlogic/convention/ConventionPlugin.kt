@@ -13,7 +13,13 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.jvm.toolchain.JvmVendorSpec
-import org.gradle.kotlin.dsl.*
+import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.creating
+import org.gradle.kotlin.dsl.getValue
+import org.gradle.kotlin.dsl.invoke
+import org.gradle.kotlin.dsl.register
+import org.gradle.kotlin.dsl.the
+import org.gradle.kotlin.dsl.withType
 import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
 import org.jetbrains.dokka.gradle.DokkaPlugin
 import org.jetbrains.kotlin.gradle.dsl.JsModuleKind
@@ -183,6 +189,5 @@ private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
         appleMain.get().dependsOn(nonJvm)
         linuxMain.get().dependsOn(nonJvm)
         mingwMain.get().dependsOn(nonJvm)
-
     }
 }
