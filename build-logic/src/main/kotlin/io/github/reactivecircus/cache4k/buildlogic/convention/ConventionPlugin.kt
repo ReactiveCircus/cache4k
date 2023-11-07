@@ -13,13 +13,9 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.jvm.toolchain.JvmVendorSpec
-import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.register
-import org.gradle.kotlin.dsl.the
-import org.gradle.kotlin.dsl.withType
+import org.gradle.kotlin.dsl.*
 import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
 import org.jetbrains.dokka.gradle.DokkaPlugin
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JsModuleKind
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
@@ -111,91 +107,82 @@ private fun Project.configureSubproject() {
 
 @Suppress("LongMethod", "MagicNumber")
 private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
-    targets {
+    jvm {
         jvmToolchain {
-            languageVersion.set(JavaLanguageVersion.of(20))
+            languageVersion.set(JavaLanguageVersion.of(21))
             vendor.set(JvmVendorSpec.AZUL)
         }
+        compilations.configureEach {
+            compilerOptions.configure {
+                jvmTarget.set(JvmTarget.JVM_11)
+                freeCompilerArgs.addAll(
+                    "-Xjvm-default=all"
+                )
+            }
+        }
+        val main = compilations.getByName("main")
+        compilations.create("lincheck") {
+            defaultSourceSet {
+                dependencies {
+                    implementation(main.compileDependencyFiles + main.output.classesDirs)
+                }
+            }
+            project.tasks.register<Test>("jvmLincheck") {
+                classpath = compileDependencyFiles + runtimeDependencyFiles + output.allOutputs
+                testClassesDirs = output.classesDirs
+                useJUnitPlatform()
+                testLogging {
+                    events("passed", "skipped", "failed")
+                }
+                jvmArgs(
+                    "--add-opens", "java.base/jdk.internal.misc=ALL-UNNAMED",
+                    "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+                    "--add-exports", "java.base/jdk.internal.util=ALL-UNNAMED",
+                    "--add-exports", "java.base/jdk.internal.vm=ALL-UNNAMED",
+                    "--add-exports", "java.base/jdk.internal.access=ALL-UNNAMED",
+                )
+            }
+        }
+    }
+    js {
+        compilations.configureEach {
+            compilerOptions.configure {
+                moduleKind.set(JsModuleKind.MODULE_COMMONJS)
+            }
+        }
+        browser()
+        nodejs()
+    }
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+    macosX64()
+    macosArm64()
+    tvosX64()
+    tvosArm64()
+    tvosSimulatorArm64()
+    watchosX64()
+    watchosArm64()
+    watchosSimulatorArm64()
+    linuxX64()
+    linuxArm64()
+    mingwX64()
+    applyDefaultHierarchyTemplate()
 
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        targetHierarchy.default {
-            group("jvmAndIos") {
-                withJvm()
-            }
-            group("nonJvm") {
-                withJs()
-                withIosX64()
-                withIosArm64()
-                withIosSimulatorArm64()
-                withMacosX64()
-                withMacosArm64()
-                withTvosX64()
-                withTvosArm64()
-                withTvosSimulatorArm64()
-                withWatchosX64()
-                withWatchosArm64()
-                withWatchosSimulatorArm64()
-                withLinuxX64()
-                withLinuxArm64()
-                withMingwX64()
-            }
+    sourceSets {
+        val jvmAndIos by creating {
+            dependsOn(commonMain.get())
         }
+        iosMain.get().dependsOn(jvmAndIos)
+        jvmMain.get().dependsOn(jvmAndIos)
 
-        jvm {
-            compilations.configureEach {
-                compilerOptions.configure {
-                    jvmTarget.set(JvmTarget.JVM_11)
-                    freeCompilerArgs.addAll(
-                        "-Xjvm-default=all"
-                    )
-                }
-            }
-            val main = compilations.getByName("main")
-            compilations.create("lincheck") {
-                defaultSourceSet {
-                    dependencies {
-                        implementation(main.compileDependencyFiles + main.output.classesDirs)
-                    }
-                }
-                project.tasks.register<Test>("jvmLincheck") {
-                    classpath = compileDependencyFiles + runtimeDependencyFiles + output.allOutputs
-                    testClassesDirs = output.classesDirs
-                    useJUnitPlatform()
-                    testLogging {
-                        events("passed", "skipped", "failed")
-                    }
-                    jvmArgs(
-                        "--add-opens", "java.base/jdk.internal.misc=ALL-UNNAMED",
-                        "--add-opens", "java.base/java.lang=ALL-UNNAMED",
-                        "--add-exports", "java.base/jdk.internal.util=ALL-UNNAMED",
-                        "--add-exports", "java.base/jdk.internal.vm=ALL-UNNAMED",
-                        "--add-exports", "java.base/jdk.internal.access=ALL-UNNAMED",
-                    )
-                }
-            }
+        val nonJvm by creating {
+            dependsOn(commonMain.get())
         }
-        js(IR) {
-            compilations.all {
-                compilerOptions.configure {
-                    moduleKind.set(JsModuleKind.MODULE_COMMONJS)
-                }
-            }
-            browser()
-            nodejs()
-        }
-        iosX64()
-        iosArm64()
-        iosSimulatorArm64()
-        macosX64()
-        macosArm64()
-        tvosX64()
-        tvosArm64()
-        tvosSimulatorArm64()
-        watchosX64()
-        watchosArm64()
-        watchosSimulatorArm64()
-        linuxX64()
-        linuxArm64()
-        mingwX64()
+        jsMain.get().dependsOn(nonJvm)
+        appleMain.get().dependsOn(nonJvm)
+        linuxMain.get().dependsOn(nonJvm)
+        mingwMain.get().dependsOn(nonJvm)
+
     }
 }

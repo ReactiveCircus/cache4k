@@ -28,7 +28,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '19'
+          java-version: '21'
       - uses: gradle/gradle-build-action@v2
         with:
           gradle-home-cache-cleanup: true
@@ -45,7 +45,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '19'
+          java-version: '21'
       - uses: gradle/gradle-build-action@v2
         with:
           gradle-home-cache-cleanup: true
@@ -67,7 +67,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '19'
+          java-version: '21'
       - uses: gradle/gradle-build-action@v2
         with:
           gradle-home-cache-cleanup: true
