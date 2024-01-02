@@ -13,8 +13,7 @@ kotlin {
         }
         commonTest {
             dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
+                implementation(kotlin("test"))
                 implementation(libs.coroutines.test)
             }
         }
@@ -27,11 +26,6 @@ kotlin {
             dependencies {
                 implementation(kotlin("test-junit5"))
                 implementation(libs.lincheck)
-            }
-        }
-        jsTest {
-            dependencies {
-                implementation(kotlin("test-js"))
             }
         }
     }

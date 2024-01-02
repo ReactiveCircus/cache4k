@@ -16,6 +16,7 @@ import org.gradle.jvm.toolchain.JvmVendorSpec
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.creating
 import org.gradle.kotlin.dsl.getValue
+import org.gradle.kotlin.dsl.getting
 import org.gradle.kotlin.dsl.invoke
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.the
@@ -25,6 +26,7 @@ import org.jetbrains.dokka.gradle.DokkaPlugin
 import org.jetbrains.kotlin.gradle.dsl.JsModuleKind
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 internal class ConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) = with(project) {
@@ -159,6 +161,11 @@ private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
         browser()
         nodejs()
     }
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+        binaries.executable()
+    }
     iosX64()
     iosArm64()
     iosSimulatorArm64()
@@ -186,6 +193,9 @@ private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
             dependsOn(commonMain.get())
         }
         jsMain.get().dependsOn(nonJvm)
+        val wasmJsMain by getting {
+            dependsOn(nonJvm)
+        }
         appleMain.get().dependsOn(nonJvm)
         linuxMain.get().dependsOn(nonJvm)
         mingwMain.get().dependsOn(nonJvm)
