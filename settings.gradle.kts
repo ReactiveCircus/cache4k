@@ -10,14 +10,20 @@ pluginManagement {
         mavenCentral()
     }
 
-    val toolchainsResolverVersion = file("$rootDir/gradle/libs.versions.toml").readLines().first { it.contains("toolchainsResolver") }.substringAfter("=").trim().removeSurrounding("\"")
+    val toolchainsResolverVersion = file("$rootDir/gradle/libs.versions.toml")
+        .readLines()
+        .first { it.contains("toolchainsResolver") }
+        .substringAfter("=")
+        .trim()
+        .removeSurrounding("\"")
 
     plugins {
         id("org.gradle.toolchains.foojay-resolver-convention") version toolchainsResolverVersion
     }
 }
 
-@Suppress("UnstableApiUsage") dependencyResolutionManagement {
+@Suppress("UnstableApiUsage")
+dependencyResolutionManagement {
     repositories {
         mavenCentral()
         maven("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental")
