@@ -16,6 +16,7 @@ The following targets are currently supported:
 
 - jvm
 - js
+- wasmJs
 - iosX64
 - iosArm64
 - iosSimulatorArm64
