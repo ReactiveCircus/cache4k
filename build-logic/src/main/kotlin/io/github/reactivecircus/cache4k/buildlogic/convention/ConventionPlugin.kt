@@ -193,6 +193,7 @@ private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
             dependsOn(commonMain.get())
         }
         jsMain.get().dependsOn(nonJvm)
+        @Suppress("UnusedPrivateProperty")
         val wasmJsMain by getting {
             dependsOn(nonJvm)
         }
