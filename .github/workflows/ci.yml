@@ -20,7 +20,7 @@ env:
 jobs:
   assemble:
     name: Assemble
-    runs-on: macos-latest
+    runs-on: macos-14
 
     steps:
       - uses: actions/checkout@v4
@@ -37,7 +37,7 @@ jobs:
 
   checks:
     name: Checks (unit tests, static analysis and binary compatibility API check)
-    runs-on: macos-latest
+    runs-on: macos-14
 
     steps:
       - uses: actions/checkout@v4
@@ -56,7 +56,7 @@ jobs:
     name: Deploy snapshot
     needs: [assemble, checks]
     if: github.ref == 'refs/heads/main'
-    runs-on: macos-latest
+    runs-on: macos-14
     env:
       ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
       ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
