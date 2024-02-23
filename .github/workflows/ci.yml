@@ -72,4 +72,4 @@ jobs:
         with:
           gradle-home-cache-cleanup: true
       - name: Publish snapshot
-        run: ./gradlew publishAllPublicationsToMavenCentral
+        run: ./gradlew publishToMavenCentral
