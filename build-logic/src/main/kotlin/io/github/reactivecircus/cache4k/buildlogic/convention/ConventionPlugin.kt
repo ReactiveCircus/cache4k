@@ -182,6 +182,7 @@ private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
     mingwX64()
     applyDefaultHierarchyTemplate()
 
+    @Suppress("UnusedPrivateProperty")
     sourceSets {
         val nonJvmMain by creating {
             dependsOn(commonMain.get())
@@ -190,7 +191,6 @@ private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
             dependsOn(jvmMain.get())
         }
         jsMain.get().dependsOn(nonJvmMain)
-        @Suppress("UnusedPrivateProperty")
         val wasmJsMain by getting {
             dependsOn(nonJvmMain)
         }
