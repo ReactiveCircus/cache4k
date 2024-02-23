@@ -182,23 +182,20 @@ private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
     mingwX64()
     applyDefaultHierarchyTemplate()
 
+    @Suppress("UnusedPrivateProperty")
     sourceSets {
-        val jvmAndIos by creating {
+        val nonJvmMain by creating {
             dependsOn(commonMain.get())
         }
-        iosMain.get().dependsOn(jvmAndIos)
-        jvmMain.get().dependsOn(jvmAndIos)
-
-        val nonJvm by creating {
-            dependsOn(commonMain.get())
+        val jvmLincheck by getting {
+            dependsOn(jvmMain.get())
         }
-        jsMain.get().dependsOn(nonJvm)
-        @Suppress("UnusedPrivateProperty")
+        jsMain.get().dependsOn(nonJvmMain)
         val wasmJsMain by getting {
-            dependsOn(nonJvm)
+            dependsOn(nonJvmMain)
         }
-        appleMain.get().dependsOn(nonJvm)
-        linuxMain.get().dependsOn(nonJvm)
-        mingwMain.get().dependsOn(nonJvm)
+        appleMain.get().dependsOn(nonJvmMain)
+        linuxMain.get().dependsOn(nonJvmMain)
+        mingwMain.get().dependsOn(nonJvmMain)
     }
 }
