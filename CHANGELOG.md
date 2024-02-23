@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.13.0
+
+### Added
+
+Added new targets:
+- `wasmJs` - [#45](https://github.com/ReactiveCircus/cache4k/pull/45)
+
+### Changed
+
+- Switch internal map implementation to `ConcurrentHashMap` for JVM targets - [#39](https://github.com/ReactiveCircus/cache4k/pull/39)
+- Kotlin 1.9.22
+- Coroutines 1.8.0
+- AtomicFU 0.23.2
+- Stately 2.0.6
+
 ## 0.12.0
 
 ### Added
@@ -18,11 +33,11 @@ Added new targets:
 
 ### Added
 
-- New event listener APIs (@darkxanter) - [35](https://github.com/ReactiveCircus/cache4k/pull/35)
+- New event listener APIs (@darkxanter) - [#35](https://github.com/ReactiveCircus/cache4k/pull/35)
 
 ### Fixed
 
-- Downgrade stately to 1.2.5 to fix duplicate class error - [36](https://github.com/ReactiveCircus/cache4k/pull/36)
+- Downgrade stately to 1.2.5 to fix duplicate class error - [#36](https://github.com/ReactiveCircus/cache4k/pull/36)
 
 ## 0.10.0
 
