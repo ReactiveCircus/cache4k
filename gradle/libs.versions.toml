@@ -4,11 +4,11 @@ dokka = "1.9.10"
 binaryCompabilityValidator = "0.14.0"
 toolchainsResolver = "0.8.0"
 detekt = "1.23.5"
-mavenPublish = "0.25.3"
+mavenPublish = "0.27.0"
 coroutines = "1.8.0"
-atomicfu = "0.23.1"
-lincheck = "2.17"
-statelyIso = "2.0.5"
+atomicfu = "0.23.2"
+lincheck = "2.26"
+statelyIso = "2.0.6"
 
 [libraries]
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
