@@ -117,7 +117,7 @@ private fun Project.configureSubproject() {
 private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
     jvm {
         jvmToolchain {
-            languageVersion.set(JavaLanguageVersion.of(21))
+            languageVersion.set(JavaLanguageVersion.of(22))
             vendor.set(JvmVendorSpec.AZUL)
         }
         compilations.configureEach {
