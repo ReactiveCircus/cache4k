@@ -25,8 +25,10 @@ import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
 import org.jetbrains.dokka.gradle.DokkaPlugin
 import org.jetbrains.kotlin.gradle.dsl.JsModuleKind
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 internal class ConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) = with(project) {
@@ -66,10 +68,7 @@ private fun Project.configureSubproject() {
             configureTargets(this@configureSubproject)
             sourceSets.configureEach {
                 languageSettings.apply {
-                    languageVersion = "1.9"
                     progressiveMode = true
-                    enableLanguageFeature("NewInference")
-                    optIn("kotlin.time.ExperimentalTime")
                 }
             }
         }
@@ -115,19 +114,33 @@ private fun Project.configureSubproject() {
 
 @Suppress("LongMethod", "MagicNumber")
 private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
-    jvm {
-        jvmToolchain {
-            languageVersion.set(JavaLanguageVersion.of(22))
-            vendor.set(JvmVendorSpec.AZUL)
-        }
+    targets.configureEach {
         compilations.configureEach {
-            compilerOptions.configure {
-                jvmTarget.set(JvmTarget.JVM_11)
-                freeCompilerArgs.addAll(
-                    "-Xjvm-default=all"
-                )
+            compileTaskProvider.configure {
+                compilerOptions {
+                    freeCompilerArgs.add("-Xexpect-actual-classes")
+                }
             }
         }
+    }
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(22))
+        vendor.set(JvmVendorSpec.AZUL)
+    }
+    project.tasks.withType<KotlinJvmCompile>().configureEach {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+            freeCompilerArgs.addAll(
+                "-Xjvm-default=all"
+            )
+        }
+    }
+    project.tasks.withType<KotlinJsCompile>().configureEach {
+        compilerOptions {
+            moduleKind.set(JsModuleKind.MODULE_COMMONJS)
+        }
+    }
+    jvm {
         val main = compilations.getByName("main")
         compilations.create("lincheck") {
             defaultSourceSet {
@@ -153,11 +166,6 @@ private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
         }
     }
     js {
-        compilations.configureEach {
-            compilerOptions.configure {
-                moduleKind.set(JsModuleKind.MODULE_COMMONJS)
-            }
-        }
         browser()
         nodejs()
     }
@@ -182,7 +190,6 @@ private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
     mingwX64()
     applyDefaultHierarchyTemplate()
 
-    @Suppress("UnusedPrivateProperty")
     sourceSets {
         val nonJvmMain by creating {
             dependsOn(commonMain.get())
