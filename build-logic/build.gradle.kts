@@ -9,7 +9,7 @@ plugins {
 
 kotlin {
     jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(22))
+        languageVersion.set(JavaLanguageVersion.of(23))
         vendor.set(JvmVendorSpec.AZUL)
     }
 }

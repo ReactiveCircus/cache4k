@@ -124,7 +124,7 @@ private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
         }
     }
     jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(22))
+        languageVersion.set(JavaLanguageVersion.of(23))
         vendor.set(JvmVendorSpec.AZUL)
     }
     project.tasks.withType<KotlinJvmCompile>().configureEach {
