@@ -21,7 +21,7 @@ import org.gradle.kotlin.dsl.invoke
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.the
 import org.gradle.kotlin.dsl.withType
-import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
+import org.jetbrains.dokka.gradle.DokkaExtension
 import org.jetbrains.dokka.gradle.DokkaPlugin
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JsModuleKind
@@ -44,11 +44,11 @@ internal class ConventionPlugin : Plugin<Project> {
 }
 
 private fun Project.configureRootProject() {
-    tasks.withType<DokkaMultiModuleTask>().configureEach {
-        val apiDir = rootDir.resolve("docs/api")
-        outputDirectory.set(apiDir)
-        doLast {
-            apiDir.resolve("-modules.html").renameTo(apiDir.resolve("index.html"))
+    plugins.withId("org.jetbrains.dokka") {
+        extensions.configure<DokkaExtension> {
+            dokkaPublications.configureEach {
+                outputDirectory.set(layout.buildDirectory.dir("docs/api"))
+            }
         }
     }
 
