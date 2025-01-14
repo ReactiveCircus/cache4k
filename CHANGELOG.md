@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.14.0
+
+### Changed
+
+- Kotlin 2.1.0
+- Coroutines 1.10.1
+- AtomicFU 0.27.0
+- Stately 2.1.0
+
 ## 0.13.0
 
 ### Added
