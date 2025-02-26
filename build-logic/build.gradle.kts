@@ -7,13 +7,6 @@ plugins {
     alias(libs.plugins.detekt)
 }
 
-kotlin {
-    jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(23))
-        vendor.set(JvmVendorSpec.AZUL)
-    }
-}
-
 tasks.withType<KotlinCompile>().configureEach {
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_11)

@@ -11,8 +11,6 @@ import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
-import org.gradle.jvm.toolchain.JavaLanguageVersion
-import org.gradle.jvm.toolchain.JvmVendorSpec
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.creating
 import org.gradle.kotlin.dsl.getValue
@@ -122,10 +120,6 @@ private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
                 }
             }
         }
-    }
-    jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(23))
-        vendor.set(JvmVendorSpec.AZUL)
     }
     project.tasks.withType<KotlinJvmCompile>().configureEach {
         compilerOptions {
