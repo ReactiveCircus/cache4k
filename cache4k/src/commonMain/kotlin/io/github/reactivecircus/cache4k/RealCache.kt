@@ -32,6 +32,7 @@ import kotlin.time.TimeSource
 internal class RealCache<Key : Any, Value : Any>(
     val expireAfterWriteDuration: Duration,
     val expireAfterAccessDuration: Duration,
+    val expiresAt: ((Key, Value) -> TimeMark?)?,
     val maxSize: Long,
     val timeSource: TimeSource,
     private val eventListener: CacheEventListener<Key, Value>?,
@@ -135,6 +136,7 @@ internal class RealCache<Key : Any, Value : Any>(
                 value = atomic(value),
                 accessTimeMark = atomic(nowTimeMark),
                 writeTimeMark = atomic(nowTimeMark),
+                expiresAt = expiresAt?.invoke(key, value)
             )
             recordWrite(newEntry)
             cacheEntries.put(key, newEntry)
@@ -217,11 +219,12 @@ internal class RealCache<Key : Any, Value : Any>(
     }
 
     /**
-     * Check whether the [CacheEntry] has expired based on either access time or write time.
+     * Check whether the [CacheEntry] has expired based on either access time, write time, or set expiration time.
      */
     private fun CacheEntry<Key, Value>.isExpired(): Boolean {
-        return expiresAfterAccess && (accessTimeMark.value + expireAfterAccessDuration).hasPassedNow() ||
-            expiresAfterWrite && (writeTimeMark.value + expireAfterWriteDuration).hasPassedNow()
+        return expiresAfterAccess && (accessTimeMark.value + expireAfterAccessDuration).hasPassedNow()
+            || expiresAfterWrite && (writeTimeMark.value + expireAfterWriteDuration).hasPassedNow()
+            || expiresAt != null && expiresAt.hasPassedNow()
     }
 
     /**
@@ -293,4 +296,5 @@ private class CacheEntry<Key : Any, Value : Any>(
     val value: AtomicRef<Value>,
     val accessTimeMark: AtomicRef<TimeMark>,
     val writeTimeMark: AtomicRef<TimeMark>,
+    val expiresAt: TimeMark?,
 )
