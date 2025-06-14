@@ -105,7 +105,7 @@ private fun Project.configureSubproject() {
     // configure publishing
     pluginManager.apply(MavenPublishPlugin::class.java)
     extensions.configure<MavenPublishBaseExtension> {
-        publishToMavenCentral(SonatypeHost.S01, automaticRelease = true)
+        publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
         signAllPublications()
     }
 }
