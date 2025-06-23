@@ -2,7 +2,6 @@ package io.github.reactivecircus.cache4k.buildlogic.convention
 
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import com.vanniktech.maven.publish.MavenPublishPlugin
-import com.vanniktech.maven.publish.SonatypeHost
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
@@ -105,7 +104,7 @@ private fun Project.configureSubproject() {
     // configure publishing
     pluginManager.apply(MavenPublishPlugin::class.java)
     extensions.configure<MavenPublishBaseExtension> {
-        publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
+        publishToMavenCentral(automaticRelease = true)
         signAllPublications()
     }
 }
