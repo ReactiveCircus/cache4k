@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.1.20"
+kotlin = "2.2.0"
 dokka = "2.0.0"
 binaryCompabilityValidator = "0.17.0"
 toolchainsResolver = "0.10.0"
