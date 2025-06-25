@@ -242,4 +242,42 @@ class CacheExpiryTest {
         assertEquals("cat", cache.get(2))
         assertEquals("bird", cache.get(3))
     }
+    
+    @Test
+    fun expiresAtEntryEvictedAfterExpirationTimeSet() {
+        val dog = "dog"
+
+        val cache = Cache.Builder<Long, String>()
+            .timeSource(fakeTimeSource)
+            .expiresAt { _, value -> fakeTimeSource.markNow() + value.length.minutes }
+            .build()
+
+        cache.put(1, dog)
+        assertEquals(dog, cache.get(1))
+
+        fakeTimeSource += 1.minutes
+        assertEquals(dog, cache.get(1))
+
+        fakeTimeSource += dog.length.minutes
+        assertNull(cache.get(1))
+    }
+
+    @Test
+    fun expiresAtEntryNoEvictionWhenNoExpirationTimeSet() {
+        val dog = "dog"
+
+        val cache = Cache.Builder<Long, String>()
+            .timeSource(fakeTimeSource)
+            .expiresAt { _, _ -> null }
+            .build()
+
+        cache.put(1, dog)
+        assertEquals(dog, cache.get(1))
+
+        fakeTimeSource += 1.minutes
+        assertEquals(dog, cache.get(1))
+
+        fakeTimeSource += dog.length.minutes
+        assertEquals(dog, cache.get(1))
+    }
 }
