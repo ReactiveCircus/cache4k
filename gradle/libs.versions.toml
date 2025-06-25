@@ -1,7 +1,7 @@
 [versions]
 kotlin = "2.2.0"
 dokka = "2.0.0"
-binaryCompabilityValidator = "0.17.0"
+binaryCompabilityValidator = "0.18.0"
 toolchainsResolver = "0.10.0"
 detekt = "1.23.7"
 mavenPublish = "0.33.0"
