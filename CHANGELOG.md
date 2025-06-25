@@ -4,7 +4,7 @@
 
 ### Changed
 
-- Kotlin 2.1.20
+- Kotlin 2.2.0
 - Migrate to Sonatype Central Portal. 
 
 ## 0.14.0
