@@ -1,6 +1,6 @@
 [versions]
 kotlin = "2.2.10"
-dokka = "2.0.0"
+dokka = "2.1.0-Beta"
 binaryCompabilityValidator = "0.18.0"
 toolchainsResolver = "0.10.0"
 detekt = "1.23.7"
