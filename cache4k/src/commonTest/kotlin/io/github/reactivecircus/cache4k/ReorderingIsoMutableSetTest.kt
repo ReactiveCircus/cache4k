@@ -6,7 +6,6 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class ReorderingIsoMutableSetTest {
-
     private val set = ReorderingIsoMutableSet<String>()
 
     @Test

@@ -9,7 +9,6 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.nanoseconds
 
 class CacheLoaderTest {
-
     private val fakeTimeSource = FakeTimeSource()
     private val expiryDuration = 1.minutes
 

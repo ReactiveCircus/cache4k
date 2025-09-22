@@ -36,7 +36,6 @@ internal class RealCache<Key : Any, Value : Any>(
     val timeSource: TimeSource,
     private val eventListener: CacheEventListener<Key, Value>?,
 ) : Cache<Key, Value> {
-
     private val cacheEntries = ConcurrentMutableMap<Key, CacheEntry<Key, Value>>()
 
     /**

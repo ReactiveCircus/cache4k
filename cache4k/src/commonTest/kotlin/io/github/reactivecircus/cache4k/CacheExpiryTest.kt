@@ -7,7 +7,6 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.nanoseconds
 
 class CacheExpiryTest {
-
     private val fakeTimeSource = FakeTimeSource()
 
     @Test
