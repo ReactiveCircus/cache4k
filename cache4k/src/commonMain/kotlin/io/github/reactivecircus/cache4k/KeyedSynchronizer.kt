@@ -9,7 +9,6 @@ import kotlinx.coroutines.sync.withLock
  * Provides a mechanism for performing key-based synchronization.
  */
 internal class KeyedSynchronizer<Key : Any> {
-
     private val keyBasedMutexes = ConcurrentMutableMap<Key, MutexEntry>()
 
     private val mapLock = reentrantLock()

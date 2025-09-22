@@ -7,7 +7,6 @@ import kotlin.time.TimeSource
  * An in-memory key-value cache with support for time-based (expiration) and size-based evictions.
  */
 public interface Cache<in Key : Any, Value : Any> {
-
     /**
      * Returns the value associated with [key] in this cache, or null if there is no
      * cached value for [key].
@@ -48,7 +47,6 @@ public interface Cache<in Key : Any, Value : Any> {
      * Main entry point for creating a [Cache].
      */
     public interface Builder<K : Any, V : Any> {
-
         /**
          * Specifies that each entry should be automatically removed from the cache once a fixed duration
          * has elapsed after the entry's creation or the most recent replacement of its value.
@@ -95,7 +93,6 @@ public interface Cache<in Key : Any, Value : Any> {
         public fun build(): Cache<K, V>
 
         public companion object {
-
             /**
              * Returns a new [Cache.Builder] instance.
              */
@@ -108,7 +105,6 @@ public interface Cache<in Key : Any, Value : Any> {
  * A default implementation of [Cache.Builder].
  */
 internal class CacheBuilderImpl<K : Any, V : Any> : Cache.Builder<K, V> {
-
     private var expireAfterWriteDuration = Duration.INFINITE
 
     private var expireAfterAccessDuration = Duration.INFINITE

@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test
 import kotlin.time.Duration.Companion.seconds
 
 class Cache4kLincheckTest {
-
     private val cache = Cache.Builder<Long, String>()
         .expireAfterWrite(5.seconds)
         .expireAfterAccess(2.seconds)

@@ -10,7 +10,6 @@ import kotlin.time.Duration.Companion.nanoseconds
 import kotlin.time.TimeSource
 
 class CacheBuilderTest {
-
     @Test
     fun expireAfterWrite_zeroDuration() {
         val exception = assertFailsWith<IllegalArgumentException> {

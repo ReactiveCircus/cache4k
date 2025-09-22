@@ -2,22 +2,14 @@ package io.github.reactivecircus.cache4k.buildlogic.convention
 
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import com.vanniktech.maven.publish.MavenPublishPlugin
-import io.gitlab.arturbosch.detekt.Detekt
-import io.gitlab.arturbosch.detekt.DetektPlugin
-import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import dev.detekt.gradle.Detekt
+import dev.detekt.gradle.extensions.DetektExtension
+import dev.detekt.gradle.plugin.DetektPlugin
 import kotlinx.validation.BinaryCompatibilityValidatorPlugin
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.testing.Test
-import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.creating
-import org.gradle.kotlin.dsl.getValue
-import org.gradle.kotlin.dsl.getting
-import org.gradle.kotlin.dsl.invoke
-import org.gradle.kotlin.dsl.register
-import org.gradle.kotlin.dsl.the
-import org.gradle.kotlin.dsl.withType
 import org.jetbrains.dokka.gradle.DokkaExtension
 import org.jetbrains.dokka.gradle.DokkaPlugin
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
@@ -42,9 +34,9 @@ internal class ConventionPlugin : Plugin<Project> {
 
 private fun Project.configureRootProject() {
     plugins.withId("org.jetbrains.dokka") {
-        extensions.configure<DokkaExtension> {
-            dokkaPublications.configureEach {
-                outputDirectory.set(layout.buildDirectory.dir("docs/api"))
+        extensions.configure(DokkaExtension::class.java) {
+            it.dokkaPublications.configureEach {
+                it.outputDirectory.set(layout.buildDirectory.dir("docs/api"))
             }
         }
     }
@@ -60,11 +52,11 @@ private fun Project.configureSubproject() {
     version = property("VERSION_NAME") as String
 
     plugins.withId("org.jetbrains.kotlin.multiplatform") {
-        extensions.configure<KotlinMultiplatformExtension> {
-            explicitApi()
-            configureTargets(this@configureSubproject)
-            sourceSets.configureEach {
-                languageSettings.apply {
+        extensions.configure(KotlinMultiplatformExtension::class.java) {
+            it.explicitApi()
+            it.configureTargets(this@configureSubproject)
+            it.sourceSets.configureEach {
+                it.languageSettings.apply {
                     progressiveMode = true
                 }
             }
@@ -73,82 +65,81 @@ private fun Project.configureSubproject() {
 
     // configure detekt
     pluginManager.apply(DetektPlugin::class.java)
-    dependencies.add("detektPlugins", the<LibrariesForLibs>().plugin.detektFormatting)
-    plugins.withType<DetektPlugin> {
-        extensions.configure<DetektExtension> {
-            source.from(files("src/"))
-            config.from(files("${project.rootDir}/detekt.yml"))
-            buildUponDefaultConfig = true
-            allRules = true
-            parallel = true
+    dependencies.add("detektPlugins", (extensions.getByName("libs") as LibrariesForLibs).plugin.detektKtlintWrapper)
+    plugins.withType(DetektPlugin::class.java) {
+        extensions.configure(DetektExtension::class.java) {
+            it.source.from(files("src/"))
+            it.config.from(files("${project.rootDir}/detekt.yml"))
+            it.buildUponDefaultConfig.set(true)
+            it.parallel.set(true)
         }
-        tasks.withType<Detekt>().configureEach {
-            jvmTarget = JvmTarget.JVM_11.target
-            reports {
-                xml.required.set(false)
-                txt.required.set(false)
-                sarif.required.set(false)
-                md.required.set(false)
+        tasks.withType(Detekt::class.java).configureEach {
+            it.jvmTarget.set(JvmTarget.JVM_11.target)
+            it.reports { report ->
+                report.xml.required.set(false)
+                report.sarif.required.set(false)
+                report.md.required.set(false)
             }
         }
     }
 
     // configure test
-    tasks.withType<Test>().configureEach {
-        useJUnitPlatform()
-        testLogging {
-            events("passed", "skipped", "failed")
+    tasks.withType(Test::class.java).configureEach { test ->
+        test.useJUnitPlatform()
+        test.testLogging {
+            it.events("passed", "skipped", "failed")
         }
     }
 
     // configure publishing
     pluginManager.apply(MavenPublishPlugin::class.java)
-    extensions.configure<MavenPublishBaseExtension> {
-        publishToMavenCentral(automaticRelease = true)
-        signAllPublications()
+    extensions.configure(MavenPublishBaseExtension::class.java) {
+        it.publishToMavenCentral(automaticRelease = true)
+        it.signAllPublications()
     }
 }
 
 @Suppress("LongMethod", "MagicNumber")
 private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
     targets.configureEach {
-        compilations.configureEach {
-            compileTaskProvider.configure {
+        it.compilations.configureEach {
+            it.compileTaskProvider.configure {
                 compilerOptions {
                     freeCompilerArgs.add("-Xexpect-actual-classes")
                 }
             }
         }
     }
-    project.tasks.withType<KotlinJvmCompile>().configureEach {
-        compilerOptions {
+    project.tasks.withType(KotlinJvmCompile::class.java).configureEach {
+        it.compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
             freeCompilerArgs.addAll(
                 "-Xjvm-default=all"
             )
         }
     }
-    project.tasks.withType<KotlinJsCompile>().configureEach {
-        compilerOptions {
+    project.tasks.withType(KotlinJsCompile::class.java).configureEach {
+        it.compilerOptions {
             moduleKind.set(JsModuleKind.MODULE_COMMONJS)
         }
     }
     jvm {
         val main = compilations.getByName("main")
-        compilations.create("lincheck") {
-            defaultSourceSet {
+        compilations.create("lincheck") { compilation ->
+            compilation.defaultSourceSet {
                 dependencies {
                     implementation(main.compileDependencyFiles + main.output.classesDirs)
                 }
             }
-            project.tasks.register<Test>("jvmLincheck") {
-                classpath = compileDependencyFiles + runtimeDependencyFiles + output.allOutputs
-                testClassesDirs = output.classesDirs
-                useJUnitPlatform()
-                testLogging {
-                    events("passed", "skipped", "failed")
+            project.tasks.register("jvmLincheck", Test::class.java) {
+                it.classpath = compilation.compileDependencyFiles +
+                    compilation.runtimeDependencyFiles + compilation.output.allOutputs
+                it.testClassesDirs = compilation.output.classesDirs
+                it.useJUnitPlatform()
+                it.testLogging {
+                    it.events("passed", "skipped", "failed")
                 }
-                jvmArgs(
+                it.jvmArgs(
                     "--add-opens", "java.base/jdk.internal.misc=ALL-UNNAMED",
                     "--add-opens", "java.base/java.lang=ALL-UNNAMED",
                     "--add-exports", "java.base/jdk.internal.util=ALL-UNNAMED",
@@ -183,20 +174,19 @@ private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
     mingwX64()
     applyDefaultHierarchyTemplate()
 
-    @Suppress("UnusedPrivateProperty")
-    sourceSets {
-        val nonJvmMain by creating {
-            dependsOn(commonMain.get())
+    with(sourceSets) {
+        create("nonJvmMain") {
+            it.dependsOn(commonMain.get())
         }
-        val jvmLincheck by getting {
-            dependsOn(jvmMain.get())
+        getByName("jvmLincheck") {
+            it.dependsOn(jvmMain.get())
         }
-        jsMain.get().dependsOn(nonJvmMain)
-        val wasmJsMain by getting {
-            dependsOn(nonJvmMain)
+        jsMain.get().dependsOn(getByName("nonJvmMain"))
+        getByName("wasmJsMain") {
+            it.dependsOn(getByName("nonJvmMain"))
         }
-        appleMain.get().dependsOn(nonJvmMain)
-        linuxMain.get().dependsOn(nonJvmMain)
-        mingwMain.get().dependsOn(nonJvmMain)
+        appleMain.get().dependsOn(getByName("nonJvmMain"))
+        linuxMain.get().dependsOn(getByName("nonJvmMain"))
+        mingwMain.get().dependsOn(getByName("nonJvmMain"))
     }
 }

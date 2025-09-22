@@ -6,7 +6,6 @@ import kotlin.test.assertNull
 import kotlin.time.Duration.Companion.minutes
 
 class CacheInvalidationTest {
-
     @Test
     fun invalidateByKey_associatedEntryEvicted() {
         val cache = Cache.Builder<Long, String>()

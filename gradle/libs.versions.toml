@@ -2,8 +2,8 @@
 kotlin = "2.2.20"
 dokka = "2.1.0-Beta"
 binaryCompabilityValidator = "0.18.0"
-toolchainsResolver = "0.10.0"
-detekt = "1.23.7"
+toolchainsResolver = "1.0.0"
+detekt = "2.0.0-alpha.0"
 mavenPublish = "0.34.0"
 coroutines = "1.10.1"
 atomicfu = "0.27.0"
@@ -14,8 +14,8 @@ statelyIso = "2.1.0"
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
 plugin-binaryCompatibilityValidator = { module = "org.jetbrains.kotlinx:binary-compatibility-validator", version.ref = "binaryCompabilityValidator" }
-plugin-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
-plugin-detektFormatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt"}
+plugin-detekt = { module = "dev.detekt:detekt-gradle-plugin", version.ref = "detekt"}
+plugin-detektKtlintWrapper = { module = "dev.detekt:detekt-rules-ktlint-wrapper", version.ref = "detekt"}
 plugin-mavenPublish = { module ="com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublish" }
 
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -25,4 +25,5 @@ lincheck = { module = "org.jetbrains.kotlinx:lincheck", version.ref = "lincheck"
 stately-isoCollections = { module = "co.touchlab:stately-iso-collections", version.ref = "statelyIso" }
 
 [plugins]
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+detekt = { id = "dev.detekt", version.ref = "detekt" }

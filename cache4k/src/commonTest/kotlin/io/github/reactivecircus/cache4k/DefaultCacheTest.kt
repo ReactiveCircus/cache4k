@@ -5,7 +5,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
 class DefaultCacheTest {
-
     @Test
     fun noEntryWithAssociatedKeyExists_get_returnsNull() {
         val cache = Cache.Builder<Long, String>().build()

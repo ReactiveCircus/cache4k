@@ -7,7 +7,6 @@ import org.jetbrains.kotlinx.lincheck.strategy.stress.StressOptions
 import org.junit.jupiter.api.Test
 
 class ReorderingIsoMutableSetLincheckTest {
-
     private val reorderingIsoMutableSet = ReorderingIsoMutableSet<Int>()
 
     @Operation

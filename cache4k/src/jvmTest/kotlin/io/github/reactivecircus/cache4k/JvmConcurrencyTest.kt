@@ -7,7 +7,6 @@ import org.junit.jupiter.api.RepeatedTest
 import kotlin.time.Duration.Companion.seconds
 
 class JvmConcurrencyTest {
-
     private val fakeTimeSource = FakeTimeSource()
 
     @RepeatedTest(100)

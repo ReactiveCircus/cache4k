@@ -5,7 +5,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
 class CacheEvictionTest {
-
     @Test
     fun maxSizeLimitReached_addNewEntry_oldEntryEvicted() {
         val cache = Cache.Builder<Long, String>()

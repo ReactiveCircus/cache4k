@@ -6,8 +6,16 @@ complexity:
   LargeClass:
     excludes: ["**/*Test/**"]
 
-formatting:
+ktlint:
+  ChainMethodContinuation:
+    active: false
+  ClassSignature:
+    active: false
+  FunctionExpressionBody:
+    active: false
   MaximumLineLength:
+    active: false
+  MultilineExpressionWrapping:
     active: false
   TrailingCommaOnCallSite:
     active: false
