@@ -1,6 +1,7 @@
 package io.github.reactivecircus.cache4k
 
 import kotlin.time.Duration
+import kotlin.time.TimeMark
 import kotlin.time.TimeSource
 
 /**
@@ -67,6 +68,12 @@ public interface Cache<in Key : Any, Value : Any> {
         public fun expireAfterAccess(duration: Duration): Builder<K, V>
 
         /**
+         * Specifies a function that takes the cache entry key and value, and returns a [TimeMark] at which
+         * time the entry should expire, or null if the entry does not have a set expiration time.
+         */
+        public fun expiresAt(expiresAt: (K, V) -> TimeMark?): Builder<K, V>
+
+        /**
          * Specifies the maximum number of entries the cache may contain.
          * Cache eviction policy is based on LRU - i.e. least recently accessed entries get evicted first.
          *
@@ -106,8 +113,8 @@ public interface Cache<in Key : Any, Value : Any> {
  */
 internal class CacheBuilderImpl<K : Any, V : Any> : Cache.Builder<K, V> {
     private var expireAfterWriteDuration = Duration.INFINITE
-
     private var expireAfterAccessDuration = Duration.INFINITE
+    private var expiresAt: ((K, V) -> TimeMark?)? = null
     private var maxSize = UNSET_LONG
     private var timeSource: TimeSource? = null
     private var eventListener: CacheEventListener<K, V>? = null
@@ -124,6 +131,10 @@ internal class CacheBuilderImpl<K : Any, V : Any> : Cache.Builder<K, V> {
             "expireAfterAccess duration must be positive"
         }
         this.expireAfterAccessDuration = duration
+    }
+
+    override fun expiresAt(expiresAt: (K, V) -> TimeMark?): Cache.Builder<K, V> = apply {
+        this.expiresAt = expiresAt
     }
 
     override fun maximumCacheSize(size: Long): CacheBuilderImpl<K, V> = apply {
@@ -145,6 +156,7 @@ internal class CacheBuilderImpl<K : Any, V : Any> : Cache.Builder<K, V> {
         return RealCache(
             expireAfterWriteDuration,
             expireAfterAccessDuration,
+            expiresAt,
             maxSize,
             timeSource ?: TimeSource.Monotonic,
             eventListener,
