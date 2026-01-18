@@ -150,6 +150,22 @@ An entry in this cache will be removed if it has not been replaced **after 30 mi
 
 _Note that cache entries are **not** removed immediately upon expiration at exact time. Expirations are checked in each interaction with the `cache`._
 
+
+##### Dynamic expiration time
+
+To set an specific expiration time for an entry, you can specify a function that takes the cache key and value
+and returns a time for when it should expire, or null if the entry does not have an expiration time.
+
+
+```kotlin
+val cache = Cache.Builder<String, String>()
+    .expiresAt { key, value -> key.length.minutes }
+    .build()
+```
+
+An entry in this cache will be removed when the current time passed the time mark returned by the function, or never if the returned time is null.
+
+
 ### Size-based eviction
 
 To set the maximum number of entries to be kept in the cache:
