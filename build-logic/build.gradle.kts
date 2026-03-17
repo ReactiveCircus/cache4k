@@ -29,9 +29,9 @@ detekt {
 tasks.withType<Detekt>().configureEach {
     jvmTarget = JvmTarget.JVM_11.target
     reports {
-        xml.required.set(false)
+        checkstyle.required.set(false)
         sarif.required.set(false)
-        md.required.set(false)
+        markdown.required.set(false)
     }
 }
 

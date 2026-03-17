@@ -219,8 +219,8 @@ internal class RealCache<Key : Any, Value : Any>(
      * Check whether the [CacheEntry] has expired based on either access time or write time.
      */
     private fun CacheEntry<Key, Value>.isExpired(): Boolean {
-        return expiresAfterAccess && (accessTimeMark.value + expireAfterAccessDuration).hasPassedNow() ||
-            expiresAfterWrite && (writeTimeMark.value + expireAfterWriteDuration).hasPassedNow()
+        return (expiresAfterAccess && (accessTimeMark.value + expireAfterAccessDuration).hasPassedNow()) ||
+            (expiresAfterWrite && (writeTimeMark.value + expireAfterWriteDuration).hasPassedNow())
     }
 
     /**
