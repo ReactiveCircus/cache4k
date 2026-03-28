@@ -19,29 +19,35 @@ env:
 jobs:
   assemble:
     name: Assemble
-    runs-on: macos-14
+    runs-on: macos-26
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-java@v5
         with:
           distribution: 'zulu'
           java-version: '25'
-      - uses: gradle/actions/setup-gradle@v5
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          build-scan-terms-of-use-url: 'https://gradle.com/terms-of-service'
+          build-scan-terms-of-use-agree: 'yes'
       - name: Assemble
         run: ./gradlew assemble
 
   checks:
     name: Checks (unit tests, static analysis and binary compatibility API check)
-    runs-on: macos-14
+    runs-on: macos-26
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '25'
-      - uses: gradle/actions/setup-gradle@v5
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          build-scan-terms-of-use-url: 'https://gradle.com/terms-of-service'
+          build-scan-terms-of-use-agree: 'yes'
       - name: Check
         run: ./gradlew check && ./gradlew -p build-logic detekt
 
@@ -49,17 +55,20 @@ jobs:
     name: Deploy snapshot
     needs: [assemble, checks]
     if: github.ref == 'refs/heads/main'
-    runs-on: macos-14
+    runs-on: macos-26
     env:
       ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_CENTRAL_USERNAME }}
       ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_CENTRAL_PASSWORD }}
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-java@v5
         with:
           distribution: 'zulu'
           java-version: '25'
-      - uses: gradle/actions/setup-gradle@v5
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          build-scan-terms-of-use-url: 'https://gradle.com/terms-of-service'
+          build-scan-terms-of-use-agree: 'yes'
       - name: Publish snapshot
         run: ./gradlew publishToMavenCentral
