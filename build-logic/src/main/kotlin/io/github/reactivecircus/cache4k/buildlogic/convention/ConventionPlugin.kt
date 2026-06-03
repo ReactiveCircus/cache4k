@@ -113,9 +113,6 @@ private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
     project.tasks.withType(KotlinJvmCompile::class.java).configureEach {
         it.compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
-            freeCompilerArgs.addAll(
-                "-Xjvm-default=all"
-            )
         }
     }
     project.tasks.withType(KotlinJsCompile::class.java).configureEach {
