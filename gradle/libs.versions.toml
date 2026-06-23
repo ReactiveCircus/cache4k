@@ -7,7 +7,7 @@ detekt = "2.0.0-alpha.5"
 mavenPublish = "0.37.0"
 coroutines = "1.11.0"
 atomicfu = "0.33.0"
-lincheck = "2.26"
+lincheck = "3.6"
 statelyIso = "2.1.0"
 
 [libraries]
@@ -21,7 +21,7 @@ plugin-mavenPublish = { module ="com.vanniktech:gradle-maven-publish-plugin", ve
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfu" }
-lincheck = { module = "org.jetbrains.kotlinx:lincheck", version.ref = "lincheck" }
+lincheck = { module = "org.jetbrains.lincheck:lincheck", version.ref = "lincheck" }
 stately-isoCollections = { module = "co.touchlab:stately-iso-collections", version.ref = "statelyIso" }
 
 [plugins]

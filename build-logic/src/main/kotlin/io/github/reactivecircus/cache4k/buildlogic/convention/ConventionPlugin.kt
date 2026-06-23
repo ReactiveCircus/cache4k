@@ -120,32 +120,7 @@ private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
             moduleKind.set(JsModuleKind.MODULE_COMMONJS)
         }
     }
-    jvm {
-        val main = compilations.getByName("main")
-        compilations.create("lincheck") { compilation ->
-            compilation.defaultSourceSet {
-                dependencies {
-                    implementation(main.compileDependencyFiles + main.output.classesDirs)
-                }
-            }
-            project.tasks.register("jvmLincheck", Test::class.java) {
-                it.classpath = compilation.compileDependencyFiles +
-                    compilation.runtimeDependencyFiles + compilation.output.allOutputs
-                it.testClassesDirs = compilation.output.classesDirs
-                it.useJUnitPlatform()
-                it.testLogging {
-                    it.events("passed", "skipped", "failed")
-                }
-                it.jvmArgs(
-                    "--add-opens", "java.base/jdk.internal.misc=ALL-UNNAMED",
-                    "--add-opens", "java.base/java.lang=ALL-UNNAMED",
-                    "--add-exports", "java.base/jdk.internal.util=ALL-UNNAMED",
-                    "--add-exports", "java.base/jdk.internal.vm=ALL-UNNAMED",
-                    "--add-exports", "java.base/jdk.internal.access=ALL-UNNAMED",
-                )
-            }
-        }
-    }
+    jvm()
     js {
         browser()
         nodejs()
@@ -171,9 +146,6 @@ private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
     with(sourceSets) {
         create("nonJvmMain") {
             it.dependsOn(commonMain.get())
-        }
-        getByName("jvmLincheck") {
-            it.dependsOn(jvmMain.get())
         }
         jsMain.get().dependsOn(getByName("nonJvmMain"))
         getByName("wasmJsMain") {

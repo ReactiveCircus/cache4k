@@ -20,11 +20,6 @@ kotlin {
         jvmTest {
             dependencies {
                 implementation(kotlin("test-junit5"))
-            }
-        }
-        jvmLincheck {
-            dependencies {
-                implementation(kotlin("test-junit5"))
                 implementation(libs.lincheck)
             }
         }
