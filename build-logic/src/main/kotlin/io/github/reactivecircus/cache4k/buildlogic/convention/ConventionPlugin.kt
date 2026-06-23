@@ -74,7 +74,7 @@ private fun Project.configureSubproject() {
             it.parallel.set(true)
         }
         tasks.withType(Detekt::class.java).configureEach {
-            it.jvmTarget.set(JvmTarget.JVM_11.target)
+            it.jvmTarget.set(JvmTarget.JVM_17.target)
             it.reports { report ->
                 report.checkstyle.required.set(false)
                 report.sarif.required.set(false)
@@ -112,7 +112,7 @@ private fun KotlinMultiplatformExtension.configureTargets(project: Project) {
     }
     project.tasks.withType(KotlinJvmCompile::class.java).configureEach {
         it.compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+            jvmTarget.set(JvmTarget.JVM_17)
             freeCompilerArgs.addAll(
                 "-Xjvm-default=all"
             )
