@@ -5,6 +5,10 @@
 ### Changed
 
 - Kotlin 2.2.10
+- Remove deprecated targets - `macosX64`, `tvosX64`, `watchosX64`.
+- Target Java 17.
+- AtomicFU 0.33.0.
+- Coroutines 1.11.0.
 - Migrate to Sonatype Central Portal. 
 
 ## 0.14.0
