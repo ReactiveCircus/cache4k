@@ -1,19 +1,19 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
 REPO="git@github.com:ReactiveCircus/cache4k.git"
-REMOTE_NAME="origin"
 DIR=temp-clone
+OUTPUT_DIR="$(pwd)/site"
 
-if [ -n "${CI}" ]; then
+if [ -n "${CI:-}" ]; then
   REPO="https://github.com/${GITHUB_REPOSITORY}.git"
 fi
 
 # Clone project into a temp directory
-rm -rf $DIR
-git clone "$REPO" $DIR
-cd $DIR
+rm -rf "$DIR" "$OUTPUT_DIR"
+git clone "$REPO" "$DIR"
+cd "$DIR"
 
 # Generate API docs
 ./gradlew :dokkaGenerate
@@ -22,18 +22,9 @@ cd $DIR
 cp README.md docs/index.md
 cp CHANGELOG.md docs/changelog.md
 
-# If on CI, configure git remote with access token
-if [ -n "${CI}" ]; then
-  REMOTE_NAME="https://x-access-token:${DEPLOY_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-  git config --global user.name "${GITHUB_ACTOR}"
-  git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-  git remote add deploy "$REMOTE_NAME"
-  git fetch deploy && git fetch deploy gh-pages:gh-pages
-fi
-
-# Build the website and deploy to GitHub Pages
-mkdocs gh-deploy --remote-name "$REMOTE_NAME"
+# Build the website for the GitHub Pages artifact
+mkdocs build --site-dir "$OUTPUT_DIR"
 
 # Delete temp directory
 cd ..
-rm -rf $DIR
+rm -rf "$DIR"
