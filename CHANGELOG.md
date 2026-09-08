@@ -4,7 +4,7 @@
 
 ### Changed
 
-- Kotlin 2.4.0
+- Kotlin 2.4.20
 - Remove deprecated targets - `macosX64`, `tvosX64`, `watchosX64`.
 - Target Java 17.
 - AtomicFU 0.33.0.
