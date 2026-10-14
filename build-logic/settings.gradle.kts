@@ -1,8 +1,9 @@
+@Suppress("UnstableApiUsage")
 pluginManagement {
     repositories {
         gradlePluginPortal {
             content {
-                includeGroupByRegex("org.gradle.*")
+                includeGroupAndSubgroups("org.gradle")
             }
         }
         mavenCentral()

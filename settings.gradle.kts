@@ -1,10 +1,11 @@
+@Suppress("UnstableApiUsage")
 pluginManagement {
     includeBuild("build-logic")
 
     repositories {
         gradlePluginPortal {
             content {
-                includeGroupByRegex("org.gradle.*")
+                includeGroupAndSubgroups("org.gradle")
             }
         }
         mavenCentral()
